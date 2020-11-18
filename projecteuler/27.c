@@ -29,18 +29,30 @@ int run_formula(int n, int a, int b) {
     return pow(n, 2) + (a*n) + b;
 }
 
-int main() {
-   printf("Start of Program.\n\n"); 
-   
-   int a=1, b=41;
-   //for (int a=0;a<A_MAX;a++) {
-   //for (int b=0;b<B_MAX;b++) {
-   for (int n=0;n<=N_MAX;n++) {
-   printf("%d^2 + %d*%d + %d = %d\n", n, a, n, b, run_formula(n, a, b));
-   }
-   printf("-\n");
-   printf("\nEnd of Program.\n"); 
+int is_prime(int subject) {
+    for(int p_factor = 2;p_factor<subject;p_factor++) {
+        int quotient = subject/p_factor; // will remove remainder
+        int product = quotient*p_factor;
+        if (product==subject) // then it's a factor
+            return 0; // not prime
+        if (p_factor*p_factor >= subject) // eliminating innefficiency
+            break;
+    }
+    return 1; // prime
 }
 
+int main() {
+    printf("Start of Program.\n\n"); 
+   
+    int a=1, b=41;
+    //for (int a=0;a<A_MAX;a++) {
+    //for (int b=0;b<B_MAX;b++) {
+    for (int n=0;n<=N_MAX;n++) {
+    int result = run_formula(n, a, b);
+    printf("%d^2 + %d*%d + %d = %d (prime? %d)\n", n, a, n, b, result, is_prime(result));
+    }
+    printf("-\n");
 
+    printf("\nEnd of Program.\n"); 
+}
 
