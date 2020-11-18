@@ -1,0 +1,32 @@
+<html>
+<body>
+<script>
+var result = 0;
+
+//while(y<=4000000) {
+m=600851475143;
+for(i=0;i<m;i++)  {
+	if (600851475143%i==0) {
+		dw(i);
+		m= 600851475143/i;
+		for(j=2;j<i;j++) {
+			var prime = 1;
+			if(i%j==0) {
+				var prime = 0;
+			}
+		}
+		if (!prime)	result= i;
+	}
+}
+
+//dw(result);
+//dw(result);
+dw("result="+result);
+//alert(5%6);
+
+function dw(input) {
+	document.write(input+"<br /><br />");
+}
+</script>
+</body>
+</html>

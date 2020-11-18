@@ -1,0 +1,28 @@
+<html>
+<body>
+<script>
+var result = 2;
+
+var x=1;
+var y=2;
+while(y<=4000000) {
+	var z=x+y;
+	if (z%2==0) {
+		dw(result+" modulo "+z)
+		result= z + result;
+	}
+	var x=y;
+	var y=z;
+}
+
+dw(result);
+dw(result);
+dw(result);
+//alert(5%6);
+
+function dw(input) {
+	document.write(input+"<br /><br />");
+}
+</script>
+</body>
+</html>
