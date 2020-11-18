@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Alegreya SC' rel='stylesheet'>
+<style>
+body {padding:10% 20% 0 20%;background:#322;color:#ddf;font-family: 'Alegreya SC';}
+#txt {font-size:100px;text-align:center;display:block;}
+body.stopped {
+background:black;
+color:skyblue;
+}
+body span.stopped {
+    display:none;
+}
+body.stopped span.stopped {
+    display:inline;
+    font-style:italic;
+}
+#txt {
+font-size: 100px;
+    text-align: left;
+    display: block;
+    margin: 0 auto;
+    width: 320px;
+    }
+</style>
+<script>
+var h = 30;
+var m = 0;
+var s = 0;
+// victory ;)
+var int, running;
+function main() {
+    if (localStorage.hours) h = parseInt(localStorage.hours);
+    if (localStorage.minutes) m = parseInt(localStorage.minutes);
+    if (localStorage.seconds) s = parseInt(localStorage.seconds);
+    start();
+    window.onbeforeunload = function (e) {
+        e = e || window.event;
+
+        // For IE and Firefox prior to version 4
+        if (e) {
+            e.returnValue = 'Sure?';
+        }
+
+        // For Safari
+        return 'Sure?';
+    };
+}
+function start() {
+  console.info('starting '+Date()+'|||'+h+':'+m+':'+s);
+  document.body.classList.remove('stopped');
+  running = true;
+  int = setInterval(startTime, 1000);
+}
+function key(event) {
+  //console.log(event)
+  if ((event.keyCode>= 65 && event.keyCode <=90) || event.code==='Space' || event.code === 'Enter') {
+    clock_hit();
+  }
+}
+
+function clock_hit() {
+    if(running) {
+        console.info('stopping '+Date());
+        clearInterval(int);
+        running = false;
+        document.body.classList.add('stopped');
+    } else start();
+}
+
+function save_time() {
+    localStorage.hours = h;
+    localStorage.minutes = m;
+    localStorage.seconds = s;
+}
+function startTime() {
+  s -= 1;
+  if(s<0) { s = 59; m -=1}
+  if(m<0) { m = 59; h -=1}
+  if(h<0) {
+     //~ alert('over!');
+     rebeep();
+  }
+  save_time();
+  document.getElementById('txt').innerHTML = doz(h) + ":" + doz(m) +':'+ doz(s) + '<br /><span class=stopped>' + h+ ":" + m +':'+ s + '</span>';
+}
+function doz(val) {
+  var res = '';
+  if (val>=12) {
+    res = minidoz(Math.floor(val/12));
+    val = val%12;
+  }
+  res = res.toString() + minidoz(val).toString();
+  return res;
+}
+function minidoz(val) {
+  if(val==11) return 'E';
+  else if(val==10) return 'X';
+  else if(val<10) return val;
+  return '!!!';
+}
+
+//if you have another AudioContext class use that one, as some browsers have a limit
+var audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
+
+function rebeep() {
+   beep(1000);
+   setTimeout(rebeep,2000);
+}
+//All arguments are optional:
+
+//duration of the tone in milliseconds. Default is 500
+//frequency of the tone in hertz. default is 440
+//volume of the tone. Default is 1, off is 0.
+//type of tone. Possible values are sine, square, sawtooth, triangle, and custom. Default is sine.
+//callback to use on end of tone
+function beep(duration, frequency, volume, type, callback) {
+    var oscillator = audioCtx.createOscillator();
+    var gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    if (volume){gainNode.gain.value = volume;}
+    if (frequency){oscillator.frequency.value = frequency;}
+    if (type){oscillator.type = type;}
+    if (callback){oscillator.onended = callback;}
+
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + ((duration || 500) / 1000));
+};
+</script>
+</head>
+
+<body onload="main()" onkeydown="key(event)" onclick="clock_hit()">
+
+<div id="txt"></div>
+
+</body>
+</html>
