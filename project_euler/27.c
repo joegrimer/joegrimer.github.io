@@ -27,6 +27,7 @@ int run_formula(int n, int a, int b) {
 }
 
 int is_prime(int subject) {
+    if(subject<0) return -1; // negative numbers can't be prime, apparently
     for(int p_factor = 2;p_factor<subject;p_factor++) {
         int quotient = subject/p_factor; // will remove remainder
         int product = quotient*p_factor;
@@ -42,7 +43,7 @@ int main() {
     printf("Start of Program.\n\n"); 
    
     int best_a=0, best_b=0, best_n=0;
-    int a=-999, b=-996;
+    int a=-999, b=61;
     for (a=-999;a<=999;a++) { for (b=-1000;b<=1000;b++) {
     for (int n=0;1;n++) {
         int result = run_formula(n, a, b);
