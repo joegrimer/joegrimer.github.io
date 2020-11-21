@@ -29,23 +29,12 @@ int main(){
   mpz_out_str(stdout,10,n);
   printf ("\n");
 
-  /* 3. Add one to the number */
+  /* 5. Square n */
 
-  mpz_add_ui(n,n,1); /* n = n + 1 */
-
-  /* 4. Print the result */
-
-  printf (" n +1 = ");
-  mpz_out_str(stdout,10,n);
-  printf ("\n");
+  mpz_pow_ui(n,n,100); /* n = n * n */
 
 
-  /* 5. Square n+1 */
-
-  mpz_mul(n,n,n); /* n = n * n */
-
-
-  printf (" (n +1)^2 = ");
+  printf (" (n +1)^n = ");
   mpz_out_str(stdout,10,n);
   printf ("\n");
 
