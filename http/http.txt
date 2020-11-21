@@ -1,0 +1,33 @@
+Socket successfully created..
+Socket successfully binded..
+Server listening..
+server acccept the client...
+
+----
+Him:
+ GET / HTTP/1.1
+Host: localhost:8080
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) C
+----
+Me:
+ HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 3
+#### IT'S A SPLIT PACKET... LOOK AT THE END OF THAT MESSAGE AND THE BEGGINING OF THE ONE BELOW!
+123
+----
+Him:
+ hrome/79.0.3945.130 Safari/537.36
+Sec-Fetch-User: ?1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-S
+----
+Me:
+ HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 3
+
+123
