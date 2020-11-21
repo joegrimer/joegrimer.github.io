@@ -25,32 +25,32 @@ int check_and_add(int new_int) {
 int main() {
 
 	printf("start\n");
-    printf("max is %d\n",MAX);
-    printf("max*max is %d\n",MAX_SQUARED);
+   printf("max is %d\n",MAX);
+   printf("max*max is %d\n",MAX_SQUARED);
 
-    mpz_t new_num;
-	mpz_t a_big;
-	mpz_t b_big;
-    //mpz_t *seq; //[MAX_SQUARED];
-    //seq = (mpz_t *) malloc(MAX_SQUARED * sizeof(mpz_t));
-    //for(i=0;i<MAX_SQUARED;i++) {
-    //    mpz_set_ui(seq[i],0);
-    //}
+   //mpz_t new_num;
+   mpz_t a_big;
+	//mpz_t b_big;
+   //mpz_t *seq; //[MAX_SQUARED];
+   //seq = (mpz_t *) malloc(MAX_SQUARED * sizeof(mpz_t));
+   //for(i=0;i<MAX_SQUARED;i++) {
+   //    mpz_set_ui(seq[i],0);
+   //}
 
-    int a=2,b=2;
-    //for (unsigned long int a=2;a<=MAX;a++) for(unsigned long int b=2;b<=MAX;b++) {
-	    mpz_set_ui(a_big, 100);
-	    mpz_set_ui(b_big, 100);
-        mpz_pow_ui(new_num, a_big, b);
-	    printf("\n= ");
-        mpz_out_str(stdout, 10, new_num);
-	    //check_and_add(new_num);*/
-    //}
-    printf("\ncount: %d\n", count);
+   int a=2,b=2;
+   //for (unsigned long int a=2;a<=MAX;a++) for(unsigned long int b=2;b<=MAX;b++) {
+		mpz_set_ui(a_big, 21);
+	//	mpz_set_ui(b_big, 100);
+      mpz_pow_ui(a_big,a_big, 6);
+		printf("\n= ");
+		mpz_out_str(stdout, 10, a_big);
+		//check_and_add(new_num);*/
+	//}
+   printf("\ncount: %d\n", count);
 	printf("\nend\n");
 
-    //free(seq);
-    mpz_clear(new_num);
-    mpz_clear(a_big);
-    mpz_clear(b_big);
+   //free(seq);
+   //mpz_clear(new_num);
+   mpz_clear(a_big);
+   //mpz_clear(b_big);
 }
