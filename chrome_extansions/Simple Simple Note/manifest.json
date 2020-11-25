@@ -1,0 +1,14 @@
+{
+  "name": "Simple Simplenote",
+  "version": "2.0",
+  "description": "Ever wished that Simplenote was even simpler that it already is? Simple Simplenote will grant that wish",
+  "icons": {
+      "128": "icon.png"
+   },
+  "content_scripts": [
+    {
+      "matches": ["https://simple-note.appspot.com/*", "http://simple-note.appspot.com/*"],
+      "css": ["style.css"]
+    }
+  ]
+}

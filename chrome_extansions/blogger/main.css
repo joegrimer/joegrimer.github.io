@@ -1,0 +1,5 @@
+/*Main Css file for Blogger Toolbar remover for Chrome*/
+
+#navbar, #navbar-iframe {display:none;height:0px;width:0px;z-index:-2000;}
+
+/*End of css file*/

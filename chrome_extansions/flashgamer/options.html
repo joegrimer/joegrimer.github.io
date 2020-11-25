@@ -1,0 +1,81 @@
+<html>
+<head>
+  
+  <title>Flash Gamer Extension Options</title>
+  <link rel="icon" href="icon.png" />
+  <script type="text/javascript">
+    
+    alert("hah")
+    
+//    if (localStorage[options] == 0) alert("huh");
+//    localStorage.setItem('fullname', 'John Paul');
+//    alert("Hello " + localStorage.fullname);
+    
+    var options=["mads", "mist", "moot", "meen", "mull", "nads"];
+    var i=0;
+    // Saves options to localStorage.
+    function save_options() {
+    for(i = 0; i < 6; i++) {
+      if(document.getElementById(options[i]).checked == true) { localStorage[options[i]] = 1; }
+      else  { localStorage[options[i]] = 0; }
+      }
+    }
+
+    // Restores select box state to saved value from localStorage.
+    function restore_options() {
+    for(i = 0; i < 6; i++) {
+        if(localStorage[options[i]] == 1) {
+      document.getElementById(options[i]).checked = true;
+      }
+      else { document.getElementById(options[i]).checked = false; }
+    }	
+    }
+    
+    alert("almos1");
+    var datas;
+
+    for(i = 0; i < 6; i++) {
+        if(localStorage[options[i]] == 1) {
+      datas[i] = "1";
+      }
+      else {}
+    }
+    alert("almost");
+    for(i = 0; i < 6; i++) {
+      alert(datas[i]);
+    }
+    alert("almost3");
+  </script>
+  <style>
+  body{background:#000 url(back.png) no-repeat;margin:0px;padding: 50px 0px 20px 0px;width:100%;} .title {font-size:18px;margin:auto;}
+  #wrapper{background:#fff;width:600px;padding:20px;margin:auto;-webkit-border-radius:20px;-webkit-box-shadow:0px 0px 15px #fff; opacity:.9;}
+  #title{font-size:20px;padding-bottom:20px;} #box {padding:5px;border:2px solid black;}
+  </style>
+</head>
+
+
+<body onload="restore_options()">
+<div id="wrapper">
+
+<div id="title">Flash Gamer Extension: Options Page</div>
+
+<form>
+  <div id="box">
+ <div class="title">Miniclip.com</div>
+ <br /><input type="checkbox" id="mads">&nbsp; Remove Ads. Fix Template.
+ <br /><input type="checkbox" id="mist">&nbsp; Disable Hide Full games list.
+ <br /><input type="checkbox" id="meen">&nbsp; Add Full screen button to game page.
+ <br /><input type="checkbox" id="mull">&nbsp; Auto fullscreen mode.
+ <br /><input type="checkbox" id="moot">&nbsp; Show Footer.
+  </div><br />
+  <div id="box">
+ <div class="title">Nitrome.com</div>
+ <br /><input type="checkbox" id="nads">&nbsp; Remove Ads. Fix Template.
+  </div>
+ <br /><br /><button onclick="save_options()">Save</button>
+ 
+</form>
+
+</div>
+</body>
+</html>

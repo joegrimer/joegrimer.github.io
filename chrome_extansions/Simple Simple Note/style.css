@@ -1,0 +1,38 @@
+/* You seem to be reading the main css file for my Simplified Simple Note extension for Google Chrome. Enjoy! */
+
+.logo, .footer
+  {
+  display:none !important;
+  }
+
+.header{position:absolute !important; z-index:3 !important;top:10px !important;right:20px !important;}
+
+.wrapper
+  {
+  position:absolute !important;
+  left:0px !important;
+  top:0px !important;
+  width:100% !important;
+  height:100% !important
+  }
+
+.wrapper,.app
+  {
+  -webkit-border-radius:0px !important;
+  }
+
+.app
+  {
+  padding:none !important;left:-4px !important;right:0px !important;
+  }
+
+.sideview
+  {
+  padding-left:40px !important;
+  }
+
+/* Uncomment the following to disable ads:
+.fusionentire{display:none!important;}*/
+
+/*End of CSS File*/
+

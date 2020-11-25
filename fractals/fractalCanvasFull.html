@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fractal Generator</title>
+</head>
+<body>
+
+<canvas id="myCanvas" width="500" height="500" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+    
+// main
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+var turtle = {x:250,y:250,a:0}
+forward(100);
+ctx.stroke();
+
+function rotate(angle) {
+    turtle.a+=angle;
+}
+function forward(distance) {
+    // s(t) = o/h c=a/h t=o/a
+    // c(t) = a/h
+    // a = c(t) * h
+    // o = h^2 / a^2
+    const across = Math.cos(turtle.a) * distance;
+    const up = Math.sqrt(distance*distance - across*across );
+//    console.log("cos20 = "+Math.cos(10)*distance);
+    console.log("across>"+across);
+    console.log("up>"+up);
+    
+    ctx.moveTo(turtle.x,turtle.y);
+    turtle.x+=across;
+    turtle.y+=up;
+    ctx.lineTo(turtle.x,turtle.y);
+}
+
+</script>
+
+</body>
+</html>

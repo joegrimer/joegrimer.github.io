@@ -1,0 +1,14 @@
+
+
+#feature_header,  #featuredgame {display:none;}
+ 
+#google_ads_div_kong_devcenter_af_728x90,
+#google_ads_div_kong_devcenter_af_300x250,
+.adspacer, .ad {display:none;}
+
+#gamepage_header{display:none;}
+
+#main {width:900px !important;}
+
+body{padding-bottom:20px;}
+#footer {display:none;}

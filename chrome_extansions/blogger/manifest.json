@@ -1,0 +1,12 @@
+{
+  "name": "Blogger Toolbar Remover",
+  "version": "1.0",
+  "description": "This extension removes the (annoying) toolbar on all blogspot.com blogs.",
+  "icons": { "128": "icon.png" },
+  "content_scripts": [
+    {
+      "matches": ["http://*.blogspot.com/*"],
+      "css": ["main.css"]
+    }    
+  ]
+}

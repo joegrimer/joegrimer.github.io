@@ -1,0 +1,567 @@
+<script type="text/javascript">
+// javascript functions for priority ladder
+// Ben Grimer: 18jul2009
+// version: 23/07/2009
+
+// useful pages
+// alternating colors: http://www.somacon.com/p338.php
+// pastel colors:
+
+var GsavedRow;     // used to hold existing row data while editing
+
+function insCell()
+{
+  var x=document.getElementById('tr2').insertCell(0)
+  x.innerHTML="John"
+}
+
+
+function showRow()
+{
+  alert(document.getElementById('myTable').rows[getSelected()+1].innerHTML);
+}
+
+
+// *** REFACTOR ***
+function loadTable() {
+  var myTable = document.getElementById('myTable');
+  var numTable = document.getElementById('numTable');
+  var myTableComplete = document.getElementById('myTableComplete');
+
+  myTable.innerHTML = unescape(readCookie("myPriority"));
+  var cookie2 = unescape(readCookie("myCompleted"));
+
+  if ('null' != cookie2) {
+    myTableComplete.innerHTML = cookie2;
+  }
+  numTable.innerHTML = "";
+  numTable.insertRow(0);
+  numTable.rows[0].innerHTML = '<th style="font: bold 16px Arial">Task</th>';
+  for (i=1; i<myTable.rows.length; i++) {
+  numTable.insertRow(i);
+  numTable.rows[i].innerHTML = "<td>" + (i) + ".<input type='button' style='font: bold 4px Arial' id='task" + i + "' onclick='editTask(this);' value='*'></td>";
+//alert3("numTable.rows[i]", numTable.rows[i].innerHTML);
+  }
+}
+
+
+function loadTable_v2() {
+  var myTable = document.getElementById('myTable');
+  var numTable = document.getElementById('numTable');
+  var myTableComplete = document.getElementById('myTableComplete');
+
+  myTable.innerHTML = unescape(readCookie("myPriority"));
+  var cookie2 = unescape(readCookie("myCompleted"));
+
+  if ('null' != cookie2) {
+    myTableComplete.innerHTML = cookie2;
+  }
+  numTable.innerHTML = "";
+  numTable.insertRow(0);
+  numTable.rows[0].innerHTML = '<th style="font: bold 16px Arial">Task</th>';
+  for (i=1; i<myTable.rows.length; i++) {
+  numTable.insertRow(i);
+  numTable.rows[i].innerHTML = "<td>" + (i) + ".<input type='button' style='font: bold 4px Arial' id='task" + i + "' onclick='editTask(this);' value='*'></td>";
+//alert3("numTable.rows[i]", numTable.rows[i].innerHTML);
+  }
+
+  putTableData(document.getElementById('textareaExport').value);
+
+}
+
+
+function saveTable() {
+  createCookie('myPriority', document.getElementById('myTable').innerHTML, 30);
+  createCookie('myCompleted', document.getElementById('myTableComplete').innerHTML, 30);
+}
+
+
+// mark2
+function saveTable_v2() {
+  createCookie('myPriority2', getTableData(), 30);
+  createCookie('myCompleted2', getCompleteData(), 30);
+}
+
+
+// used to save current priority table
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else { var expires = ""; }
+
+    document.cookie = name + "=" + escape(value) + "; path=/" + ((expires == null) ? "" : "; expires=" + expires);
+}
+
+
+// not currently used
+function eraseCookie(name) {
+  createCookie(name,"",-1);
+}
+
+
+// used by loadtable()
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+
+// moves selected task up or down (top or bottom displays warning)
+function move(dir) {
+  var cellNo;
+  var check1 = document.getElementsByName('position');
+  var offset;
+
+  if (dir == "up") {
+    offset = 0;
+    if (check1[0].checked == true) {
+      alert('task is already highest priority!');
+     return;
+    }
+  } else if (dir == "down") {
+    offset = 2;
+    if (check1[check1.length-1].checked == true) {
+      alert('task is already lowest priority!');
+      return;
+    }
+  } else {
+    alert('invalid direction');
+   return;
+  }
+
+  cellNo = getSelected();
+  var rows = document.getElementById('myTable').rows;
+  var selectedRow = rows[cellNo+1].innerHTML;
+  rows[cellNo+1].innerHTML = rows[cellNo+offset].innerHTML;
+  rows[cellNo+offset].innerHTML = selectedRow;
+
+  // finally, check the moved row again and prioritize
+  check1[cellNo-1+offset].checked = true;
+  prioritiseRow(rows[cellNo+1]);
+  prioritiseRow(rows[cellNo+offset]);
+  return;
+}
+
+
+// works out which task is selected (returns index)
+function getSelected() {
+  var check1 = document.getElementsByName('position');
+  var cellNo = -1;
+
+  for (i=0; i<check1.length; i++) {
+    if (check1[i].checked == true) {
+      cellNo = i;
+      break;
+    }
+  }
+  return cellNo;
+}
+
+
+// add a new task to the table
+function addTask() {
+  var myTable = document.getElementById('myTable');
+  var numTable = document.getElementById('numTable');
+  if (myTable.rows.length != numTable.rows.length) alert("tables lengths differ !");
+  var length = myTable.rows.length;
+
+  DisableButtons(true, new Array("addButton", "editButton"));
+
+  myTable.insertRow(length);
+  numTable.insertRow(length);
+  myTable.rows[length].innerHTML = newCell("", "", "", length);
+  numTable.rows[length].innerHTML = "<td>" + (length) + ".</td>";
+
+  document.getElementById('newdesc').focus();
+}
+
+
+// edit an existing task, change label fields to text boxes  *** REFACTOR ***
+function editTask(butObj) {
+  var cellNo;
+
+  if (undefined == butObj) {
+    cellNo = getSelected()+1;
+    if (0 == cellNo) {
+      alert("no row selected, please select a row");
+      return;
+    }
+  } else {
+    cellNo = butObj.id.split("task")[1];
+  }
+
+  var row = document.getElementById('myTable').rows[cellNo];
+  DisableButtons(true, new Array("addButton", "editButton"));
+  GsavedRow = row.innerHTML;
+
+  row.cells[0].innerHTML = '<input name="newcell" id="newdesc" value="' + row.cells[0].innerHTML + '" type="text" size="60" onKeyPress="checkEnter(event,' + (cellNo) + ')">';
+  row.cells[1].innerHTML = '<input name="newcell" value="' + row.cells[1].innerHTML + '" type="text" onKeyPress="checkEnter(event,' + (cellNo) + ')">';
+  row.cells[2].innerHTML = '<input name="newcell" value="' + row.cells[2].innerHTML + '" type="text" onKeyPress="checkEnter(event,' + (cellNo) + ')">';
+  row.cells[3].innerHTML = '<input type="button" onclick="saveTask(' + (cellNo) + ')" value=">>">'
+                         + '<input type="button" onclick="cancelRestoreTask(' + (cellNo) + ')" value="X">';
+}
+
+
+// this function disables all named buttons in the input array
+//   if action = true, disable.  if action = false, enable
+function DisableButtons(action, butArray) {
+
+  for (i=0; i<butArray.length; i++) {
+    document.getElementById(butArray[i]).disabled=action;
+  }
+}
+
+
+// restores original task data when cancel during edit
+function cancelRestoreTask(cellno) {
+  document.getElementById('myTable').rows[cellno].innerHTML = GsavedRow;
+  DisableButtons(false, new Array("addButton", "editButton"));
+}
+
+function cancelTask(cellno) {
+  myTable.deleteRow(cellno);
+  numTable.deleteRow(cellno);
+  DisableButtons(false, new Array("addButton", "editButton"));
+}
+
+
+// this functions shows the contents of the node objects, keeping for future reference
+function showNodes(cellno) {
+alert("showNodes()");
+  var myTable = document.getElementById('myTable');
+  var nodes = myTable.rows[cellno].childNodes;
+
+  for (i=0; i<nodes.length; i++) {
+    if (nodes[i].nodeName == "TD" || nodes[i].nodeName == "TH") {
+      alert("nodes[" + i + "].innerHTML=>" + nodes[i].innerHTML + "<.  Nodename =>" + nodes[i].nodeName + "<");
+    }
+  }
+alert("showNodes() end");
+}
+
+
+// returns html for the new/edited row (used by add/edit)
+function newCell(description, priority, deadline, cellno) {
+  return('<td><input name="newcell" id="newdesc" value="' + description + '" type="text" size="60" onKeyPress="checkEnter(event,' + (cellno) + ')"></td>'
+       + '<td><input name="newcell" value="' + priority + '" type="text" onKeyPress="checkEnter(event,' + (cellno) + ')"></td>'
+       + '<td><input name="newcell" value="' + deadline + '" type="text" onKeyPress="checkEnter(event,' + (cellno) + ')"></td>'
+       + '<td><input type="button" onclick="saveTask(' + (cellno) + ')" value=">>"><input type="button" onclick="cancelTask(' + (cellno) + ')" value="X"></td>');
+}
+
+
+// returns html for the new/edited row (used by add/edit)
+function newCompletedCell(description, priority, deadline, completedDate ) {
+  return('<td>' + description + '</td>' + '<td>' + priority + '</td>' + '<td>' + deadline + '</td>' + '<td>' + completedDate + '</td>');
+}
+
+
+function newPriorityCell(description, priority, deadline) {
+  return('<td>' + description + '</td><td>' + priority + '</td><td>' + deadline + '</td>'
+        + '<td><input type="radio" name="position" value="1"/></td>');
+}
+
+
+// remove selected task
+function removeTask() {
+  var myTable = document.getElementById('myTable');
+  var numTable = document.getElementById('numTable');
+  var cellNo = getSelected();
+  if (-1 == cellNo) { alert("no row selected, please select a row");return; }
+
+  myTable.deleteRow(cellNo+1);
+  numTable.deleteRow(numTable.rows.length-1);
+}
+
+
+// add a new task to the table (*** REFACTOR ***)
+function completeTask() {
+  var myTable = document.getElementById('myTable');
+  var numTable = document.getElementById('numTable');
+  var completeTable = document.getElementById('myTableComplete');
+  var cellNo = getSelected();
+
+  if (-1 == cellNo) { alert("no row selected, please select a row");return; }
+
+  var oCells=myTable.rows[cellNo+1].cells;
+
+  myTableComplete.insertRow(1);
+  myTableComplete.rows[1].innerHTML = newCompletedCell(oCells[0].innerHTML, oCells[1].innerHTML, oCells[2].innerHTML, dateDDMMYYYY()); /* insert at position 1 */
+
+  myTable.deleteRow(cellNo+1);
+  numTable.deleteRow(numTable.rows.length-1);
+}
+
+
+function checkEnter(e, cellNo) {
+  var keynum;
+  var keychar;
+  var numcheck;
+
+  if (window.event) { // IE
+    keynum = e.keyCode;
+  } else if(e.which) { // Netscape/Firefox/Opera
+    keynum = e.which;
+  }
+
+  if (keynum==13) {
+    saveTask(cellNo);
+  } else {
+    return false;
+  }
+}
+
+
+// stores text box values in new cell
+function saveTask(cellNo) {
+  var rows = document.getElementById('myTable').rows;
+  var inputs = document.getElementsByName('newcell');
+  var myObject=new Object();
+  myObject.ddmmyyStr = inputs[2].value;
+
+  if (!validatePriority(inputs[1].value)) return;
+  if (!validateDate(myObject)) return;
+
+  rows[cellNo].innerHTML = '<td>' + inputs[0].value + '</td><td>' + inputs[1].value + '</td><td>' + myObject.ddmmyyStr + '</td>'
+                         + '<td><input type="radio" name="position" value="1"/></td>';
+
+  DisableButtons(false, new Array("addButton", "editButton"));
+  prioritiseRow(rows[cellNo]);
+}
+
+
+// returns true if priority ok else false
+function validatePriority(priority) {
+  if(isNaN(priority)){ // check priority is a number
+    alert("priority must be a number !");
+    return(false);
+  } else if (priority < 1 || priority > 10) {
+    alert("priority must be in the range 1-10 !");
+    return(false);
+  }
+  return(true);
+}
+
+
+// returns true if priority ok else false
+function validateDate(dateObject) {
+
+  var ddmmyy = dateObject.ddmmyyStr.split("/");
+
+  if (ddmmyy.length != 3) {
+    var todayAry = dateDDMMYYYY().split("/");
+    switch (ddmmyy.length) {
+    case 1:
+      ddmmyy[1] = todayAry[1];   // note: no break here is deliberate
+    case 2:
+      ddmmyy[2] = todayAry[2];
+      break;
+    default: 
+      alert('invalid date - date must be format dd/mm/yyyy');
+      return false;
+    }
+  }
+//alert3("ddmmyy join", ddmmyy.join("/"));
+
+  // REFACTOR - turn this bit into a separate fixer function
+  var day = ('0' + ddmmyy[0]).slice(-2);      // the following 3 lines fixes dates (e.g. 1/1/01 = 01/01/2001)
+  var month = ('0' + ddmmyy[1]).slice(-2);
+  var year = (1==ddmmyy[2].length) ? ('200' + ddmmyy[2]).slice(-4) : ('20' + ddmmyy[2]).slice(-4);
+  dateObject.ddmmyyStr = day + "/" + month + "/" + year;
+
+  if (isNaN(day)) {
+    alert('invalid date (day not a number) !');
+    return false;
+  } else if (day<1 || day>31 ) {
+    alert('invalid date, day not in range (1-31) !');
+    return false;
+  } else if (isNaN(month)) {
+    alert('invalid date (month not a number) !');
+    return false;
+  } else if (month<1 || month>12 ) {
+    alert('invalid date, month not in range (1-12) !');
+    return false;
+  } else if (isNaN(year)) {
+    alert('invalid date (year not a number) !');
+    return false;
+  } else if (year<1900 || year>2099 ) {
+    alert('invalid date, year not in range (1900-2099) !');
+    return false;
+  }
+  return true;
+}
+
+
+
+// prioritises whole table
+function prioritiseAll() {
+  var rows = document.getElementById('myTable').rows;
+  for (i=1; i < rows.length; i++) {
+    prioritiseRow(rows[i]);
+  }
+}
+
+
+// colours row according to how close the deadline is
+function prioritiseRow(row) {
+  var myDate=new Date();
+  var numMSecsPerDay = 1000 * 60 * 60 * 24; // millisecs * secs * mins * hours = days
+  var numMSecsToNow = myDate.getTime();
+  var numDaysToNow = numMSecsToNow / numMSecsPerDay;
+  var deadline = row.cells[2].innerHTML;
+  var numDaysToDead = Date.parse(deadline.split('/').reverse().join('/')) / numMSecsPerDay;  // reverse a dd/mm/yyyy date
+  var diffDays = numDaysToDead - numDaysToNow;
+  
+  if (diffDays < 0) {
+    row.className = 'dinvertred';
+  } else if (diffDays < 1) {
+    row.className = 'dred';
+  } else if (diffDays < 7) {
+    row.className = 'dyellow';
+  } else {
+    row.className = 'dgreen';
+  }
+} 
+
+
+// debug function, delimits variable and displays
+function alert2(str1) {
+  alert("val>" + str1 + "<");
+}
+function alert3(prompt, variable) {
+  alert(prompt + "=>" + variable + "<");
+}
+
+
+// this function returns the given date in dd/mm/yyyy format (or todays date if null)
+function dateDDMMYYYY(date) {
+  var day;
+
+  if (null == date) {
+    day = new Date();        // i.e. today
+  } else {
+    day = date;					// or date passed in
+  }   
+  var dayOfMonth = ('0' + day.getDate()).slice(-2);
+  var numMonth = ('0' + (day.getMonth()+1).toString()).slice(-2);
+  return (dayOfMonth + "/" + numMonth + "/" + day.getFullYear() );
+}
+
+
+// mark1
+function importData() {
+  putTableData(document.getElementById('textareaExport').value);
+  DisableButtons(false, new Array("addButton", "exportButton"));
+}
+
+
+// extracts tasks from the main table in comma delimited format
+function putTableData(data) {
+  var myTable = document.getElementById('myTable');
+  var numTable = document.getElementById('numTable');
+
+  emptyTable(myTable);
+  emptyTable(numTable);
+
+  var sections = data.split("Completed");
+  for (k=0; k<sections.length; k++) {
+    alert3("sections[k]", sections[k]);
+  }
+
+  var rows = data.split("\n");
+  for (i=0; i<rows.length; i++) {
+    var cols = rows[i].split(",");
+alert3("cols.length", cols.length );
+if (1==cols.length) alert3("cols[0]", cols[0] );
+    numTable.insertRow(i+1);
+    myTable.insertRow(i+1);
+
+    numTable.rows[i+1].innerHTML = "<td>" + (i+1) + ".</td>";
+    myTable.rows[i+1].innerHTML = newPriorityCell(cols[0], cols[1], cols[2]);
+  }
+  prioritiseAll();
+}
+
+
+// empties all rows in a table (except the headings)
+function emptyTable(table) {
+  var last;
+  while (table.rows.length > 1) {
+    last = table.rows.length - 1;
+    table.deleteRow(last);
+  }
+}
+
+
+function exportHide() {
+  document.getElementById("divExport").style.visibility = "hidden";
+  document.getElementById("divExport").style.display = "none";
+  DisableButtons(false, new Array("addButton", "exportButton"));
+}
+
+
+// This function exports the data in the main table and completed table to the textarea
+function exportData() {
+  DisableButtons(true, new Array("addButton", "exportButton"));
+  document.getElementById('textareaExport').value = getTableData() + "\nCompleted\n" + getCompleteData();
+
+  var divExport = document.getElementById('divExport');
+  divExport.style.visibility = "visible";
+  divExport.style.display = "inline";   // possible 'block' could be used here too
+}
+
+
+// extracts tasks from the main table in comma delimited format
+function getTableData() {
+  var rows = document.getElementById('myTable').rows;
+  var exportData=new Array();
+  var exportLine;
+  var k=0;
+
+  for (i=1; i<rows.length; i++) {
+    exportLine=new Array();
+    for (j=0; j<rows[i].cells.length-1; j++) {  			// dont get the last cell
+      exportLine[j] = rows[i].cells[j].innerHTML;
+    }
+    exportData[k++] = exportLine.join(",");
+  }
+  return(exportData.join("\n") + "\n");
+}
+
+
+// extracts tasks from the main table in comma delimited format
+function getCompleteData(rows) {
+  var rows = document.getElementById('myTable').rows;
+  var exportData=new Array();
+  var exportLine;
+  var k=0;
+
+  for (i=1; i<rows.length; i++) {
+    exportLine=new Array();
+    for (j=0; j<rows[i].cells.length-1; j++) {  			// dont get the last cell
+      exportLine[j] = rows[i].cells[j].innerHTML;
+    }
+    exportData[k++] = exportLine.join(",");
+  }
+  return(exportData.join("\n") + "\n");
+}
+
+
+function test1(obj) {
+alert("test1()");
+alert3("value", obj.value);
+alert3("style", obj.style);
+alert3("type", obj.type);
+alert3("id", obj.id.split("task")[1]);
+  alert("cr" + "\n" + "cr");
+}
+
+</script>

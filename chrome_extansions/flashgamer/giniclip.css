@@ -1,0 +1,27 @@
+/*This Css file applies to games only*/
+
+#sideBar {position:absolute;z-index:-12;}
+#sideBar *{display:none;}
+
+#navigation {display:none;}
+
+.ad_728_90, #leagueContain, .leagueContain, #undergameAd  {position:absolute;z-index:-12;top:-2000px;}
+#wideLogin {display:none;}
+
+/*fullscreen feauture:*/
+#gfull{position:absolute;left:50%;top:-2px;margin-left:400px;
+width:65px;height:30px;background:#ddd;
+padding:4px;color:f55;text-align:center;
+-webkit-border-bottom-left-radius:5px;
+-webkit-border-bottom-right-radius:5px;}
+#gfull a:hover,#gfull a:active,#gfull a:link,#gfull a:visited {color:#00f;}
+
+#wrapper{overflow:hidden;}
+
+#gameHolder{margin:auto !important;width:970px !important;}
+
+.mkoPush{display:none; width:0px;height:0px;position:absolute;z-index:-12;}
+
+.complete{display:none;}
+
+/*end of css file*/

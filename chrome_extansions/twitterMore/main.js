@@ -1,0 +1,4 @@
+alert("joe");
+
+&("body").hide();
+

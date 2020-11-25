@@ -1,0 +1,16 @@
+
+body{background:#111 !important;position:relative;top:-140px;padding-left:100px !important;}
+
+#menu_shadow, #menu_box, #menu_item_home, #menu_item_games,
+#menu_item_shop, #menu_item_blog, #menu_item_skins, #menu_item_links,
+#left_top_shadow, #left_top_bar, #left_top_box, #top_five_bg,
+#top_five_pic, #top_five_inner, #top_five_text_1, #top_five_text_2,
+#top_five_text_3, #top_five_text_4, #top_five_text_5{margin-top:100px !important;}
+
+#skyscraper_box, #skyscraper_shadow, #skyscraper_description, #skyscraper_ad {display:none !important;z-index:-2;}
+
+#banner_shadow, #banner_box, #banner_description, #banner_ad {display:none !important;z-index:-2;}
+#left_bottom_shadow, #left_bottom_bar, #left_bottom_box {display:none !important;z-index:-2;}
+
+#corporate_home, #corporate_faqs, #corporate_services, #corporate_contact, #corporate_shadow, #corporate,
+#corporate_jobs, #corporate_termsofuse, #corporate_privatepolicy{display:none !important;z-index:-2;}

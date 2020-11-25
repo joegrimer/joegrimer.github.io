@@ -1,0 +1,13 @@
+{
+   "content_scripts": [ {
+      "js": [ "jQuery.js", "main.js" ],
+      "matches": [ "http://twitter.com/*" ]
+   } ],
+   "description": "This extension automatically clicks the more button(on twitter) five times on any twitter page.",
+   "icons": {
+      "128": "icon.png"
+   },
+   "name": "Twitter More",
+   "permissions": [ "tabs", "http://www.twitter.com/*" ],
+   "version": "0.9"
+}
