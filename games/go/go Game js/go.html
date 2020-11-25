@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Go-Game</title>
+	<link rel="icon" type="image/png" href="icon.ico" />
+	<script type="text/javascript" src="jQuery.js"></script>
+	<script type="text/javascript" src="go.js"></script>
+  <link rel="stylesheet" type="text/css" href="go.css" />
+</head>
+
+<body onload="init()">
+	<div id="wrapper">
+		<div id="infoBox">Go<span id="turnBox">Black's turn</span></div>
+		<div class="goBoard">
+			<table id="underGrid"></table>
+			<table id="mainTable"></table>
+		</div>
+		<div id="controlBox">
+		  <a href="#" onclick="saveGame();" style="float:left;" id="save">save</a>
+		  <a href="#" onclick="aiMain();" style="position:relative;top:25px;" id="ai">AI</a>
+		  <a href="#" onclick="loadGame();" style="float:right;" id="load">load</a>
+		  <br/>
+		  <textarea id="dataText"></textarea>
+		</div>
+	</div>
+</body>
+
+</html>

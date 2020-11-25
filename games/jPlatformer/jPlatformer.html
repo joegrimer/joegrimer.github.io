@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+<title>J-Plat</title>
+    
+<style>
+
+    body {
+        background-color:#000;
+    }
+    section#gameContainer {
+        width:800px;
+        height:500px;
+        background-color:#fff;
+        margin:0px auto;
+        border: 2px solid grey;
+        border-radius:5px;
+        margin-top:20px;
+    }
+    
+    body canvas {
+        background:linear-gradient(red, yellow);
+/*        background-color:#008;*/
+        border:1px solid #222;
+
+    }
+
+</style>
+    
+<script>
+
+// globals:
+var canvas;
+var ctx; // context
+    
+// robot Globals
+var robot; // this is a global object that I'm going to work on later
+//var robotX = 12;
+//var robotY = 400;
+//var forceField = 0;
+
+// initator - called at onload event in <body> tag
+function init() {
+
+    canvas = document.getElementById('myCanvas');
+    ctx = canvas.getContext('2d');
+
+
+    
+    robot = {
+        name:"Karlov",
+        x:12,
+        y:410,
+        src:"assets/box.jpg",
+        forceField:0,
+        startForceField:function() {
+            this.forceField = 1;
+            setTimeout(function() {this.forceField=0},1000);
+        },
+        jump:function(){oJump(this)},
+        draw:function(){drawImage(this.x,this.y,"assets/robot.png")}
+    }
+    
+    drawAll();
+}
+
+// make an object jump
+function oJump(object,index = 0) {
+
+    setTimeout(function() {
+        if(index>30) return;
+
+        object.y+=(index-15);
+//        object.draw();
+        drawAll();
+//        console.log(object.y);
+        oJump(object,index+1);
+    },30);
+}
+    
+// robot Drawer
+function drawAll() {
+    ctx.clearRect(robot.x-10, robot.y-10, 60, 60); // using this line instead of the one below prevents overall fuziness
+//    ctx.clearRect(0, 0, canvas.width, canvas.height-32);
+    
+    drawImage(200,400);
+    drawFloor2();
+    
+    // gravity check
+    if (robot.x<0) robot.x=0;
+    else if (robot.x>800) robot.x=800;
+    if (robot.y<0) robot.y=0;
+    else if (robot.y>410) robot.y=400;
+    
+    if (robot.forceField) {
+        ctx.beginPath();
+        ctx.arc(robot.x+16,robot.y+24,40,0,2*Math.PI);
+        ctx.stroke();
+        ctx.fillStyle="#008";
+//        ctx.strokeStyle="#fff";
+        ctx.fill();
+    }
+
+    drawImage(robot.x,robot.y,"assets/robot.png");
+}
+
+function drawImage(x=0,y=0,url="assets/box.jpg") {
+      var imageObj = new Image();
+      imageObj.src = url;
+      imageObj.onload = function() {
+          ctx.drawImage(imageObj, x, y);
+      }
+}
+
+function drawFloor2(x=0,y=468,url="assets/floor.png") {
+      var imageObj = new Image();
+      imageObj.src = url;
+      imageObj.onload = function() {
+          for(x2=x;x2<800;x2+=132) {
+              ctx.drawImage(imageObj, x2, y);
+          }
+      }
+}
+    
+function drawFloor(x=0,y=468,url="assets/floor.png") {
+      var imageObj = new Image();
+      imageObj.src = url;
+      imageObj.onload = function() {
+          for(x2=x;x2<800;x2+=132) {
+              ctx.drawImage(imageObj, x2, y);
+          }
+      }
+}
+    
+// this function will capture keystrokes
+document.addEventListener("keydown", KeyCheck);  //or however you are calling your method
+function KeyCheck(event)
+{
+   var KeyID = event.keyCode;
+   switch(KeyID)
+   {
+        case 37: // left
+        robot.x-=10;
+        break;
+        case 32: // space - jump
+        robot.jump();
+        break;
+        case 39: // right
+        robot.x+=10;
+        break;
+        case 70: //f for robot.forceField
+        robot.startForceField();
+        default:
+        break;
+   }
+    drawAll();
+}
+    
+</script>
+</head>
+<body onload="init()">
+
+<section id="gameContainer">
+
+<canvas id="myCanvas" width="800" height="500"
+style="border-radius:5px;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+</section>
+
+</body>
+</html>

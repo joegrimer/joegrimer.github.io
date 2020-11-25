@@ -1,0 +1,13 @@
+Welcome to Chatbot... Your Personal Digital Assistant
+{'i': ['fat'], 'this': ['fat'], 'love': ['beautiful'], 'truth': ['true'], 'money': ['power']}
+Thank You. I am ready now...
+> love is what
+['beautiful']
+{'i': ['fat'], 'this': ['fat'], 'love': ['beautiful'], 'truth': ['true'], 'money': ['power']}
+> money is what
+['power']
+{'i': ['fat'], 'this': ['fat'], 'love': ['beautiful'], 'truth': ['true'], 'money': ['power']}
+> q
+Goodbye
+Saving...
+

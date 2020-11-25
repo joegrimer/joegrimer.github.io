@@ -1,0 +1,1 @@
+{'a book': ['pages bound together'], 'monday': ['a first day of the week'], 'Monday': ['a day of the week'], 'a watch': ['can tell time', 'can count time', 'a clock'], 'a human': ['emotional'], 'Joseph': ['a person', 'a human'], 'a clock': ['can tell time', 'can count time'], 'a paper': ['from trees'], 'knives': ['can cut'], 'a knife': ['a sharp object']}

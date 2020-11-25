@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+<title>Morse Code Inputter</title>
+<script>
+var curChar = 0;
+
+//var silentCount=0;
+var aryFeed = [];
+
+function startStream() {
+	if(curChar==0) {
+		aryFeed.push(0);
+		o.frequency.value=0
+	} else {
+		o.frequency.value+=350;
+		aryFeed.push(1);
+	}
+	if(aryFeed.length>20) aryFeed.shift();
+	
+	document.getElementById("stream").innerHTML = aryFeed.join('');
+	processFeed2(curChar);
+	setTimeout(startStream, 200);
+}
+
+var feedMemory = 0;
+function processFeed2(newChar) {
+	var letter = '';
+	// process new signal
+	if(newChar==1) {
+		feedMemory = feedMemory | 1;
+	}
+    feedMemory = (feedMemory << 1) % 4096;
+
+	//process feed memory
+	var signalArray = 0
+	var lastState = 0
+	var stateLength = 0
+	for(var i=2048;i>=1;i/=2) {
+		if(!!(feedMemory & i)==lastState) {
+			stateLength++;
+		} else {
+			signalArray = signalArray << 1;
+			if(lastState==1) {
+				signalArray = signalArray | 1;
+				if(stateLength>2) {
+					signalArray = signalArray << 1;
+					signalArray = signalArray | 1;
+				}
+			} else if(stateLength > 3) signalArray = signalArray << 1; // extra 0
+			stateLength = 0
+		}
+		lastState = !!(feedMemory & i);
+		stateLength++;
+	}
+	if(signalArray == 0) letter = ' ';
+	else if(!(signalArray^0b1101101011)) letter = 'Q';
+	else if(!(signalArray^0b1101011011)) letter = 'Y';
+	else if(!(signalArray^0b1011011011)) letter = 'J';
+	else if(!(signalArray^0b110110101)) letter = 'Z';
+	else if(!(signalArray^0b110101101)) letter = 'C';
+	else if(!(signalArray^0b110101011)) letter = 'X';
+	else if(!(signalArray^0b101101101)) letter = 'P';
+	else if(!(signalArray^0b11010101)) letter = 'B';
+	else if(!(signalArray^0b10110101)) letter = 'L';
+	else if(!(signalArray^0b10101101)) letter = 'F';
+	else if(!(signalArray^0b10101011)) letter = 'V';
+	else if(!(signalArray^0b11011011)) letter = 'O';
+	else if(!(signalArray^0b1010101)) letter = 'H';
+	else if(!(signalArray^0b1011011)) letter = 'W';
+	else if(!(signalArray^0b1101011)) letter = 'K';
+	else if(!(signalArray^0b1101101)) letter = 'G';
+	else if(!(signalArray^0b101011)) letter = 'U';
+	else if(!(signalArray^0b101101)) letter = 'R';
+	else if(!(signalArray^0b110101)) letter = 'D';
+	else if(!(signalArray^0b10101)) letter = 'S';
+	else if(!(signalArray^0b11011)) letter = 'M';
+	else if(!(signalArray^0b1101)) letter = 'N';
+	else if(!(signalArray^0b1011)) letter = 'A';
+	else if(!(signalArray^0b101)) letter = 'I';
+	else if(!(signalArray^0b11)) letter = 'T';
+	else if(!(signalArray^0b1)) letter = 'E';
+
+	console.log("eof"+signalArray.toString(2));
+	signalArray = (signalArray << 1) % 4096;
+	
+	document.getElementById("output").innerHTML += letter;
+}
+
+function processFeed(newChar) {
+    var letter = '';
+	if(newChar==1) {
+		feedMemory = feedMemory | 1;
+	} else {
+		if(feedMemory == 0) letter = ' ';
+		else if(!(feedMemory^0b00110110101100)) letter = 'Q';
+		else if(!(feedMemory^0b00110101101100)) letter = 'Y';
+		else if(!(feedMemory^0b00101101101100)) letter = 'J';
+		else if(!(feedMemory^0b0011011010100)) letter = 'Z';
+		else if(!(feedMemory^0b0011010110100)) letter = 'C';
+		else if(!(feedMemory^0b0011010101100)) letter = 'X';
+		else if(!(feedMemory^0b0010110110100)) letter = 'P';
+		else if(!(feedMemory^0b001101010100)) letter = 'B';
+		else if(!(feedMemory^0b001011010100)) letter = 'L';
+		else if(!(feedMemory^0b001010110100)) letter = 'F';
+		else if(!(feedMemory^0b001010101100)) letter = 'V';
+		else if(!(feedMemory^0b001101101100)) letter = 'O';
+		else if(!(feedMemory^0b00101010100)) letter = 'H';
+		else if(!(feedMemory^0b00101101100)) letter = 'W';
+		else if(!(feedMemory^0b00110101100)) letter = 'K';
+		else if(!(feedMemory^0b00110110100)) letter = 'G';
+		else if(!(feedMemory^0b0010101100)) letter = 'U';
+		else if(!(feedMemory^0b0010110100)) letter = 'R';
+		else if(!(feedMemory^0b0011010100)) letter = 'D';
+		else if(!(feedMemory^0b001010100)) letter = 'S';
+		else if(!(feedMemory^0b001101100)) letter = 'M';
+		else if(!(feedMemory^0b00110100)) letter = 'N';
+		else if(!(feedMemory^0b00101100)) letter = 'A';
+		else if(!(feedMemory^0b0010100)) letter = 'I';
+		else if(!(feedMemory^0b001100)) letter = 'T';
+		else if(!(feedMemory^0b00100)) letter = 'E';
+	}
+	feedMemory = (feedMemory << 1) % 4096;
+	
+	document.getElementById("output").innerHTML += letter;
+}
+
+var context = new AudioContext();
+var o = context.createOscillator();
+o.type = "sine";
+//o.type = "square"
+//o.type = "sawtooth"
+//o.type = "triangle"
+o.frequency.value=0;
+o.connect(context.destination);
+o.start();
+</script>
+<style>
+body {
+	background:#222;
+	color:#ddd;
+}
+
+heading {
+/*	display:block;*/
+	text-align:center;
+	font-weight:bold;
+	font-size:20px;
+	margin:10px;
+}
+
+#stream {
+	width:400px;
+	word-wrap:break-word;
+	font-family:"Courier New";
+}
+
+</style>
+</head>
+<body onload="startStream()" onkeydown="curChar=1;" onkeyup="curChar=0">
+<heading>Welcome. Press any key to start morse coding.</heading>
+
+<div id="stream"><!--nothing Yet--></div>
+<div id="output"><!--nothing Yet--></output>
+
+</body>
+</html>
