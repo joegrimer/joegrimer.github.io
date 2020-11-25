@@ -1,0 +1,181 @@
+<!-- Unique Thing Generator - 19/9/2013 - Joseph Grimer-->
+<!-- b = [a, a = b][0]; -->
+
+<html>
+<head>
+
+<title>Unique Thing Generator</title>
+
+<style>
+body {padding:50px;background:#bbb;}
+body *{font-size:24px;}
+div{/*float:left;*/display:block;border:2px solid black;padding:10px;background:royalblue;}
+span{font-size:16px;display:block;padding-left:10px;margin-bottom:4px;}
+</style>
+
+<script>
+// global variables... body is the bucket I put everything into before I 'flush' it onto the document
+var body = "<div>";
+var bucket = '';
+
+// main function, run on body load event
+function main() {
+
+  var pArray = [
+   [["He","She"],
+    ["defies","creates","thirsts for","is curious about","will never become familiar with"],
+    ["chaos","destruction","a new beginning","the end of all time","hygiene","a sense of peace","war","clean teeth","the undead","the living"]],
+
+   [["The"],
+    ["only","last","first","ugliest","simplest","tallest","moresome","awesome"],
+    ["pig","green thing","hobgoblin","dwarf","elf","human","orc","half-orc","half-elf","drow","Fighter"]],
+
+   [["Has a"],
+    ["fat","ugly","green","shinyn"],
+    ["pig","thing","hobgoblin"]]
+  ];
+
+  var nArray = [
+   [["All","None","They","Those"],
+    ["that"],
+    ["punch","defy","deny","ignore","become","despise","create","ponder","liquify","destroy","assist","applaud","save"],
+    ["the"],
+    ["goblin","gods","warriors","powers","villagers","monsters","cats","coconuts","trees","grass","wild animals","fish","water","fire","air","wind",
+     "mushrooms","swamps","lunatics","gentlemen","mountains","leaves","signs","markings","skies","clouds","animals","suns","stars","moons","planets",
+     "goblins","spiders","orcs","carpets","ropes","eggs","insects","hats","crossbows","bows","logs","knives","feet","books","catapults","slingshots",
+     "rocks","things that fly","short hair","sharp objects","ranged weapons","spoons","wood","trees","grass","noses","holes","fingers","spears"],
+    ["shall","will","won't","cannot","shan't","must never","must","are to","will see how to","will discover a way to","may not","is fated to"],
+    ["burn","swim","fly","become green","be like he who defiles","clean bananas","roll the dice","play the role","paint the fence","clean the car",
+     "sand the floor","read","challenge fate","conquer destiny","lift a mountain","hold up the sky","drink the ocean","eat the hill of ham"],
+    ["in"],
+    ["hell","paradise","my boot","the village","the town","the dungeon","the caves","the wilderness","the house","the underground","the sky","...",
+     "sky city","Poseidon's home","Apollo's lavatory","the magical cave","the forest of trees","the rivers of blood","the shires of chaos","_"]
+   ],
+   [["To"],
+    ["die","fly","swim","learn","fight","clean","destroy","be diplomatic","heal","know","eat"],
+    ["is to"],
+    ["taste","touch","listen to","hear","understand","think of","sense","ride","climb"],
+    ["Death","Green","Deep","High","Yellow","Foamy","Great","Death","Life","Fearing","Galloping","Blue","Victory","Moon"],
+    ["Mountain","Valley","River","Stream","Spring","Plain","Plateau","Mesa","Hill","Metropolis"]
+   ],
+   [["Make","Do","Learn","Observe","Look At","See","Climb","Focus on","Levitate","Control","Posses","Laugh upon"],
+    ["power","war","movement","sleep","toughness","hammers","Thor","Zeus","Athena","Mars","Achilles","ankles"],
+    ["with a sense of","despite the","without thinking of","considering the","not"],
+    ["Holy","Platonic","Tectonic","Great","destructive","Plutonic","Skinny"],
+    ["Guns","Elves","Wars","Foes","Fumbles","Freaks","Pancakes","Lands"],
+    [""]
+   ]
+  ]
+
+  var hArray = [
+   [["His","Her "],
+    ["left baby toe","right baby toe","left big toe","right big toe","left thumb","right thumb","left pinkie","right pinkie","right eye","left eye",
+     "nose","eye","forehead","right ear","left ear","left cheek","right cheek","wrong cheek","left leg","right leg","jaw","heart","front tooth","gizzard",
+     "neck","earlobe","nose bridge","lip","brain","second brain","backup arm","right 6th finger","only fist-able hand","only chin","previous belly",
+     "hair","left wrist","right elbow","left foot","right foot","chin","second chin","whole body","only and favourite set of clothing","irremovable shoe"],
+    ["is","was once","will become"],
+    ["made of rock","tiny","huge and red","missing","striped like a zebra","controlled by Athena","wooden","really rather ugly","missing but there",
+     "made of metal","90% magnetic","flat","able to make people cry","black and crispy","extremely stretchy","not good","mysterious","very short",
+     "extremely flammable but never burns","covered in scales","100% reflective","transparent","extremely bendy","able to talk","toxic to the touch",
+     "frequently telling him to go home","twisted beyond recognition","permanently frozen","always moving","devoid of nerves","100% bone","boneless"] ],
+
+    [["He","She","His close relative","Her close relative","His uncle","Her father","His aunty","Her grandfather","His imaginary dog","His brother"],
+     ["simply needs","doesn't want to forget","lives the life of", "is, deep down,", "is convinced he is a", "is fated to become","may once have been",
+      "has the heart of","acts like","is in fact the humanoid version","has the eye of","persistently desires","has the heart of","always wants to burn"],
+     ["a crazy","an empathetic","a pathetic","a convoluted","a scaly","an intelligent replica of a(n)","a dying","a breathing","a suffocating","a sad",
+      "a sleepy","a sleeping","a messed-up","a black","an undead","a lifeless","a bendy","a boneless","a sharp","a blunt","a bevelled","a departitioned"],
+     ["goblin","quadruped","cat","moon","dragonfly","dragon","walking","hand","horse","robe","sleeping bag","noose","dagger","shovel","knife","fork",
+      "(this is the bit we don't understand)","baboon","dictionary","goggle","tooth","banana","apple","thing","thingy","thingymabob","blob called Bob"],
+     ["(because one can't simply walk into Mordor)","","","","","","","","","","","",", despite all appearance","(True Story)","(Not actually true)"] ],
+
+    [["He","She"],
+     ["has a crippling fear of","is obsessed with", "believes we are all made of", "is unpredictably affected by","has a fascination with",
+      "is made speechless by","is convinced he has a heart made of","is frequently observed talking to","can speak to", "thinks he can speak to",
+      "loves to try and communicate with","hates and fatefully detests","is convinced he will die from eating","likes to eat","constantly talks about",
+      "is convinced the world revolves around","tends to hide from","secretly detests","is somehow marked by","has a dark past when it comes to"],
+     ["dry","ugly","green","purple","violet","pink","maroon","blue","black","sweet","sour","old","neglected","convoluted","diabolical","clean",
+      "messy","mathematical","abstract","beautiful","fat","skinny","amicable","detestable","invisible","transparent","opaque","reflective","blunt",
+      "overgrown","weeping","rotting","healthy","stale","flying","heartless","frustrated","invisible","","","","","","","","","","",""],
+     ["coconuts","trees","grass","wild animals","fish","water","fire","air","wind","mushrooms","swamps","lunatics","gentlemen",
+      "goblins","spiders","orcs","carpets","ropes","eggs","insects","hats","crossbows","bows","logs","knives","feet","books","catapults","slingshots",
+      "rocks","things that fly","short hair","sharp objects","ranged weapons","spoons","wood","trees","grass","noses","holes","fingers"]]
+    ];
+
+  epicJuggle(nArray);
+  epicJuggle(nArray);
+  epicJuggle(nArray);
+  body += "<br />";
+  epicJuggle(hArray);
+  epicJuggle(hArray);
+  epicJuggle(hArray);
+  body += "<br />";
+  epicJuggle(pArray);
+  epicJuggle(pArray);
+  epicJuggle(pArray);
+
+  body += "</div>";
+
+  // the great flush
+  document.getElementById('bodi').innerHTML += body;
+}
+
+function epicJuggle(ary) {
+//  alert(rand(ary));
+  body += superJuggle(rand(ary));
+}
+
+function superJuggle(ary){
+//  alert(ary);
+  var result = '';
+//  if( typeof ary === 'string' ) return ary + "<br />";
+  for (i=0;i<ary.length;i++) {
+    if( typeof ary[i] === 'string' ) return ary[i] + "<br />";
+    var element = rand(ary[i]);
+    if( typeof element === 'string' ) result += element + " ";
+    else result += miniJuggle(element);
+  }
+  return result.substring(0, result.length - 1) + "<br />";
+}
+
+function miniJuggle(ary){
+  var element = rand(ary);
+  if( typeof element === 'string' ) return element + " ";
+  else return miniJuggle(element);
+}
+
+function rand(array) {
+  return array[Math.floor(Math.random()*array.length)];
+}
+
+function capFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+</script>
+</head>
+<body onload="main()"><p>Joseph's Unique Thing Generator (13'th Age Mechanic)</p>
+<section id="bodi"></section><!--
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<div><span>Official List</span>
+The only housebroken dwarf<br />
+The only dwarf with a crippling fear of mice<br />
+"Drrrrrrrr" the dark elf sorcerer adopted by a family of zombies<br />
+The tallest halfling ever known, due to being stretched on the rack by the Crusader<br />
+The only dwarf made of pure iron<br />
+The only paladin in service to the Prince of Shadows (“I’m more a mob enforcer than a holy man.”)<br />
+"Frostbitten", a wizard covered in a thin layer of ice due to an accident during wizarding school<br />
+The only elf to be alive when the Wizard King fell…and also happened to have fought on his side.<br />
+A rogue absolved of all sins past and future by the Priestess<br />
+A half-orc barbarian with two heads, and one of them is the evil twin<br />
+The only half-elf to be raised by dwarven nobles<br />
+A paladin who had his tongue cut out for his crimes before being redeemed by the Priestess<br />
+A cleric who healed the Crusader's mortal wound while in captivity<br />
+A half-elf ranger cursed to slowly turn into a tree<br />
+A half-elf ranger cursed to kill all plants near her<br />
+A halfling with a wooden leg that he had carved into a flute<br />
+A gnome bard who can’t tell dragons apart (has conflicted relationships with the Great Gold Wyrm and the Three)<br />
+<br />
+Can't carry a sword smaller than his own body!
+</div>-->
+</body>
+<html>

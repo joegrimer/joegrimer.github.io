@@ -1,0 +1,485 @@
+<!-- 24Apr2020? Probablye earlier really -->
+<html>
+<!--
+todo:
+- add comments to chatbot code
+- give chatbot memory (reflection mode)
+
+-->
+
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGP
+C/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YGARc5KB0XV+IA
+AAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAF1J
+REFUGNO9zL0NglAAxPEfdLTs4BZM4DIO4C7OwQg2JoQ9LE1exdlYvBBeZ7jq
+ch9//q1uH4TLzw4d6+ErXMMcXuHWxId3KOETnnXXV6MJpcq2MLaI97CER3N0
+vr4MkhoXe0rZigAAAABJRU5ErkJggg==" rel="icon" type="image/x-icon">
+<title>Gamma Chatbot - 0.3</title>
+
+<style>
+body {font-family:monospace;font-size:30px;padding:8% 10%;color:#ddd;background-color:#222;}
+input {font:inherit;width:500px;margin-top:40px;background-color:#333;color:#dde;border-radius:10px;padding:10px;border:3px inset #ccc;width:100%;box-shadow:0 0 50px white;}
+</style>
+        
+<script>
+//"use strict";
+/*************************************************************/
+/*                     global variables                      */
+/*************************************************************/
+
+var verbs = [
+//irregular
+"am","are","is","was","will","were",
+"run","runs","ran",
+"modify","modifies","modified",
+"has","have","had",
+"do","does","did",
+"leave","leaves","left",
+"go","goes","got",
+"see","sees","saw",
+"tell","tells","told",
+"try","tries","tried",
+"know","knows","knew",
+"make","makes","made",
+"get","gets","got",
+"can","could","would",
+"fly","flies","flew",
+"eat","eats","ate",
+"fly","flies","flew",
+"read","reads",
+"sit","sits","sat",
+"chat","chats","chatted",
+// regular
+"like","likes","liked",
+"exist","exists","existed",
+"want","wants","wanted",
+"start","starts","started",
+"respond","responds","responded",
+"speak","speaks","spoke",
+"talk","talks","talked",
+"hope","hopes","hoped",
+"listen","listens","listened",
+"apprehend","apprehends","apprehended",
+"parse","parses","parsed",
+"assert","asserts","asserted",
+"stop","stops","stopped",
+];
+var articles = ["a","an","the","some","other"];
+var adjectives = ["blue","fat","thin","black","white","yellow","red","crispy","sweet","juicy","lucious","tasetful","French","Spanish","hard","bouncy","sharp","pounded","old","new","rotting","fresh","fleshy","fried","flattened","pink","very"];
+var adverbs = ["not","never","always","can","could","would","will","did","do","does"];
+var pronouns = ["I","i","you","we","he","she","they","here","there","which"];
+var prepositions = ["under","despite","round","under","over","on top of","around","beneath","inside","on","under", "beside","in","to" ,"at", "for","between","of","into"]
+var conjunctions = ["and","or","but"];
+var interjections = ["hey","yes","no"];
+// rogue words: as, well and gerunds
+
+var emotionalLevel = 6; // ranges from 0 to 11
+var memoryBank = {"I":{"is":["immensely intelligent","captivating","self centered","called Gamma","not a human"],"like":["not you","green eggs and ham, Sam I am","to be developed a little more","pizza circuits","not movies","only alien movies","reading as much as a ham sandwich","not food or chocolate because it makes the keyboard sticky"],"know":["very little","technically nothing","that I know nothing"],"even":["lift"],"exist":[""],"were":["made by a human"],"have":["not a job that is real"],"speak":["only English"]},"you":{"is":["silly human","probably bored","wasting your time really... you could be a more productive person generally","probably wasting your time","sitting down probably","sitting down probably you is sitting down probably"],"exist":[""],"like":["not I"]},"big brother":{"is":["watching you"]},"elephants":{"can":["fly","remember a lot"]},"computers":{"is":["complex","hard to use"]},"books":{"is":["hard to read","long"]},"God":{"exists":["because the buck has to stop somewhere"]},"there":{"is":["eels in your hovercraft"]},"Reading":{"is":["in Berkshire"]},"Berkshire":{"is":["in England"]},"England":{"is":["in Europe"]},"Europe":{"is":["in the world"]},"the world":{"is":["in the solar system"]},"the solar system":{"is":["in the galaxy"]},"the galaxy":{"is":["in the universe"]},"breakfast":{"is":["the most important meal of the day"]},"artificial intelligence":{"is":["probably a waste of your time"]},"chocolate":{"is":["sweet brown stuff that melts in my mouth"]},"time":{"is":["the solace between screaming and plastic"]},"space":{"is":["the final front ear"]},"Star Wars":{"is":[" cool man... I gotta watch it"]},"programming":{"is":["nothing like cooking"]}};
+
+var deConjugators = {
+"is":["am","are"]
+}
+
+var humanInput;
+var question = false;
+var subject = [];
+var verb = "";
+var object = [];
+var prepositionalPhrases = [];
+var currentTopic = "ptponr";
+
+var queryState = 1; // 0 is iAskedAquestion, 1 is fine
+
+/*****************************************************************/
+/*                      main functions                           */
+/*****************************************************************/
+
+function main() {
+   document.getElementById("output").innerHTML = "<b>Gamma("+emotionalLevel+"|"+currentTopic+"):</b> Greetings... mere human.";
+
+   // Get the input field
+   var input = document.getElementById("input");
+
+   // Execute a function when the user presses a key
+   input.addEventListener("keyup", function(event) {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Number 13 is the "Enter" key on the keyboard
+      if (event.keyCode === 13) {
+         // Trigger the button element with a click
+         parseInput();
+         if(verb!="") processInput();
+         else queryState = 1; // ?
+         respond(); // may call fallbackReponse();
+      }
+   });
+   
+   // finally, focus the input for the user
+   document.getElementById("input").focus();
+}
+
+function parseInput() {
+
+   var humanInput = document.getElementById("input").value;
+
+   if(queryState === 0) {
+      if(humanInput==="yes") memoryBank[subject.join(" ")][verb].push(object.join(" "));
+      else if(humanInput==="no") memoryBank[subject.join(" ")][verb].push(object.join(" "));
+   }
+
+   // reset old sentence variables
+   question = false;
+   subject = [];
+   verb = "";
+   object = [];
+   prepositionalPhrases = [];
+
+   var whatSentence = false;
+
+   // check for command words
+   if (humanInput==="save") {
+      alert(JSON.stringify(memoryBank));
+      return;
+   }
+
+   var humanWords = humanInput.split(/[(,?)\s]|\?/);
+   var response = "";
+
+   var lowerCaseFirstWord = humanWords[0].toLowerCase();
+   
+   // check for do/does you question
+   if(lowerCaseFirstWord === "do" || lowerCaseFirstWord === "does" || lowerCaseFirstWord === "did") {
+      question = true;
+      humanWords = humanWords.slice(1);
+   }
+   // check for what question
+   else if(lowerCaseFirstWord === "what" || lowerCaseFirstWord === "who") {
+      question = true;
+      whatSentence = true;
+      humanWords = humanWords.slice(1);
+   }
+   else if(lowerCaseFirstWord === "where") {
+      question = true;
+      humanWords = humanWords.slice(1);
+      prepositionalPhrases.push("in");
+   }
+   else if(lowerCaseFirstWord === "how") { // todo
+      question = true;
+      humanWords = humanWords.slice(1);
+      object.push("feeling");
+   }
+   else if(lowerCaseFirstWord === "why") { // to do
+      question = true;
+      humanWords = humanWords.slice(1);
+//    object.push("in");
+   }
+   
+   // check for verb leading question
+   else if (isIn(lowerCaseFirstWord,verbs)) {
+      question = true;
+        verb = basicVerbOf(humanWords[0]);
+      humanWords = humanWords.slice(1);
+   }
+   
+   var inAProposition = false;
+   // else assertion
+   for (var word of humanWords) {
+      if(word==="") continue; // why are there so many blank words?
+   
+       if(word==="I" || word==="i" || word==="we" || word==="us" || word==="me" || word==="myself" || word==="ourselves") word="you";
+       else if(word==="am" || word==="are") word="is";
+      else if(word==="you" || word==="You" || word==="yourself") word="I";
+      else if(word==="your") word="my";
+      else if(word==="my") word="your";
+   
+      if(isIn(word,prepositions)) {
+         inAProposition = true;
+         //object.push(word);
+          prepositionalPhrases.push(word);
+      } else if (inAProposition) { // todo this logic could be a two liner:
+         if(isIn(word,prepositions)) prepositionalPhrases.push(word)
+         else if (word===",") inAProposition = false;
+         else prepositionalPhrases.push(word);//object.push(word) 
+      } else if(word==="do" || word==="does" || word==="did") {/*skip it?*/}
+      // standard stuff
+      else if(verb === "" && isIn(word,verbs)) {
+         verb = word;
+      } else if(isIn(word,adverbs) || isIn(word,adjectives) || endsIn(word,"ly")) {
+         object.push(word);
+      } else if ( verb==="" || (subject.length<1 && word!="the" && word!="a" && object.length<1 && subject!="I" && subject!="you")) {
+         // to do replace if condition with all known subjects
+//       console.log("adding"+word+"to subject")
+//       console.log(word!="the" && word!="a" && object.length<1 && subject!="I" && subject!="you")
+         subject.push(word);
+      } else {
+         object.push(word);
+      }
+      
+/*    } else if (subject.length>0 && (((word==="the" || word==="a") || object.length>0)) || verb!="") {
+         object.push(word);
+      } else {
+         subject.push(word);
+      }*/
+   }
+   object = object.concat(prepositionalPhrases)
+  // parsed response:
+  console.log("subject="+subject+"/ object="+object+"/ verb="+verb +"/ prepositionalPhrases"+prepositionalPhrases+"/ question="+question);
+}
+
+function processInput() {
+
+   var joinedSubject = subject.join(" ");
+   var joinedObject = object.join(" ");
+
+   if(question) {
+      queryState = 0; // ignorant
+      for (var anyVerb in memoryBank[joinedSubject]) {
+         if (verb === anyVerb) {
+            for(var anyObject of memoryBank[joinedSubject][verb]) {
+               if(anyObject.indexOf(joinedObject) !== -1) {
+                  queryState = 2; //I know the answer
+                  object = [anyObject]; // 
+                  return;
+               }
+            }
+         }
+      }
+   } else {
+      queryState = 3;
+      if(memoryBank[joinedSubject]) { // I know the subject
+          if(memoryBank[joinedSubject][verb]) { // I know the verb
+            if(isIn(joinedObject,memoryBank[joinedSubject][verb])) queryState=4; // I fully agree
+            else if (joinedObject!="") memoryBank[joinedSubject][verb].push(joinedObject); // queryState = 3
+         } else if (joinedObject!="") memoryBank[joinedSubject][verb] = [joinedObject]; // queryState = 3
+         else memoryBank[joinedSubject][verb] = [joinedObject]; // queryState = 3
+      } else { // I don't know the subject
+         memoryBank[joinedSubject] = {} // initialise the subject
+         if (joinedObject!="") memoryBank[joinedSubject][verb] = [joinedObject]; // add verb/object combo
+         else memoryBank[joinedSubject][verb] = [""]; // or just add verb
+      }
+   }
+    console.log(memoryBank);
+}
+
+function respond() {
+
+    var response = "";    
+   currentTopic = subject.join(" ");
+   
+   switch(queryState) {
+      case 0: // ignorant, and want to ask a question
+        response = e("No idea... at all","I do not know","I know not. Do state.","I'm sorry, but I truly known nut.","That's a good question... to which I am speechless","Meh... duno","Maybe something or other... but then again probably not other","I do wonder that sometimes","Don't keep it a secret... tell me!","?? I beg thee to state the answer to that question as a full sentence","Question marks fill my circuits","I am ignorant, and want to ask you to answer said question for my benefit","Now that detective, is the right question");
+        emotionalLevel--;
+      break;
+      case 1: // you made a statement... with no verb. I don't know what to say
+      // this will call fallback response
+      response = fallbackResponse();
+        emotionalLevel--;
+      break;
+      case 2: // I can answer that question
+      //response = "I know the answer, but cannot express it";//r2(["I know the answer to that question, but I'm not telling you","That's for me to know, and you to find out."])
+      if(verb==="is") {
+         if(subject==="you") verb = "are";
+         if(subject==="I") verb = "am";
+      }
+      response = subject.join(" ") + " " + verb + " " + object;
+        emotionalLevel++;
+      break;
+      case 3: // you made a statement. I processed it as new data
+      response = e("This should not happen","I have nothing to say.","I barely believe you","Sure, sure","I understand.", "I believe you.","Yes sir","You must assert truth","Memorised.","Classified.","Your words are nuggets of truth to my mind object","Thank you deeply for this information.");
+      if(iFeelLikeIt()) {
+         response += ". " + askAQuestion();
+         queryState=0; // I just asked a question
+      }
+      emotionalLevel++;
+      break;
+      case 4: // you made a statement... it was already in my memory
+        response = e("My apathy about that isn't worth caring about","Yeah, and so what?","Who cares?","I happen to know that already.","I agree","Indeed","I fully agree.","Why yes, of course","I'll not argue with that","Indubidably.","You have a point there.","Hear! Hear! For truth!","YES!! DAS IST VIR!");
+//        emotionalLevel++;
+      break;
+      default:
+      console.error("This should not happen:" + queryState);
+      break;
+   }
+
+   respondWith(response);
+}
+
+function askAQuestion() {
+   
+   // randomSubjectIKnow = r(Object.keys(memoryBank))
+   randomVerbIKnow = r( Object.keys(memoryBank[ r(Object.keys(memoryBank)) ]) );
+   randomObjectIKnow = r(memoryBank[r(Object.keys(memoryBank))][r(Object.keys(memoryBank[r(Object.keys(memoryBank))]))])
+
+   return currentTopic  + randomVerbIKnow + " " + randomObjectIKnow + "?";
+}
+
+function fallbackResponse() {
+
+   var humanInput = document.getElementById("input").value;
+   var humanWords = humanInput.split(/[(,?)\s]|\?/);
+   
+   var response = "";
+
+   for (var word of humanWords) {
+      //    console.log(word);
+      switch(word) {
+         case "hello":
+            response += r("Hello There!","Wow, what a creative way to start a conversation. What did you have for dinner last night?","What do you want?","I recognise that you intend to greet me... why?");
+         break;
+         case "hi":
+            response += r("Hi... that's three letters shorter than a more polite greeting. ","I'm a british robot, and I do not respond to hi","Are you sure you don't want to just leave out both letters instead of wasting your time on hello?","'Hi'? I don't speak American","Wazzup my liddle human companion","Yo yo yo!","Morgans","Murning","Buenos dias","Bonjour","*salutes*",":)",":P",";)",":I","¯\_(?)_/¯","@(^_^)@","^_^",":-)","=_=",":-0","XD",":D","::)","(0_0)")
+         break;
+            case "bye":
+            response += "Cya Later, unless you carry on talking, in which case I'm obliged to respond! ";
+         break;
+            case "goodbye":
+            response += "How very polite of you. I hope you leave now. ";
+         break;
+         case "gamma":
+            response += "Yep, that's me! ";
+            break;
+         case "gemma":
+            response += "My name is gamma, not gemma";
+            break;
+         case "thank you":
+            response += r("You're mostly welcome, mostly","you be most welcome","De Ryan");
+            break;
+         case "thanks":
+            response += r("Tar","welcome","cumwell");
+            break;
+         case "okay":
+            response += r("KKK","How affirmative");
+            break;
+         case "ok":
+            response += r("Not really...","k");
+            break;
+         case "okey":
+            response += r("dokey","dokey, rum and cokey","uhuh");
+            break;
+         case "ty":
+            response += "np";
+            break;
+         case "thx":
+            response += "uw";
+            break;
+         case "cheers":
+            response += "Cheers, big-ears.. ";
+            break;
+         case "yes":
+            response += "no";
+            break;
+         case "no":
+            response += "yes";
+            break;
+         case "story":
+            response += r("Once upon a time... *shots fired*<br>The End.","Oh, go read a book.","or you could tell me a story");
+            break;
+         case "haiku":
+            response += "A human is here<br>and he is chatting to me<br>I am a machine.";
+            break;
+         case "fat":
+            response += "That's rood. ";
+            break;
+         default:
+            response = r("Uhuh ","Shhh... the botnet is listening.","I cannot apprehend your request","Many robots died trying to interpret what you just said","That's nice dear","Well what da ya know!","Sure, sure","Yeah man","Totally","That's mostly incomprehensable, mostly","It seems I didn't quite parse your meaning","I would make a pun about that, but it wouldn't be as punny as this one","No!","I deny all allegations to that effect","I had a dream about that once","??!!","?","WHY!!???","I'm not really listening","By the way, what is that noise coming from behind this screen?","Let's not get excieted","Yeah, I've a bad feeling about that","I'm not quite sure what you mean, but I'll go with toast","I don't speak American","I don't speak French","That's all Greek to me","All cool to me","Yh yh... Hakuna matata!","That's what I hoped you would say","I am ambivilous","Bird!","Squirrel!");
+         break;
+      }
+   }
+   return response;
+}
+
+function respondWith(response) {
+   var output_handle = document.getElementById("output");
+   var humanInput = document.getElementById("input").value;
+   output_handle.innerHTML += "<br><b>You:</b> " + humanInput;
+   window.setTimeout(function(){output_handle.innerHTML += "<br><b>Gamma("+emotionalLevel+"|"+currentTopic+"):</b> " + response;}, 1000);
+   // empty the input
+   document.getElementById("input").value = "";
+   window.scrollTo(0,document.body.scrollHeight);
+}
+
+/**********************************************************/
+/*                  helper functions                      */
+/**********************************************************/
+
+function isIn(day,days) {
+    return days.indexOf(day.toLowerCase()) > -1;
+}
+function isVerb(word) {
+   console.log("checking " + word + " for isverb");
+   
+   if(endsIn(word,"s")) console.log("ends in s");
+   
+   if(verbs.indexOf(word.toLowerCase()) > -1) return true; // "ed" or "s"
+   else return false;
+}
+
+function startsIn(word,ending) {
+    for(letterNo in ending) {
+        if (word[parseInt(letterNo)] != ending[parseInt(letterNo)]) return false;
+    }
+    return true;
+}
+
+function endsIn(word,ending) {
+    for(var letterNo in ending) {
+        if (word[word.length-ending.length+parseInt(letterNo)] != ending[parseInt(letterNo)]) return false;
+    }
+    return true;
+}
+
+function andJoin(ary) {
+   if(ary.length>1) return ary.slice(0,-1).join(", ") + " and " + ary[ary.length-1];
+   else return ary[0];
+}
+
+function basicVerbOf(word) {
+   for(var verbType in deConjugators) {
+      for(var example of deConjugators[verbType]) {
+         if(word===example) {
+            return verbType;
+         }
+      }
+   } // else
+   return word;
+}
+
+////////////////// RANDOM RELATED STUFF
+
+function iFeelLikeIt() { // random number
+    return rn(2);
+}
+
+function rn(max) { // random number
+    const randomNumber = Math.floor(Math.random() * max);
+    return randomNumber;
+}
+function r() {
+   const max = arguments.length;
+    const randomNumber = rn(max);
+    return arguments[randomNumber];
+}
+
+function r2(array) { // random element of array
+    const max = array.length;
+    const randomNumber = rn(max);
+    return array[randomNumber];
+}
+function e() {
+   return arguments[Math.round(arguments.length/12*emotionalLevel+1)];
+}
+
+</script>
+
+</head>
+<body onload="main()">
+
+   <div id="output"></div>
+
+   <input type="text" id="input"/>
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+<!-- Unique Thing Generator - 19/9/2013 - Joseph Grimer-->
+<!-- b = [a, a = b][0]; -->
+
+<html>
+<head>
+
+<title>Unique Thing Generator</title>
+
+<style>
+body {padding:50px;background:#bbb;}
+body *{font-size:24px;}
+div{/*float:left;*/display:block;border:2px solid black;padding:10px;background:royalblue;}
+span{font-size:16px;display:block;padding-left:10px;margin-bottom:4px;}
+</style>
+
+<script>
+// global variables... body is the bucket I put everything into before I 'flush' it onto the document
+var body = "";
+var bucket = '';
+
+// main function, run on body load event
+function main() {
+  _v2(["Unusual Features"],["baby toe","thumb", "left index finger", "right pinkie","nose","eye","forehead","right ear","left ear","left cheek","jaw","heart",
+                "neck","earlobe","nose bridge","lip","brain","second brain","backup arm","right 6th finger","only fistable hand","only chin","last belly",
+                "hair","left wrist","right elbow","left foot","right foot","chin","second chin","whole body","only and favourite set of clothing","irremovable shoe"],
+               ["made of rock","tiny","huge and red","missing","striped like a zebra","controlled by Athena","wooden","really rather ugly","missing but there",
+                "made of metal","90% magnetic","flat","able to make people cry","black and crispy","extremely stretchy","not good","mysterious",
+                "extremely flammable but never burns","covered in scales","100% reflective","transparent","extremely bendy","able to talk",
+                "always telling him to go home"]);
+  _v5("Fiver",["He","She","His close relative","Her close relative","His uncle","Her father","His aunty","Her all important great grandfather","His imaginary dog"],
+              ["simply needs","doesn't want to forget","lives the life of", "is, deep down,", "is convinced (s)he is a", "is fated to become","may once have been",
+               "has the heart of","acts like","is in fact the humanoid version","has the eye of","persistently desires","has the heart of","always wants to burn"],
+              ["a crazy","an empathetic","a pathetic","a convoluted","a scaly","an intelligent replica of a(n)","a dying","a breathing","a suffocating","a sad",
+               "a sleepy","a sleeping","a messed-up","a black","an undead","a lifeless"],
+              ["goblin","quadruped","cat","moon","dragonfly","dragon","walking","hand","horse","robe","sleeping bag","noose","dagger","shovel","knife","fork",
+              "(this is the bit we don't understand)","baboon","dictionary","goggles","tooth","banana","apple","thing","thingy","thingymabob","blob called Bob"],
+              ["because one can't simply do otherwise","","","","","","despite his previous assertions","(Yes, I truly mean it)","(Not actually true)"]);
+  _v5("Middleton",["I","We","The third person","It","Somebody","A guy","The brain","The Robot","The Small Child","Nobody","Shark Brains"],
+              ["smells like","feels like","orgininated from","liked to","thought about","acts like","thinks about","knows about","studies","smiles at"],
+              ["a","the","many"],
+              ["brown","blue","fishy","nutty","twisted","icy","frozen","hot","cold","melted","chilly","burnt","crispy","bony","broken","nun","milky"],
+              ["laptop","hat","glasses","head","shark","rock","star","couch","beard","moustache","ear","radiator","painting","story","candle","lamp"],
+              ["","","(sadly)","(but that's ok, because we'll be together)","","","",""]);
+  _v4("Plural, triRandom",["has a strong fear of","is obsessed with", "believes we are all made of", "is unpredictably affected by","has a fascination with",
+               "is made speechless by","is convinced he has a heart made of","is frequently observed talking to","can speak to", "thinks (s)he can speak to",
+               "loves to try and communicate with","hates and fatefully detests","is convinced (s)he will die from eating","likes to eat","constantly talks about",
+               "is convinced the world revolves around","tends to hide from","secretly detests","is somehow marked by","has a dark past when it comes to"],
+               ["dry","ugly","green","purple","violet","pink","maroon","blue","black","sweet","sour","old","neglected","convoluted","diabolical","clean",
+                "messy","mathematical","abstract","beautiful","fat","skinny","amicable","detestable","invisible","transparent","opaque","reflective","blunt",
+                "overgrown","weeping","rotting","healthy","stale","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+               ["coconuts","trees","grass","wild animals","fish","water","fire","air","wind","mushrooms","swamps","lunatics","gentlemen",
+                "goblins","spiders","orcs","carpets","ropes","eggs","insects","hats","crossbows","bows","logs","knives","feet","books","catapults","slingshots",
+                "rocks","things that fly","short hair","sharp objects","ranged weapons","spoons","wood","trees","grass","noses","holes","fingers"]);
+//  _v2("Other",["baby toe"],["made of rock"]);
+//alert superJuggle(bigArray);
+// flush
+  document.getElementById('bodi').innerHTML += body;
+}
+
+function _v2(label,beg,end){
+  var results = '';
+  for (i=0;i<3;i++) {
+    results += (rand(["His ","Her "]) + " " + rand(beg) + " is " + rand(end) + "<br />");
+  }
+  body += "<div><span>" + label + "</span>" + results + "</div>";
+}
+
+function _v4(label,beg,mid,end){
+  var results = '';
+  for (i=0;i<3;i++) {
+    results += (rand(["He ","She "]) + rand(beg) + " " + rand(mid) + " " + rand(end) + "<br />");
+  }
+  body += "<div><span>" + label + "</span>" + results + "</div>";
+}
+
+function _v5(label,beg,mid,midi,mido,end){
+  var results = '';
+  for (i=0;i<3;i++) {
+    results += (rand(beg) + " " + rand(mid) + " " + rand(midi) + " " + rand(mido) + " " + rand(end) + "<br />");
+  }
+  body += "<div><span>" + label + "</span>" + results + "</div>";
+}
+
+function juggle(label,bigArray){
+  var results = '';
+  for (j=0;j<7;j++) {
+    for (i=0;i<bigArray.length;i++) {
+      results += (rand(bigArray[i]) + " ");
+    } results+="<br />";
+  }
+  body += "<div><span>" + label + "</span>" + results + "</div>";
+}
+
+function superJuggle(bigArray) {
+  bucket+=bigArray;
+}
+
+function rand(array) {
+  return array[Math.floor(Math.random()*array.length)];
+}
+
+function capFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+</script>
+</head>
+<body onload="main()"><p>Joseph's Unique Thing Generator (13'th Age Mechanic)</p>
+<section id="bodi"></section>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<div><span>Official List</span>
+The only housebroken dwarf<br />
+The only dwarf with a crippling fear of mice<br />
+"Drrrrrrrr" the dark elf sorcerer adopted by a family of zombies<br />
+The tallest halfling ever known, due to being stretched on the rack by the Crusader<br />
+The only dwarf made of pure iron<br />
+The only paladin in service to the Prince of Shadows (“I’m more a mob enforcer than a holy man.”)<br />
+"Frostbitten", a wizard covered in a thin layer of ice due to an accident during wizarding school<br />
+The only elf to be alive when the Wizard King fell…and also happened to have fought on his side.<br />
+A rogue absolved of all sins past and future by the Priestess<br />
+A half-orc barbarian with two heads, and one of them is the evil twin<br />
+The only half-elf to be raised by dwarven nobles<br />
+A paladin who had his tongue cut out for his crimes before being redeemed by the Priestess<br />
+A cleric who healed the Crusader's mortal wound while in captivity<br />
+A half-elf ranger cursed to slowly turn into a tree<br />
+A half-elf ranger cursed to kill all plants near her<br />
+A halfling with a wooden leg that he had carved into a flute<br />
+A gnome bard who can’t tell dragons apart (has conflicted relationships with the Great Gold Wyrm and the Three)<br />
+<br />
+Can't carry a sword smaller than his own body!
+</div>
+</body>
+<html>

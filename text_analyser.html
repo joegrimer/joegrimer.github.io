@@ -1,0 +1,62 @@
+<!-- Text Analysis - 18/9/2013 - Joseph Grimer-->
+<!-- b = [a, a = b][0]; -->
+
+<html>
+<head>
+
+<title>Text Analyser</title>
+
+<style>
+body {padding:50px;background:#bbb;}
+body *{font-size:18px;}
+div{float:left;display:block;border:2px solid black;padding:10px;background:royalblue;margin-bottom:20px;}
+span{font-size:16px;}
+textarea#text{height:300px;width:90%;}
+</style>
+
+<script>
+function main() {
+  var text = document.getElementById('text').value;
+  var results = document.getElementById('results');
+  var rewrite = document.getElementById('rewrite');
+  var output="", output2="";// to be flushed into results (and rewrite)
+  var letters = [];
+
+  for(i=0;i<text.length;i++) {
+    var match = false;
+    for(j=0;j<letters.length;j++) {
+      if (text[i]==letters[j][0]) {
+        match=true;
+        letters[j][1]++;
+      }
+    }
+    if (!match){
+      letters.push([text[i],1]);
+    }
+  }
+  letters.sort(function(a,b){return b[1]-a[1]})
+
+  for(k=0;k<letters.length;k++) {
+    output += ("<div>" + letters[k][0] + " = " + letters[k][1] + "</div>");
+  }
+  results.innerHTML = output;
+}
+
+function a2(value, value2) {
+  alert("[" + value + "] is >"+ value2 + "<")
+}
+
+function rand(array) {
+  return array[Math.floor(Math.random()*array.length)];
+}
+
+</script>
+</head>
+<body>
+<p>Text Analyser</p>
+<span>(Please insert the text you would like analysed into the textbox below)</span><br /><br />
+<textarea id="text"></textarea><br /><br />
+<input type="button" value="Submit" onclick="main()" /><br /><br />
+<div id="results"></div>
+</body>
+<html>

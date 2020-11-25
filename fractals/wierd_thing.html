@@ -1,0 +1,60 @@
+<!-- wierd thing 2015 apr 28 -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Weird Things</title>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111323253-1"></script>
+<script>
+
+</script>
+
+<style>
+/*The style*/
+
+body {
+background: radial-gradient(red,black);
+height:100vh;
+}
+
+.spike {
+z-index:3;
+  width: 0; 
+  height: 0; 
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  
+  border-bottom: 300px solid grey;
+position:absolute;
+}
+
+.one{bottom:0;left:45%;}
+.two{bottom:-40px;left:10px;transform: rotate(45deg);}
+.three{bottom:25%;left:0;transform: rotate(90deg);}
+.four{top:0;left:0;transform: rotate(135deg);}
+.five{top:0;left:55%;transform: rotate(180deg);}
+.six{top:0;right:0;transform: rotate(-135deg);}
+.seven{bottom:25%;right:0;transform: rotate(-90deg);}
+.eight{bottom:-40px;right:10px;transform: rotate(-45deg);}
+
+.tinyguy {width:30px;height:30px;border-radius:50%;background:white;position:absolute;left:50%;top:50%;}
+.tinyguy::after {content:'';display:block;width:15px;height:15px;background:black;border-radius:50%;left:20%;top:20%;position:absolute;}
+</style>
+
+</head>
+<body>
+<div class="spike one"></div>
+<div class="spike two"></div>
+<div class="spike three"></div>
+<div class="spike four"></div>
+<div class="spike five"></div>
+<div class="spike six"></div>
+<div class="spike seven"></div>
+<div class="spike eight"></div>
+
+<div class="tinyguy"></div>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!-- Model - 15/10/2013 - Joseph Grimer-->
+<html>
+<head>
+
+<title>Heat Model</title>
+
+<style>
+body {padding:50px;background:#bbb;}
+body *{font-size:24px;}
+section div{float:left;display:block;border:2px solid black;padding:10px;height:226px;background:royalblue;}
+section div h3{font-size:16px;display:block;padding-left:10px;margin:0px 0px 4px 0px;}
+section div textarea{width:160px;height:200px;}
+section div input{font-size:16px;}
+</style>
+
+<script>
+var loopCount = 1;
+
+// main function, run on body load event
+function main() {
+//  alert("fish");
+  var c=document.getElementById("myCanvas");
+  var ctx=c.getContext("2d");
+  for(i=0;i<50;i++) {
+    for(j=0;j<50;j++) {
+      ctx.fillStyle=("#00"+Math.floor((Math.random()*9)+1));
+      ctx.fillRect(j*5,i*5,5,5);
+    }
+  }
+
+  setInterval(function(){loop()},1000);
+}
+
+function loop() {
+
+//  alert(loopCount);
+//  var hexString = loopCount.toString(16);
+//  if (hexString.length == 1) hexString = "0" + hexString;//alert(hexString +"isshort");
+//  alert(hexString);
+  var c=document.getElementById("myCanvas");
+  var ctx=c.getContext("2d");
+
+  for(i=0;i<50;i++) {
+    for(j=0;j<50;j++) {
+      if (i==49) {
+        var newI = 0;
+      } else var newI = i+1;
+      if (j==49) {
+        var newJ = 0;
+      } else var newJ = j+1;
+      var otherColor = ctx.getImageData(newI*5, newJ*5, 1, 1);
+//      nc = ctx.getImageData(newI*5, newJ*5, 1, 1).data[2];
+//      color = [data[0], data[1], data[2]];
+//      a2(otherColor, "nc")
+      var clrs="rgb("+otherColor.data[0]+","+otherColor.data[1]+","+otherColor.data[2]+")";
+      ctx.fillStyle=(clrs);
+      ctx.fillRect(j*5,i*5,5,5);
+//      a2("yoha",otherColor.data[0]+","+otherColor.data[1]+","+otherColor.data[2]);
+//      ctx.putImageData(otherColor,i*5,j*5)
+    }
+  }
+}
+
+function a2(vary,string) {
+  alert(">" + vary + "< is >" + string + "<");
+}
+</script>
+</head>
+<body onload="main()"><p>Heat Model</p><section>
+
+<canvas id="myCanvas" width="500" height="300" style="border:1px solid #c3c3c3;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+</section>
+</body>
+<html>
