@@ -23,7 +23,6 @@ response='----------------------\n  My Response Begins:\n'
 def main():
 #  respondTo("Welcome to Earth. Who are you?")
 #  respondTo("Alpha is Beta. Beta is Gamma. Gamma is Delta. Delta is Epsilon. delta is what.alpha is what.what is delta")
-#  respondTo("Reading is in Berskhre. Berkshire is in the South West. The South West is in England. England is in Europe.")
 #  respondTo("Where is in England. Berkshire is in where")
   respondTo("Dom Pedro Afonso 19 July 1848 10 January 1850 was the Prince Imperial and heir apparent to the throne of the Empire of Brazil. Born at the Palace of Sao Cristovao in Rio de Janeiro, he was the second son and youngest child of Emperor Dom Pedro II and Dona Teresa Cristina of the Two Sicilies, and thus a member of the Brazilian branch of the House of Braganza. Pedro Afonso was seen as vital to the future viability of the monarchy, which had been put in jeopardy by the death of his older brother Dom Afonso almost three years earlier. Pedro Afonso's early death from fever at the age of one devastated the Emperor, and the imperial couple had no further children. Pedro Afonsos older sister Dona Isabel became heiress, but Pedro II was unconvinced that a woman could ever be accepted as monarch by the ruling elite. He excluded Isabel from matters of state, and failed to provide training for her possible role as empress. With no surviving male children, the Emperor started to believe that the imperial line was destined to end with his own death.")
   mixWords()

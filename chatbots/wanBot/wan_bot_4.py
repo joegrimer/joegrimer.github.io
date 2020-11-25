@@ -23,7 +23,6 @@ class thing:
 def main():
 #  respondTo("Welcome to Earth. Who are you?")
 #  respondTo("Alpha is Beta. Beta is Gamma. Gamma is Delta. Delta is Epsilon. delta is what.alpha is what.what is delta")
-#  respondTo("Reading is in Berskhre. Berkshire is in the South West. The South West is in England. England is in Europe.")
 #  respondTo("Where is in England. Berkshire is in where")
   laptop = thing()
   print laptop.form
