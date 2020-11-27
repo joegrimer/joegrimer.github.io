@@ -1,3 +1,4 @@
+// gcc growth.c -lcurses
 // Hello there... this is a small program I wrote using ncurses as a graphics framework
 // it's called growth... and should show you a rather nice animation of a something being drawn// enjoy!
 // Joseph Grimer - September 2018
@@ -5,6 +6,8 @@
 #include <stdio.h>
 #include <ncurses.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
 
 int semi_rand(int mod);
 

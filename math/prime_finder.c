@@ -2,7 +2,7 @@
 #include <stdbool.h>
 
 main() {
-	int power = 4;
+	int power = 20;
 	unsigned long max = 1<<power;
 	unsigned int numbers[max];
 	unsigned long i, j;
