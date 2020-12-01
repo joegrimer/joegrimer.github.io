@@ -91,14 +91,14 @@ def digestWords(text):
 
 def load():
 	global knownText
-	file1 = open("chatBotData.txt", "r")
+	file1 = open("chat_bot_data.txt", "r")
 	knownText = file1.read()
 	file1.close()
 
 #### NEED TO IMPLEMENT THIS FUNCTION EVENTUALLY I GUESS MAYBE
 def save():
 	print("Saving...")
-	file1 = open("chatBotData.txt", "w+") # w+ means create/write and read.
+	file1 = open("chat_bot_data.txt", "w+") # w+ means create/write and read.
 	file1.write(str(factAry))
 	file1.close()
 	
