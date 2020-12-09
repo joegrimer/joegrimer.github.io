@@ -82,6 +82,7 @@ function startTime() {
      //~ alert('over!');
      rebeep();
   }
+  if (new Date().getHours() == 13) rebeep();
   save_time();
   document.getElementById('txt').innerHTML = doz(h) + ":" + doz(m) +':'+ doz(s) + '<br /><span class=stopped>' + h+ ":" + m +':'+ s + '</span>';
 }
