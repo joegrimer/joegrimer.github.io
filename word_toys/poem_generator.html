@@ -1,0 +1,65 @@
+<!doctype html>
+<!-- Started 2019, I guess. Much work to do on this one -->
+<html>
+<head>
+<style>
+
+body {
+   font-size:40px;
+}
+
+</style>
+</head>
+
+<body>
+<script>
+
+var output = "";
+
+function random(max) {
+    randomNumber = Math.floor(Math.random() * max);
+    return randomNumber;
+}
+
+function randof(ary) {
+   return ary[random(ary.length)];
+}
+
+const subjects = [
+"The Flower",
+"The Watch",
+"The Pot",
+"The Pen",
+"The Paper",
+"The Sphere",
+"The Glass",
+"The Card",
+]
+const existentials = "is was will be".split(' ');
+const objects = "Green Yellow Red Blue White Black Broken Lost".split(' ');
+
+/*for(/*eachsubject of/*in subjects) {
+        output+=subject;
+}*/
+
+const random_sub = randof(subjects);
+const random_ex = randof(existentials);
+const random_obj = randof(objects);
+const random_pred = ' '+random_ex + ' ' + random_obj;
+
+const final_poem_title = random_sub + " " + random_pred;
+
+//complex linguistics
+
+output = final_poem_title + '<br>' +
+   '<br> Why ' + random_ex + ' ' + random_sub.toLowerCase() + ' ' + random_obj + ' ?' +
+   '<br>' + random_sub + random_pred;
+
+
+document.write(output);
+    
+
+</script>
+</body>
+</html>
+
