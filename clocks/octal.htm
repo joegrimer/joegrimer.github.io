@@ -91,7 +91,7 @@ function startTime() {
 function octa(val) {
   var res = '';
   if (val>=8) {
-    res = minidoz(Math.floor(val/8)) + 'o';
+    res = minioct(Math.floor(val/8)) + 'c';
     val = val%8;
   }
   res = res.toString() + minioct(val).toString();
