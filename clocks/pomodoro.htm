@@ -5,7 +5,8 @@
 <style>
 body {
 /* display: none */
-padding:10% 20% 0 20%;background:#322;color:#ddf;font-family: 'Alegreya SC';}
+/* padding:10% 20% 0 20%; */
+background:#322;color:#ddf;font-family: 'Alegreya SC';}
 #txt {font-size:100px;text-align:center;display:block;}
 body.stopped {
 background:black;
@@ -19,23 +20,20 @@ body.stopped span.stopped {
     font-style:italic;
 }
 #txt {
-font-size: 100px;
+font-size: 10px;
     text-align: left;
     display: block;
-    margin: 0 auto;
+/*     margin: 0 auto; */
     width: 320px;
     }
 </style>
 <script>
-var h = 30;
-var m = 0;
-var s = 0;
+var start_seconds = 60*24;
+var seconds = start_seconds;
 // victory ;)
 var int, running;
 function main() {
-    if (localStorage.hours) h = parseInt(localStorage.hours);
-    if (localStorage.minutes) m = parseInt(localStorage.minutes);
-    if (localStorage.seconds) s = parseInt(localStorage.seconds);
+    // here is where we previously loaded localStorage
     start();
     window.onbeforeunload = function (e) {
         e = e || window.event;
@@ -50,7 +48,7 @@ function main() {
     };
 }
 function start() {
-  console.info('starting '+Date()+'|||'+h+':'+m+':'+s);
+//   console.info('starting '+Date()+'|||'+h+':'+m+':'+s);
   document.body.classList.remove('stopped');
   running = true;
   int = setInterval(startTime, 1000);
@@ -71,43 +69,47 @@ function clock_hit() {
     } else start();
 }
 
-function save_time() {
-    localStorage.hours = h;
-    localStorage.minutes = m;
-    localStorage.seconds = s;
-}
+// function save_time() {
+//     localStorage.hours = h;
+//     localStorage.minutes = m;
+//     localStorage.seconds = s;
+// }
 function startTime() {
-  s -= 1;
-  if(s<0) { s = 59; m -=1}
-  if(m<0) { m = 59; h -=1}
-  if(h<0) {
+  seconds -= 1;
+  if(seconds<0) {
      //~ alert('over!');
      rebeep();
   }
   //if (new Date().getHours() == 13) rebeep();
-  save_time();
-  document.getElementById('txt').innerHTML = octa(h) + ":" + octa(m) +':'+ octa(s) + '<br /><span class=stopped>' + h+ ":" + m +':'+ s + '</span>';
+//   save_time();
+  var sand_string = '';
+  for(var i=0;i<start_seconds;i++) sand_string += (i<seconds) ? 'I ' : '0 ';
+  document.getElementById('txt').innerHTML = sand_string;
 }
-function octa(val) {
-  var res = '';
-  if (val>=8) {
-    res = minidoz(Math.floor(val/8)) + 'o';
-    val = val%8;
-  }
-  res = res.toString() + minioct(val).toString();
-  return res;
+function doz(val) {
+
+  return val;
+//   var res = '';
+//   if (val>=12) {
+//     res = minidoz(Math.floor(val/12)) + 'd';
+//     val = val%12;
+//   }
+//   res = res.toString() + minidoz(val).toString();
+//   return res;
 }
-function minioct(val) {
-  if(val<8) return val;
-  return '!!!';
-}
+// function minidoz(val) {
+//   if(val==11) return 'E';
+//   else if(val==10) return 'X';
+//   else if(val<10) return val;
+//   return '!!!';
+// }
 
 //if you have another AudioContext class use that one, as some browsers have a limit
 var audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
 
 function rebeep() {
-beep(1000, undefined, 0.01)
-// setTimeout(rebeep,2000);
+   beep(1000, undefined, 0.01)
+//    setTimeout(rebeep,2000);
 }
 //All arguments are optional:
 

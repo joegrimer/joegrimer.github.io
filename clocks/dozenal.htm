@@ -91,7 +91,7 @@ function startTime() {
 function doz(val) {
   var res = '';
   if (val>=12) {
-    res = minidoz(Math.floor(val/12));
+    res = minidoz(Math.floor(val/12)) + 'd';
     val = val%12;
   }
   res = res.toString() + minidoz(val).toString();
@@ -108,8 +108,8 @@ function minidoz(val) {
 var audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
 
 function rebeep() {
-   beep(1000);
-   setTimeout(rebeep,2000);
+   beep(10000, undefined, 0.01)
+//    setTimeout(rebeep,2000);
 }
 //All arguments are optional:
 
