@@ -6,7 +6,6 @@
 body {
 /* display: none */
 padding:10% 20% 0 20%;background:#322;color:#ddf;font-family: 'Alegreya SC';}
-#txt {font-size:100px;text-align:center;display:block;}
 body.stopped {
 background:black;
 color:skyblue;
@@ -19,7 +18,7 @@ body.stopped span.stopped {
     font-style:italic;
 }
 #txt {
-font-size: 100px;
+font-size: 90px;
     text-align: left;
     display: block;
     margin: 0 auto;
@@ -91,7 +90,7 @@ function startTime() {
 function octa(val) {
   var res = '';
   if (val>=8) {
-    res = minioct(Math.floor(val/8)) + 'c';
+    res = minioct(Math.floor(val/8)) + 'e';
     val = val%8;
   }
   res = res.toString() + minioct(val).toString();
