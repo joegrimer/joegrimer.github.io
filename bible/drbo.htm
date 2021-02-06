@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<script src='drbo.js'></script>
+<script>
+function init() {
+    var body_html = '';
+    for (var i=0;i<BIBLE_LIST.length;i++) {
+        body_html += BIBLE_LIST[i][0] + '<br>';
+    }
+    
+    var random_book = getRndInteger(BIBLE_LIST.length);
+    console.log('b', random_book)
+    var random_chapter = getRndInteger(BIBLE_LIST[random_book][1].length);
+    console.log('c', random_chapter)
+    var random_line = getRndInteger(BIBLE_LIST[random_book][1][random_chapter][1].length);
+    console.log('l', random_line)
+    
+    body_html += BIBLE_LIST[random_book][1][random_chapter][1][random_line];
+
+    document.body.innerHTML = body_html;
+}
+function getRndInteger(max) {
+  return Math.floor(Math.random() * (max) );
+}
+</script>
+</head>
+<body onload='init()'>
+</body>
+</html>
