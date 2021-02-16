@@ -101,7 +101,7 @@ function octa(val) {
     val = val%(60*60*3.75);
   }
   if (val > 60*24) {  // 24m pomodoros
-    res += "abcdefghijklmnopqrst"[Math.floor(val/(60*24))] + ' ';
+    res += " abcdefghijklmnopqrst"[Math.floor(val/(60*24))] + ' ';
     val = val%(60*24);
   }
   if (val > 60) {  // minutes
