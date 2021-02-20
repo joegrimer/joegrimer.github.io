@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+padding:10% 20% 0 20%;background:#322;color:#ddf;font-family: 'Alegreya SC';}
+#txt {font-size:100px;text-align:center;display:block;}
+body.stopped {
+background:black;
+color:skyblue;
+}
+body span.stopped {
+    display:none;
+}
+body.stopped span.stopped {
+    display:inline;
+    font-style:italic;
+}
+#txt {
+font-size: 100px;
+    text-align: left;
+    display: block;
+    margin: 0 auto;
+    width: 320px;
+    }
+</style>
+<script>
+var int, running;
+//if you have another AudioContext class use that one, as some browsers have a limit
+var audioCtx;
+
+var on=false;
+
+function main() {
+   if(on) return;
+   on = true;
+   if (!audioCtx)
+      audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
+      
+   var freq = 0;  // default 440
+   var backtrack = '000 0  0000 0                     000 0                      0       00       000     45      00 0';
+   var notes =     '                12345572346345           12345572346345        1234     5572      346345          ';
+   var current_note = 0;
+   var back_note = 0;
+   var timing = 300;
+   function next_note() {
+      if(current_note >= notes.length) return;
+      if(notes[current_note] === ' ') {
+         setTimeout(next_note, timing);
+      } else {
+         beep(timing, parseInt(notes[current_note])*100, 0.1, undefined, next_note);
+      }
+      current_note += 1;
+   }
+   function back_note_func() {
+      if(back_note >= backtrack.length) return;
+      if(backtrack[back_note] === ' ') {
+         setTimeout(back_note_func, timing);
+      } else {
+         beep(timing, parseInt(backtrack[back_note])*100, 0.1, undefined, back_note_func);
+      }
+      back_note += 1;
+   }
+   
+   // background hum
+   back_note_func();
+   // start tune
+   next_note();
+   on = false;
+}
+
+
+//All arguments are optional:
+
+//duration of the tone in milliseconds. Default is 500
+//frequency of the tone in hertz. default is 440 # min, max = [-24000, 24000]
+//volume of the tone. Default is 1, off is 0.
+//type of tone. Possible values are sine, square, sawtooth, triangle, and custom. Default is sine.
+//callback to use on end of tone
+function beep(duration, frequency, volume, type, callback) {
+    var oscillator = audioCtx.createOscillator();
+    var gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    if (volume){gainNode.gain.value = volume;}
+    if (frequency){oscillator.frequency.value = frequency;}
+    if (type){oscillator.type = type;}
+    if (callback){oscillator.onended = callback;}
+
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + ((duration || 500) / 1000));
+};
+</script>
+</head>
+
+<body onkeydown="main()">
+press any key.
+</body>
+</html>
