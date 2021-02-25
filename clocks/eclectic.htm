@@ -97,15 +97,19 @@ function octa(val) {
     val = val%(60*60*7.5);
   }
   if (val > 60*60*3.75) {  // half days
-    res += Math.floor(val/(60*60*3.75)) + ' ';
+    res += " H"[Math.floor(val/(60*60*3.75))] + ' ';
     val = val%(60*60*3.75);
+  }
+  if (val > 60*60*3.75/2) {  // quarter days
+    res += " Q"[Math.floor(val/(60*60*3.75/2))] + ' ';
+    val = val%(60*60*3.75/2);
   }
   if (val > 60*24) {  // 24m pomodoros
     res += " abcdefghijklmnopqrst"[Math.floor(val/(60*24))] + ' ';
     val = val%(60*24);
   }
   if (val > 60) {  // minutes
-    res += ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII','XXIII'][Math.floor(val/(60))] + ' ';
+    res += ['I','II','IIV','IV','V','VI','VII','IIX','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII','XXIIV','XXIV'][Math.floor(val/(60))] + ' ';
     val = val%(60);
   }
   if (val > 12) {
