@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Alegreya SC' rel='stylesheet'>
+<style>
+body {
+/* display: none */
+padding:10% 20% 0 20%;background:#322;color:#ddf;font-family: 'Alegreya SC';}
+#txt {font-size:100px;text-align:center;display:block;}
+body.stopped {
+background:black;
+color:skyblue;
+}
+body span.stopped {
+    display:none;
+}
+body.stopped span.stopped {
+    display:inline;
+    font-style:italic;
+}
+#txt {
+font-size: 60px;
+    text-align: left;
+    display: block;
+    margin: 0 auto;
+    width: 320px;
+    }
+</style>
+<script>
+var nihon_nos={
+0:['零','ぜろ、れい','Zero, rei'],
+1:['一','いち','Ichi'],
+2:['二','に','Ni'],
+3:['三','さん','San'],
+4:['四','よん、し','Yon, shi'],
+5:['五','ご','Go'],
+6:['六','ろく','Roku'],
+7:['七','しち、なな','Shichi, nana'],
+8:['八','はち','Hachi'],
+9:['九','きゅう、く','Kyû, ku'],
+10:['十','じゅう','Jû'],
+11:['十一','じゅういち','Jû-ichi'],
+12:['十二','じゅうに','Jû-ni'],
+13:['十三','じゅうさん','Jû-san'],
+14:['十四','じゅうよん、じゅうし','Jû-yon, jû-shi'],
+15:['十五','じゅうご','Jû-go'],
+16:['十六','じゅうろく','Jû-roku'],
+17:['十七','じゅうしち、じゅうなな','Jû-shichi, jû-nana'],
+18:['十八','じゅうはち','Jû-hachi'],
+19:['十九','じゅうきゅう','Jû-kyû'],
+20:['二十','にじゅう','Ni-jû'],
+21:['二十一','にじゅういち','Ni-jû-ichi'],
+22:['二十二','にじゅうに','Ni-jû-ni'],
+23:['二十三','にじゅうさん','Ni-jû-san'],
+24:['二十四','にじゅうよん、にじゅうし','Ni-jû-yon, ni-jû-shi'],
+25:['二十五','にじゅうご','Ni-jû-go'],
+26:['二十六','にじゅうろく','Ni-jû-roku'],
+27:['二十七','にじゅうしち、にじゅうなな','Ni-jû-shichi, ni-jû-nana'],
+28:['二十八','にじゅうはち','Ni-jû-hachi'],
+29:['二十九','にじゅうきゅう','Ni-jû-kyû'],
+30:['三十','さんじゅう','San-jû'],
+31:['三十一','さんじゅういち','San-jû-ichi'],
+32:['三十二','さんじゅうに','San-jû-ni'],
+33:['三十三','さんじゅうさん','San-jû-san'],
+34:['三十四','さんじゅうよん、さんじゅうし','San-jû-yon, san-jû-shi'],
+35:['三十五','さんじゅうご','San-jû-go'],
+36:['三十六','さんじゅうろく','San-jû-roku'],
+37:['三十七','さんじゅうしち、さんじゅうなな','San-jû-shichi, san-jû-nana'],
+38:['三十八','さんじゅうはち','San-jû-hachi'],
+39:['三十九','さんじゅうきゅう','San-jû-kyû'],
+40:['四十','よんじゅう','Yon-jû'],
+41:['四十一','よんじゅういち','Yon-jû-ichi'],
+42:['四十二','よんじゅうに','Yon-jû-ni'],
+43:['四十三','よんじゅうさん','Yon-jû-san'],
+44:['四十四','よんじゅうよん、よんじゅうし','Yon-jû-yon, yon-jû-shi'],
+45:['四十五','よんじゅうご','Yon-jû-go'],
+46:['四十六','よんじゅうろく','Yon-jû-roku'],
+47:['四十七','よんじゅうしち、よんじゅうなな','Yon-jû-shichi, yon-jû-nana'],
+48:['四十八','よんじゅうはち','Yon-jû-hachi'],
+49:['四十九','よんじゅうきゅう','Yon-jû-kyû'],
+50:['五十','ごじゅう','Go-jû'],
+51:['五十一','ごじゅういち','Go-jû-ichi'],
+52:['五十二','ごじゅうに','Go-jû-ni'],
+53:['五十三','ごじゅうさん','Go-jû-san'],
+54:['五十四','ごじゅうよん、ごじゅうし','Go-jû-yon, go-jû-shi'],
+55:['五十五','ごじゅうご','Go-jû-go'],
+56:['五十六','ごじゅうろく','Go-jû-roku'],
+57:['五十七','ごじゅうしち、ごじゅうなな','Go-jû-shichi, go-jû-nana'],
+58:['五十八','ごじゅうはち','Go-jû-hachi'],
+59:['五十九','ごじゅうきゅう','Go-jû-kyû']
+}
+var s = 60*60*7.5*4; // minutes, hours, day, week
+var interval, running;
+function main() {
+    if (localStorage.nihon_s && parseInt(localStorage.nihon_s)>0) s = parseInt(localStorage.nihon_s);
+    start();
+    window.onbeforeunload = function (e) {
+        e = e || window.event;
+        if (e) {
+            e.returnValue = 'Sure?';
+        }
+        return 'Sure?';
+    };
+}
+function start() {
+  console.info('starting '+Date()+'|||'+s);
+  document.body.classList.remove('stopped');
+  running = true;
+  interval = setInterval(startTime, 1000);
+}
+function key(event) {
+  //console.log(event)
+  if ((event.keyCode>= 65 && event.keyCode <=90) || event.code==='Space' || event.code === 'Enter') {
+    clock_hit();
+  }
+}
+
+function clock_hit() {
+    if(running) {
+        console.info('stopping '+Date());
+        clearInterval(interval);
+        running = false;
+        document.body.classList.add('stopped');
+    } else start();
+}
+
+function save_time() {
+    if (localStorage)
+        localStorage.nihon_s = s;
+}
+function startTime() {
+  s -= 1;
+  if(s<0) rebeep();
+  save_time();
+  console.log('total s', s);
+  var just_hours = Math.floor(s/(60*60));
+  var just_minutes = Math.floor((s%(60*60))/60);
+  var just_seconds = s%60;
+  document.getElementById('txt').innerHTML = octa(s) + '<br /><span class=stopped>' + just_hours+ ":" + just_minutes +':'+ just_seconds + '</span>';
+}
+function octa(val) {
+  var res = '';
+  var just_hours = Math.floor(val/(60*60));
+  var just_minutes = Math.floor((val%(60*60))/60);
+  var just_seconds = val%60;
+  
+  if(nihon_nos[just_hours]) res += nihon_nos[just_hours][1];
+  else res += '?';
+  res +=':'
+  if(nihon_nos[just_minutes]) res += nihon_nos[just_minutes][1];
+  else res += '?';
+  res +=':'
+  if(nihon_nos[just_seconds]) res += nihon_nos[just_seconds][1];
+  else res += '?';
+  return res;
+}
+
+//if you have another AudioContext class use that one, as some browsers have a limit
+var audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);
+
+function rebeep() {
+   beep(1000);
+   setTimeout(rebeep,2000);
+}
+//All arguments are optional:
+
+//duration of the tone in milliseconds. Default is 500
+//frequency of the tone in hertz. default is 440
+//volume of the tone. Default is 1, off is 0.
+//type of tone. Possible values are sine, square, sawtooth, triangle, and custom. Default is sine.
+//callback to use on end of tone
+function beep(duration, frequency, volume, type, callback) {
+    var oscillator = audioCtx.createOscillator();
+    var gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    if (volume){gainNode.gain.value = volume;}
+    if (frequency){oscillator.frequency.value = frequency;}
+    if (type){oscillator.type = type;}
+    if (callback){oscillator.onended = callback;}
+
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + ((duration || 500) / 1000));
+};
+</script>
+</head>
+
+<body onload="main()" onkeydown="key(event)" onclick="clock_hit()">
+
+<div id="txt"></div>
+
+</body>
+</html>
