@@ -1,0 +1,38 @@
+<style>
+body {font-size:60px;padding:10px;}
+</style>
+<script>
+
+function randof(listo) {
+    return listo[Math.floor(Math.random()*listo.length)];
+}
+let ro = randof;
+
+function dw (something) {
+if (typeof(something) === 'object') something = something.join(' ');
+    document.write(something+'<br><br>');
+    }
+
+function main() {
+
+let nouns = 'blood tears life death cheese impartiality name indifference journalism ignorance meaning truth goodness beauty wisdom sin virtue value things reason force center dream existence'.split(' ');
+let adjectives = 'sad happy living dead smelley alive elegant brute pompous poetic every'.split(' ');
+let verbs = 'say do live love die'.split(' ');
+
+let verb = verbs;
+let adjective = adjectives;
+let adj = adjectives;
+let noun = nouns;
+let nn = nouns;
+
+
+subject = randof(nouns);
+let object = randof(nouns);
+dw(subject + ' is a ' + randof(adjectives) + ' ' + object + ' for '+ randof(nouns) + ', which is a '+ randof(adjectives) + ' ' + object + ' for ' + randof(nouns) );
+
+dw('The ' + randof(nouns) + ' of ' + randof(adjectives) + ' ' + randof(nouns) + ' is a ' + randof(noun));
+dw(['there is only one',randof(noun),'that requires '+ro(adj),ro(nn),'to',ro(verb),'and that is a',ro(nn)]);
+
+}
+main();
+</script>
