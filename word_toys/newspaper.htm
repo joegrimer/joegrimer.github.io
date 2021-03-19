@@ -175,43 +175,43 @@ const when = ["a year ago today","yesterday","five minutes ago","last month","ea
 ////// main functions //////////
     
 function main() {
-	outputArticle3(genDiagram5()); make_d5();
-	outputArticle3(genDiagram4()); make_d4();
+	output_article_3(generate_diagram_5()); make_d5();
+	output_article_3(generate_diagram_4()); make_d4();
 	
-	outputArticle3(genShortStory());
-	outputArticle3(genDiagram3()); make_d3();
-	outputArticle3(genRiddle());
-	outputArticle3(genJoke());
-	outputArticle3(genGame());
+	output_article_3(generate_short_story());
+	output_article_3(generate_diagram_3()); make_d3();
+	output_article_3(generate_riddle());
+	output_article_3(generate_joke());
+	output_article_3(generate_game());
 
-	outputArticle3(genGun()); make_gun();
-	outputArticle3(genObituary());
+	output_article_3(generate_gun()); make_gun();
+	output_article_3(generate_obituary());
 	
-	outputArticle3(genDeepQuote());
-	outputArticle3(genRecipe());
+	output_article_3(generate_deep_quote());
+	output_article_3(generate_recipe());
 
-    outputArticle2(genDiagram2());
-    const ministory = genHeadline();
-    outputArticle(ministory[0],ministory[1]);
+    output_article_2(generate_diagram_2());
+    const ministory = generate_headline();
+    output_article(ministory[0],ministory[1]);
 	
-    const diagram = genDiagram();
-    outputArticle(diagram[0],diagram[1]);
+    const diagram = generate_diagram();
+    output_article(diagram[0],diagram[1]);
 
     const limerick = genLimerick();
-    outputArticle(limerick[0],limerick[1]);
+    output_article(limerick[0],limerick[1]);
 	
-    const patriot = genPatrioticArticle();
-    outputArticle(patriot[0],patriot[1]);
+    const patriot = generate_patriotic_article();
+    output_article(patriot[0],patriot[1]);
 	
-	renderDate();
+	render_date();
 }
 
-function renderDate () {
+function render_date () {
 
 	d = new Date();
 	document.getElementById("date").innerHTML = d.toString();
 }
-function outputArticle3 (contentAndTitle) {
+function output_article_3 (contentAndTitle) {
 
 	const articleContent = contentAndTitle[1];
 	const articleTitle = contentAndTitle[0];
@@ -229,7 +229,7 @@ function outputArticle3 (contentAndTitle) {
     para.innerHTML = articleContent;
 }
 
-function outputArticle2 (articleContent) {
+function output_article_2 (articleContent) {
     section = document.getElementById("section");
     
     var node = document.createElement("article");                 // Create a <li> node
@@ -239,7 +239,7 @@ function outputArticle2 (articleContent) {
     node.innerHTML = articleContent;
 }
 
-function outputArticle(articleContent,articleTitle) {
+function output_article(articleContent,articleTitle) {
     section = document.getElementById("section");
     
     var node = document.createElement("article");                 // Create a <li> node
@@ -265,7 +265,7 @@ function s() {
 
 //// main generators////
 
-function genDiagram5() {
+function generate_diagram_5() {
 	const content = "<canvas id='diagramfive' style='width:100%'></canvas>";
 	return ["Bubbles - Lots A Loops",content];
 }
@@ -274,8 +274,8 @@ function make_d5() {
 	var ctx = c.getContext("2d");
 
 	ctx.beginPath();
-	ctx.strokeStyle = randomColour();
-	ctx.fillStyle = randomColour();
+	ctx.strokeStyle = random_colour();
+	ctx.fillStyle = random_colour();
 	ctx.lineWidth=5;
 	
 	ctx.arc(20,20,10,2*Math.PI,0);
@@ -288,7 +288,7 @@ function make_d5() {
 }
 
 
-function genDiagram4() {
+function generate_diagram_4() {
 	const content = "<canvas id='diagramfour' style='width:100%'></canvas>";
 	return ["Squares",content];
 }
@@ -296,8 +296,8 @@ function make_d4() {
 	var c = document.getElementById("diagramfour");
 	var ctx = c.getContext("2d");
 	
-	ctx.strokeStyle = randomColour();
-	ctx.fillStyle = randomColour();
+	ctx.strokeStyle = random_colour();
+	ctx.fillStyle = random_colour();
 
 	var x = 0;
 	var y = 0;
@@ -306,9 +306,13 @@ function make_d4() {
 		y = rn(14);
 		ctx.fillRect(10*x,10*y,10,10);
 		ctx.strokeRect(10*x,10*y,10,10);
+		if (rn(2)) { // colour switch
+			ctx.strokeStyle = random_colour();
+             ctx.fillStyle = random_colour();
+		}
 	}
 }
-function genDiagram3() {
+function generate_diagram_3() {
 	const content = "<canvas id='diagramthree' style='width:100%'></canvas>";
 	return ["Bubble Chain - Imayk L D Circles",content];
 }
@@ -340,13 +344,13 @@ function make_d3() {
 		
 	//draw
 	ctx.lineWidth=5;
-	ctx.strokeStyle = randomColour();
+	ctx.strokeStyle = random_colour();
 	ctx.stroke();
-	ctx.fillStyle = randomColour();
+	ctx.fillStyle = random_colour();
 	ctx.fill();
 }
 
-function genGun() {
+function generate_gun() {
 	const content = "<canvas id='guncanvas'></canvas>";
 	return ["The Daily Gun: AA-78",content];
 }
@@ -417,7 +421,7 @@ function make_gun() {
 	ctx.stroke();
 }
 
-function genRiddle() {
+function generate_riddle() {
 
 	var content = "I " + r(adverb) + " " + r(verb_present_1) + " and " + r(adverb) + " " + r(verb_present_1) + ",<br>";
 	content += " " + r(adverb) + " " + r(gerund) + " for the " + r(adjective) + " " + r(noun) + ",<br>";
@@ -427,7 +431,7 @@ function genRiddle() {
 	return ["The Daily Riddle",content];
 }
 
-function genJoke() {
+function generate_joke() {
 
 	var content = "";
 	
@@ -452,7 +456,7 @@ function genJoke() {
 	return ["The Daily Joke",content];
 }
 
-function genGame() {
+function generate_game() {
 
 	const game_name_prefix = ["flap","flip","flop","jack","mack","gin","rum","tum","fad","cod","card","heart","spade","joe","club","diamond"];
 	const game_name = capitalise(r(game_name_prefix)) + "-" + capitalise(r(game_name_prefix));
@@ -482,15 +486,15 @@ function genGame() {
 	return ["How to play "+game_name,content];
 }
 
-function genDiagram2() {
+function generate_diagram_2() {
     var diagram = "<h3>Solar Chart #"+rn(256)+"</h3><svg width='350' height='350'>";
 
     // draw core
     var x=175;
     var y=175;
-    const sColour = "#444"; //randomColour();
+    const sColour = "#444"; //random_colour();
     const coreRadius = 12+rn(6);
-    diagram+="<circle cx='"+x+"' cy='"+y+"' r='"+coreRadius+"' stroke='"+sColour+"' stroke-width='1' fill='"+randomColour()+"' /> ";
+    diagram+="<circle cx='"+x+"' cy='"+y+"' r='"+coreRadius+"' stroke='"+sColour+"' stroke-width='1' fill='"+random_colour()+"' /> ";
 
     // prepare next planet
     var satRadius = 6+rn(6);
@@ -500,7 +504,7 @@ function genDiagram2() {
     while(orbitradius<175) {
         diagram+="<circle cx='"+x+"' cy='"+x+"' r='"+orbitradius+"' stroke='"+sColour+"' stroke-width='1' fill='none'/> ";
 
-        const fColour = randomColour();
+        const fColour = random_colour();
 
         const flipX = rn(2)*2-1;
         const flipY = rn(2)*2-1;
@@ -533,26 +537,26 @@ function genLimerick() {
     return [newPoem,poemTitle]; // you can't return a tuple in javascript!
 }
 
-function genDiagram() {
+function generate_diagram() {
 //    const colours=["red","green","blue","yellow","gold","black","magneta","purple","skyblue","white","grey"];
 //    const radius = 20+rn(4)*10;
     
     var diagram = "<svg width='350' height='350'>";
     
     for(radius=150;radius>10;radius-=rn(8) ) {
-        const fColour = randomColour();
-        const sColour = randomColour();
+        const fColour = random_colour();
+        const sColour = random_colour();
 
         diagram+="<circle cx='175' cy='175' r='"+radius+"' stroke='"+sColour+"' stroke-width='1' fill='"+fColour+"' /> ";
     }
-    diagram+='<line x1="175" y1="175" x2="175" y2="30" style="stroke:'+ randomColour() +';stroke-width:2" />';
-    diagram+='<line x1="175" y1="175" x2="70" y2="175" style="stroke:'+ randomColour() +';stroke-width:3" />';
+    diagram+='<line x1="175" y1="175" x2="175" y2="30" style="stroke:'+ random_colour() +';stroke-width:2" />';
+    diagram+='<line x1="175" y1="175" x2="70" y2="175" style="stroke:'+ random_colour() +';stroke-width:3" />';
     
     diagram+="</svg>";
     return [diagram,"The Daily Diagram - By Aness V. Jeah"]
 }
 
-function genPatrioticArticle() {
+function generate_patriotic_article() {
     
     const title = "Our Times by Poe Litcal O. Pinion";
     
@@ -572,7 +576,7 @@ function genPatrioticArticle() {
     return [fullText,title]
 }
 
-function genHeadline() {
+function generate_headline() {
     
     const emotions = ["chilled","angry","horrified", "murderous","bored","bonkers","happy","sad"]
 	const passiveVerbs = ["taken","shown","carried","flown","catapulted","transported","emailed"]
@@ -598,7 +602,7 @@ function genHeadline() {
     return [fullText,title]
 }
 
-function genRecipe() {
+function generate_recipe() {
 
 	const quantities = ["three handfuls","40 kilos","one pinkiefull","a sniff","your weight's worth","your whole stock","a can","an eggfull","a halfmoon"]
 	const actions = ["bake","squash","cook","sleep on","roast","sizzle","flay","simmer","skin","think about","meditate on","roll on","wind up","punch"]
@@ -629,7 +633,7 @@ function genRecipe() {
     return [title,fullText];
 }
 
-function genShortStory() {
+function generate_short_story() {
 
 	// Variables
 	const main_adj = r(adjective);
@@ -644,11 +648,11 @@ function genShortStory() {
 	return [title,content];
 }
 
-function genDeepQuote() {
+function generate_deep_quote() {
 
 	const person = ["They","Everybody","Those","Some people","Princesses","Wise men","Sheep","Short people","tall People","Aliens","Baboons","Cowboys","Strangers","Mad women","Clones","Jedi","you","we","he","she","no one","somebody","everybody","every body","Chinese","men","women"];
 
-	var content = s(person,"who",verb_present_1,idea,"will",adverb,verb_present_1,idea)+"\"<br/> - " + genName2();
+	var content = s(person,"who",verb_present_1,idea,"will",adverb,verb_present_1,idea)+"\"<br/> - " + generate_name_2();
 	
 //	var content = "Everybody has a bit of soppinness inside them. It just depends on who they let it out to.";
 //	var content = "They who talk to old friends talk with the heart of a lion";
@@ -656,7 +660,7 @@ function genDeepQuote() {
 	return ["Deep Quote","\"" + content];
 }
 
-function genName2() {
+function generate_name_2() {
 	const titles = ["Professor","","Sir","Madam"]
 	const initials = ["A","B","C","E","I","O","of","the","U","Y"];
 	const surnames = ["Smithe","Green","Custard","Ofteni","Azran"];
@@ -665,9 +669,9 @@ function genName2() {
 }
 
 
-function genObituary() {
+function generate_obituary() {
 
-	var name = genName2();
+	var name = generate_name_2();
 	var title = "An Obituary of: " + name;
 	const personalities = ["an idiot","a genuis","a creep","an angry person","lazy sod","happy fool"];
 	const relations = ["family","friends","enemies","children","pets","colleagues"]
@@ -686,7 +690,7 @@ function genObituary() {
 
 //////////////////// colour generators //////////////////////////
     
-function randomColour() {
+function random_colour() {
     return "rgb(" + rn(255)+"," + rn(255)+"," + rn(255)+")";
 }
 
@@ -696,7 +700,7 @@ function capitalise(string) {
     return string.substring(0,1).toUpperCase() + string.substr(1);
 }
     
-function genSyllable() {
+function generate_syllable() {
     // a syllable is composed of an Onset and a rhyme. a rhyme is composed of a nuclei and a possible coda.
     const engOnsets=["b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z"];
 //    const engRhymes=["at","et","it","ot","ut","art","een","isle","ore","ewt","arm","eaf","ode","oart","use"]
@@ -708,21 +712,21 @@ function genSyllable() {
     return syllable;
 }
     
-function genName() {
+function generate_name() {
     
     return capitalise(
-        genSyllable()+
-        genSyllable()
+        generate_syllable()+
+        generate_syllable()
     );
 }
 
-function genFullName() {
-    const middleIntials=["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
-    const forename = genName();
-    const secondInitial = r(middleIntials) + "."
-    const surname = genName();
+function generate_full_name() {
+    const middle_initials=["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+    const forename = generate_name();
+    const second_initial = r(middle_initials) + "."
+    const surname = generate_name();
 
-    return forename+" "+secondInitial+" "+surname;
+    return forename+" "+second_initial+" "+surname;
 }
 
 //////////////////////// Mathematical Functions //////////////////////
