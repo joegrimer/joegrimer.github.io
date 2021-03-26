@@ -1,19 +1,23 @@
+<!DOCTYPE html>
 <html>
 <head>
-<body onkeydown="keydown(event)">
+<body onkeydown="keydown(event)" onload="main()">
 <style>
 body {font-size:20px;padding:10px;}
 </style>
 <script>
 function keydown(event) {
-    console.log(event);
-    if(event.keyCode > 64 && event.keyCode < 91 || event.keyCode > 48 && event.keyCode < 58 || [32, 190, 188, 222, 59].indexOf(event.keyCode) !== -1) {
-    document.getElementById('user_input').innerHTML += event.key;
+//     console.log(event);
+    if(event.keyCode > 64 && event.keyCode < 91 || event.keyCode > 48 && event.keyCode < 58 || [32, 190, 188, 222, 59, 191, 49].indexOf(event.keyCode) !== -1) {
+        document.getElementById('user_input').innerHTML += event.key;
     } else if (event.keyCode == 8) {
         var inner = document.getElementById('user_input').innerHTML;
         document.getElementById('user_input').innerHTML = inner.slice(0, -1);
     } else if (event.keyCode == 13) {
-        
+        dw('<br>');
+        write_new_phrase();
+    } else {
+        console.log('unrecognised keycode', event.keycode);
     }
 }
 function randof(listo) {
@@ -23,17 +27,20 @@ let ro = randof;
 
 function dw (something) {
 if (typeof(something) === 'object') something = something.join(' ');
-    document.write(something+'<br><br>');
-    }
+    document.getElementById('user_input').innerHTML += something+'<br><br>';
+    localStorage.text = document.getElementById('user_input').innerHTML;
+}
 
 function main() {
+if (localStorage && localStorage.text) document.getElementById('user_input').innerHTML = localStorage.text;
+write_new_phrase();
+}
+function write_new_phrase() {
+var states = 'tired energetic wise sleepy crazy naive lethargic depressed happy extatic neurotic painful mean angry zealous stupid foolish proud humble self-depricating strong prudent temperate just sinful swearing insulting broken perplexed antagonistic offended offensive defensive confident weak hesitatnt fearful'.split(' ');
 
-var states = 'tired energetic wise sleepy crazy naive'.split(' ');
-
-dw(['you meet a',randof(states),randof(['man','woman'])]);
+dw(['You',randof(['meet','bump into','learn of','hear','see','are','greet','insult','complement','hate','admire','hit']),'a',randof(states),randof(['man','woman'])]);
 
 }
-main();
 </script>
 <div id='user_input'></div>
 </body>
