@@ -27,17 +27,16 @@ void do_dir(char *path, int level)
     strcat(full_file_name, file_name);
       
       stat(full_file_name, &stbuf); // livin on the edge
-      printf("<p>");
       for(int i=0;i<level;i++) printf("&nbsp;&nbsp;&nbsp;");
       if ((stbuf.st_mode & S_IFMT) == S_IFDIR) {
-          printf("%s/</p>\n", file_name);
+          printf("%s/<br />\n", file_name);
           char sub_file_name[1024];
           strcpy(sub_file_name, path);
           strcat(sub_file_name, "/");
           strcat(sub_file_name, file_name);
           do_dir(sub_file_name, level+1);
       } else {
-          printf("<a href='%s/%s'>%s</a></p>\n", path, file_name, file_name);
+          printf("<a href='%s/%s'>%s</a><br/>\n", path, file_name, file_name);
       }
    }
   
@@ -48,7 +47,7 @@ void do_dir(char *path, int level)
 int main(void) 
 { 
    printf("<!doctype html><html><head><link rel='stylesheet' href='style.css' /><title>Hello There!</title><body>");
-   printf("An inelegant dump of everything on this git repository");
+   printf("An inelegant dump of everything on this git repository<br><br>");
    do_dir(".", 0);
    printf("</body></html>");
 } 
