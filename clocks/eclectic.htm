@@ -87,8 +87,9 @@ function startTime() {
   var total_s = h*60*60 + m*60 + s;
   //if (new Date().getHours() == 13) rebeep();
   save_time();
-  console.log('total s', total_s);
-  document.getElementById('txt').innerHTML = octa(total_s) + '<br /><span class=stopped>' + h+ ":" + m +':'+ s + '</span>';
+  //console.log('total s', total_s);
+  if (!document.hidden)
+      document.getElementById('txt').innerHTML = octa(total_s) + '<br /><span class=stopped>' + h+ ":" + m +':'+ s + '</span>';
 }
 function octa(val) {
   var res = '';
