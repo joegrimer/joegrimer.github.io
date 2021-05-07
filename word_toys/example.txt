@@ -1,0 +1,64 @@
+Please don’t feel bad about the red stuff. I am hard on you. But know the piece is so much better. It’s an excellent metaphor. I enjoyed reading Paul Graham’s essay. He wrote and rewrote and rewrote so please don’t feel dismayed. All the writers I know, write and rewrite and delete and rewrite. The ones that don’t so much now, have worked their craft until they rewrite in their heads before they put anything on paper. 
+
+
+Abstract: To explore Nassim Nicholas Taleb's idea of emergent cities being more beautiful, and how this might map to programming. Having a clear abstract means as you write you keep referring back to make sure you are not waffling. A clear abstract, thanks. 
+
+---------------------------------------------
+Programming like you're growing a London Lovely title! 
+
+In N.N. Taleb's book (can you say something like “in Taleb’s exquisite/ interesting/ groundbreaking/ intriguing book) Antifragile, he contrasts bottom-up cities with top down cities. London, in this model, would be a bottom-up city. According to Taleb, London is an example of a bottom up city. It emerged, one road and house at a time, over many years, into a complex and irregular shape. (Is there an interesting quote from him you could add here? Perhaps use his words rather than your words?)
+
+In contrast, a top-down city is one where everything was is (tenses) planned out in advance. The city was built on this plan, and hasn't diverged too far from it. What city are you referring to here? ) Taleb uses the city of Brazilia as an example of this. I'm guessing (ings are passive. “I’m guessing” feels weak. Refer to the essay you sent me by Paul Graham!)  it is somewhat like Milton Keynes, designed and built by the UK government in the 60's.
+
+
+(This is what I may write) In contrast, a top-down city is one where everything was is (tenses) planned out in advance. Taleb uses the city of Brazilia as an example. Taleb was built on to this plan, and hasn't diverged too far from it. 
+
+And in Britain the city of Milton Keynes, designed and built by the government in the 60's is a British example. 
+
+
+
+Taleb goes on to (“goes on” = weak link) asserts that places (use the thesaurus for other words for cities/places) like London are more beautiful than places (try not to repeat words too closely) like Brasilia, and states that the "Wealth of details, ironically, leads to inner peace" - NN Taleb
+
+He doesn't really (really is an unnecessary word. It dilutes your sentence and meaning) justify why bottom up cities are more beautiful. To be fair, beauty is hard to argue about. (not sure what you mean here. Do you mean beauty is subjective? If so then you need to say it. Or do you mean that everyone knows what beauty is but can’t explain it?) Have you read anything or seen Roger Scruton’s stuff on beauty and architecture? You might want to have a look at his work. This could feed into your piece.
+
+But assuming he is right, and that things that emerge peace by piece are more beautiful - I'm going to try to apply this to a completely different field: That of programming. (Interesting!)
+
+Don’t be alarmed by all the red. This is a much clearer and more interesting set up. Well done. I am intrigued now! I do think that you need to give beauty more of a consideration. What are the details that create a feeling of piece and beauty to a city? That will draw the reader in. 
+---
+
+Most programmers are familiar with the "plan first" vs "code first" dilemma. 
+
+A planned program is where the programmer has thought: I need a program to do X, so it should probably contain elements A, B and eventually C. In contrast, a "code first" programmer goes straight to the code, writing in his ideas as they come along, (what do you mean as “they come along”? Do you mean, new ideas that occur to him to extend the program) and moving chunks around only when the program has grown enough to justify it. So he doesn’t begin with an end in sight? Do you mean a bit like writing a novel where someone is character lead which develops the plot, or someone who begins with a plot and then develops the characters? 
+
+One example of a plan-first approach is prototyping: You write a rough program first (in pseudo-code, or a higher level language), then based on that, you write the real program. Here you skip the stages where you move chunks around, because you've already figured out where they should be.
+
+In contrast, a code first approach might (might it be or is it?) be that of a minimal viable program: You/one Mmakes the simplest possible solution first that is? just about outputs what you want, then adds something small that's a little closer to your goal. This is effective mainly as a motivational tool. It's quite nice (quite nice is passive – try “rewarding/satisfying etc) to see a status code 0 (success). Then you go back, and change something - it breaks - then you fix it. Another small win. If you Don't do too much at a time, and you'll continue to build (what?) you need to say) and with this you’ll gain confidence. You refactor, and rearange as you go along.
+
+One problem with this iterative (code first) approach, is that the code quickly ends up looking fairly (fairly  - weak ) messy, so you feel the need to refactor. Refactoring takes time, and tends to break things. (Perhaps if you planned first, you wouldn't need to have done that.) Grammar – “you wouldn't need to have done that”and weak words “perhaps”)  Usually if you plan first then you are less likely to xxxx) 
+
+
+At some point, maybe you may make the huge mistake of going for a "version 2" - rewriting the whole codebase trying Ing! In order to be more elegant and efficient. The various large rewrites I've experienced have been horrible processes of backwards-commits, heavily informed by the fear of breaking everything - and always (“always” passive – dilutes your sentence)  seem to take forever. Yet if you never write a version 2, version 1 does start to will/ can look ugly. Parts of it start to look very esoteric indeed. I like this sentence but not how it is written. Try again. 
+
+"Programming is like scultping with cement. Parts of it harden as you go along" - (either Torvalds or Guido) Great quote – can you weave it in the essay rather than have it stick out separately. It would feel more natural. 
+
+---
+
+It's possible of course that Taleb's observation about how London is more beautiful than Brazilia might not really apply to programs. Perhaps, programs should be "perfectly designed", (why is “perfectly designed” in quotes? Are you quoting someone? If not, when you have quotations in your piece don’t add quote marks unless it is a quotation. It is confusing) and rewritten, because they are in the domain of function, and not the domain of beauty. (interesting point)  The quirkiness of London doesn't make it functional. London functions (you have used function here twice. Find another word, and the word function you have used has slightly different meaning in the sentence) ) despite the quirkiness. So maybe quirkiness (where you have used quirkiness twice here but it means the same in the context and the repetition works well) should be ignored in a program, and is certainly not to be encouraged. However Except something like quirkiness does emerge when one tries to fight the architecture astronauts, the tendency of some programmers to over-engineer to the point where the becomes perfectly logical, but terribly inefficient and hard to navigate. Efficiency in programs tends to require the use of strange shortcuts and assumptions - now that definetly sounds more like London. (this is an interesting point and needs more buld up and punch line. A bit like telling a joke. Have a play with this bit) 
+
+And in case you missed the end of moore's law, (ok, I missed it! You need to mention what it is) computing power isn't infinite, and efficiency does matter. 
+
+Writing programs iteratively comes is more naturally, mainly because there's only so much of an idea you can hold in your head at any given time. Fixing it as problems arise also come naturally. (Grammar, can you rewrite this bit so it is cleaner?) Big ideological overhauls are hard to do, and harder to finish. So maybe real-world programs will almost always be built iteratively, with more than the odd pragmatic shortcut to boot. Does this make them beautiful in the same way London is? I'm still not sure, though I'd like to think so! (The last line is important. I understand your idea but you need to play with it. Write it loads of different ways and see what stands out to you.) 
+
+
+Use strong words – be proud and confident! 
+“Perhaps” - blaaa! 
+“Ings” = weak , passive 
+
+Cut your darlings. It helps to read through your work and cut out extra adjectives and extra words that don’t add meaning/substance. They don’t bring value and the reader loose patience. 
+
+Clear, snappy writing. Think Hemmingway. Every word had a purpose. He cut, cut, cut! 
+
+Well done, Joe. Every time you redo it, it gets clearer and more succinct and beautiful. Writing doesn’t have to have florid, posh words to be beautiful. The simplest things have beauty. 
+
+
+
