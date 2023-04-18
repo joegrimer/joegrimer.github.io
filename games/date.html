@@ -39,6 +39,7 @@ function rand(max) {
 
 // this function will capture backspaces
 document.addEventListener("keydown", KeyCheck);  //or however you are calling your method
+document.addEventListener("click", Klick);  //or however you are calling your method
 function KeyCheck(event)
 {
    var KeyID = event.keyCode;
@@ -61,6 +62,7 @@ function KeyCheck(event)
       break;
    }
 }
+function Klick() { if (!input.innerHTML) input.innerHTML = new Date(question).getDay().toString(); else checkAnswer(); }
 
 function checkAnswer() {
     console.log("You hit enter!");
