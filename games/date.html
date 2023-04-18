@@ -13,7 +13,7 @@ question = null;
 function initiate() {
     output = document.getElementById("outputElement");
     input = document.getElementById("inputElement");
-    smoothShow(output,"Press enter");
+  checkAnswer();
 }
 
 function smoothShow(boxHandle,newText,oldOpacity = 100,velocity = -2) { // -1 is down, 1 is up
@@ -55,9 +55,9 @@ function KeyCheck(event)
       break;
       default:
       console.log("hi:",KeyID)
-		if((48 <= KeyID) && (KeyID <= 57 ) ) {
-			input.innerHTML += KeyID-48;
-		}// else input.innerHTML = "";
+  if((48 <= KeyID) && (KeyID <= 57 ) ) {
+   input.innerHTML += KeyID-48;
+  }// else input.innerHTML = "";
       break;
    }
 }
@@ -65,25 +65,18 @@ function KeyCheck(event)
 function checkAnswer() {
     console.log("You hit enter!");
 
-    var response = parseInt(input.innerHTML)
-    input.innerHTML = '';
-    if (response !=  new Date(question).getDay().toString()) return;
-
-    switch(question[1]) {
-		case '&times;':
-			if(question[0]*question[2]!==response) return;
-		break;
-		default:
-			console.log('TSNH');
-			break;
-	}
+    if (question) {
+     var response = input.innerHTML;
+     input.innerHTML = '';
+     if (response !=  new Date(question).getDay().toString()) return;
+    }
 
    let d = randomDate();
    question = d.toString().slice(4).slice(0,11);
    output.innerHTML = question;
 }
 
-function randomDate(start, end) {
+function randomDate() {
    let start = new Date(1900, 0, 1);
    let end = new Date(2100, 11, 31);
      return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
