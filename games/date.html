@@ -74,7 +74,8 @@ function checkAnswer() {
     }
 
    let d = randomDate();
-   question = d.toString().slice(4).slice(0,11);
+   let dstring = d.toString().slice(4).slice(0,11).split(' ');
+   question = dstring[2] + ' ' + dstring[0] + ' ' + dstring[1];
    output.innerHTML = question;
 }
 
