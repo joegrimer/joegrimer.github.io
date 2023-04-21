@@ -1,113 +1,108 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>Day for Date</title>
-<script>
+  <head>
+    <meta charset="utf-8">
+    <title>Day for Date</title>
+    <script>
 
-// global handles
-let output;
-let input;
-question = null;
+      // global handles
+      let output;
+      let input;
+      let answered = 0;
+      question = null;
 
-function initiate() {
-    output = document.getElementById("outputElement");
-    input = document.getElementById("inputElement");
-  checkAnswer();
-}
+      function initiate() {
+        output = document.getElementById("outputElement");
+        input = document.getElementById("inputElement");
+        checkAnswer();
+      }
 
-function smoothShow(boxHandle,newText,oldOpacity = 100,velocity = -2) { // -1 is down, 1 is up
+      function smoothShow(boxHandle,newText,oldOpacity = 100,velocity = -2) { // -1 is down, 1 is up
 
-    var newOpacity = oldOpacity + velocity;
-    if(newOpacity==0) {
-//        alert("stopping");
-        boxHandle.innerHTML = newText;
-        velocity = -velocity;
-    } else if ( (newOpacity>=100) && (velocity>0) ) {
-        return;
-    }
-    boxHandle.style.opacity = newOpacity/100;
-    window.setTimeout(function(){
-        smoothShow(boxHandle,newText,newOpacity,velocity);
-    },10); // milliseconds
-//    console.log("hi there!"+newOpacity);
-}
+        var newOpacity = oldOpacity + velocity;
+        if(newOpacity==0) {
+          //        alert("stopping");
+          boxHandle.innerHTML = newText;
+          velocity = -velocity;
+        } else if ( (newOpacity>=100) && (velocity>0) ) {
+          return;
+        }
+        boxHandle.style.opacity = newOpacity/100;
+        window.setTimeout(function(){
+          smoothShow(boxHandle,newText,newOpacity,velocity);
+        },10); // milliseconds
+        //    console.log("hi there!"+newOpacity);
+      }
 
-function rand(max) {
-    return Math.floor(Math.random() * max);
-}
+      function rand(max) {
+        return Math.floor(Math.random() * max);
+      }
 
-// this function will capture backspaces
-document.addEventListener("keydown", KeyCheck);  //or however you are calling your method
-document.addEventListener("click", Klick);  //or however you are calling your method
-function KeyCheck(event)
-{
-   var KeyID = event.keyCode;
-   switch(KeyID)
-   {
-      case 8:
-      input.innerHTML = input.innerHTML.slice(0,-1);
-      break;
-//      case 46:
-//      alert("delete");
-//      break;
-      case 13:
-      checkAnswer();
-      break;
-      default:
-      console.log("hi:",KeyID)
-  if((48 <= KeyID) && (KeyID <= 57 ) ) {
-   input.innerHTML += KeyID-48;
-  }// else input.innerHTML = "";
-      break;
-   }
-}
-function Klick() { if (!input.innerHTML) input.innerHTML = new Date(question).getDay().toString(); else checkAnswer(); }
+      // this function will capture backspaces
+      document.addEventListener("keydown", KeyCheck);  //or however you are calling your method
+      document.addEventListener("click", Klick);  //or however you are calling your method
+      function KeyCheck(event)
+      {
+        var KeyID = event.keyCode;
+        switch(KeyID)
+        {
+          case 8:
+            input.innerHTML = input.innerHTML.slice(0,-1);
+            break;
+            //      case 46:
+            //      alert("delete");
+            //      break;
+          case 13:
+            checkAnswer();
+            break;
+          default:
+            console.log("no:",KeyID)
+            if((48 <= KeyID) && (KeyID <= 57 ) ) {
+              input.innerHTML += KeyID-48;
+            }// else input.innerHTML = "";
+            break;
+        }
+      }
+      function Klick() { if (!input.innerHTML) input.innerHTML = new Date(question).getDay().toString(); else checkAnswer(); }
 
-function checkAnswer() {
-    console.log("You hit enter!");
+      function checkAnswer() {
+        if (question) {
+          var response = input.innerHTML;
+          input.innerHTML = '';
+          if (response !=  new Date(question).getDay().toString()) return;
+        }
+        document.title='Done: '+answered++;
 
-    if (question) {
-     var response = input.innerHTML;
-     input.innerHTML = '';
-     if (response !=  new Date(question).getDay().toString()) return;
-    }
+        let d = randomDate();
+        let dstring = d.toString().slice(4).slice(0,11).split(' ');
+        question = dstring[2] + ' ' + dstring[0] + ' ' + dstring[1];
+        output.innerHTML = question;
+      }
 
-   let d = randomDate();
-   let dstring = d.toString().slice(4).slice(0,11).split(' ');
-   question = dstring[2] + ' ' + dstring[0] + ' ' + dstring[1];
-   output.innerHTML = question;
-}
+      function randomDate() {
+        let start = new Date(1900, 0, 1);
+        let end = new Date(2100, 11, 31);
+        return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+      }
 
-function randomDate() {
-   let start = new Date(1900, 0, 1);
-   let end = new Date(2100, 11, 31);
-     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-}
+    </script>
 
-</script>
-
-<style>
-/*The style*/
-
+    <style>
 body {
-    background-color:#222;
-    color:#ddd;
-    padding-top:300px;
-    font-size:50px;
+  background-color: #222;
+  color: #ddd;
+  padding: 20px;
+  font-size: 16vw;
 }
 div {
-    display:block;
-    width:60%;
-    min-width:200px;
-    height:100px;
-    margin:auto;
+  display: block;
+  min-width: 200px;
 }
-</style>
+    </style>
 
-</head>
-<body onload="initiate()">
-<div id="outputElement">Wait</div>
-<div id="inputElement"></div>
-</body>
+  </head>
+  <body onload="initiate()">
+    <div id="outputElement">Wait</div>
+    <div id="inputElement"></div>
+  </body>
 </html>
