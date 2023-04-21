@@ -1,3 +1,6 @@
+'''
+playing with clocking cyphers at some point I guess
+'''
 import re
 
 message = '''A Wolf had been feasting too greedily, and a bone had stuck crosswise in his throat. He could get it neither up nor down, and of course he could not eat a thing. Naturally that was an awful state of affairs for a greedy Wolf.
