@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Static Front</title>
+<style>
+/*body, textarea#notes{font-family: 'Rock Salt', cursive;}*/
+.link-block{display:table}
+#notes {width:100%;border-radius:2px;font-size:16px;padding:5px;min-height:200px;height:auto;height:1000px; display:inline-block;width:45%;float:right;background:transparent;border:0;font-family:serif}
+body { background:#111;padding:20px;margin:0;}
+a:link,a:hover,a:active {font-size:20px;text-decoration:none;}
+a:link,a:hover,a:active, a:visited, #notes, body {color:#888;}
+a.link-block:hover {font-weight:bold;}
+
+#archives a, #archives a:visited, #archives a:active, #archives a:link{display:inline-block;padding:0 20px 0 0;border-right:2px solid #ccc;color:#99b}
+#archives:hover a {visibility:visible}
+#archives span:hover {cursor:alias;font-weight:bold;}
+#container { display:inline-block;width:45%;}
+</style>
+<script>
+// todo prevent bookmarks php reading non posts
+var quotes = {"bookmarks":[{"name":"Edit code","url":"","count":0},],"notes":"THIS IS BACKUP"}; // backup
+
+var last_save_time = 0;
+
+function main() {
+  make_interesting_title();
+  reload(false);
+  weird_top_right_colours();
+}
+
+function weird_top_right_colours() {
+  var time = new Date().getTime();
+//  for(var i=0;i<3;i++) {
+var i=0;
+    time += new Date().getTime();
+    var new_node = document.createElement("DIV");
+    new_node.style.backgroundColor = 'rgb('+Math.floor(time%256) + ',' + Math.floor(time/10%256) + ',' + Math.floor(time/100%256)+')';
+    new_node.style.width = '50px';
+    new_node.style.height = '9px';
+    new_node.style.position = 'absolute';
+    new_node.style.top = 0;
+    new_node.style.right = (50*i)+'px';
+    document.body.appendChild(new_node);
+//  }
+}
+
+
+function make_interesting_title() {
+  var quotes=['Memento Mori', "Don't fall asleep... don't fall asle..","Stand up straight with your shoulders back","Treat yourself like someone you are responsible for helping","Make friends with people who want the best for you","Compare yourself to who you were yesterday, not to who someone else is today","Do not let your children do anything that makes you dislike them","Set your house in perfect order before you criticise the world","Pursue what is meaningful (not what is expedient)","Tell the truth â€“ or, at least, don't lie","Assume that the person you are listening to might know something you don't","Be precise in your speech","Do not bother children when they are skateboarding","Pray as though everything depended on God. Work as though everything depended on you - Augustine"];
+  document.title = quotes[Math.floor(Math.random()*quotes.length)];
+}
+
+function reload(reloading){
+  if(reloading) make_interesting_title();
+  console.log("main be running");
+  var time = new Date().getTime();
+  get('https://raw.githubusercontent.com/joegrimer/fortunes/master/spanish.quotes',load); // ?t='+time,load
+}
+
+function load(r) {
+  console.log("load",r)
+
+  quotes = r.split("%");
+
+  var now = new Date();
+  var fullDaysSinceEpoch = Math.floor(now/8.64e7);
+  output_html = quotes[fullDaysSinceEpoch%quotes.length];
+
+  document.querySelector('container').innerHTML = output_html;
+}
+
+function post(theUrl, stuff, callback)
+{
+    if(callback===undefined) callback= function(r){console.log(r)};
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText); //
+    }
+    xmlHttp.open("POST", theUrl, true); // true for asynchronous
+    xmlHttp.setRequestHeader("Content-type", "text/html");
+    xmlHttp.send(stuff)
+
+}
+
+function get(theUrl, callback)
+{
+    theUrl += '?date='+Date.now()
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+}
+</script>
+
+</head>
+<body onload="main()">
+    <container></container>
+</body>
+</html>
