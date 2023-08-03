@@ -12,31 +12,24 @@ Task:
 """
 from pprint import pprint
 import random
+import math
 
-INPUTS = 2
-OUTPUTS = 2
-COLUMNS = 2  # middle layers
-HEIGHT = INPUTS
+INPUTS = 3
+OUTPUTS = INPUTS
+COLUMNS = 3  # layers
+HEIGHT = INPUTS # not neccessarily correct
 nn = []
 
 def starting_node_weight():
-    return random.randint(1, 9)
+    return random.randint(1, 1000)
 
-def main():
-    print("making nn")
-    nid = 0
-    for column_no in range(0, COLUMNS):
-        nn.append({})
-        for row in range(0, HEIGHT):
-            nn[column_no][nid] = {
-                "in_weights": {},
-                "out_weight": starting_node_weight(),
-            }
-            if column_no != 0:
-                nn[column_no][nid]["in_weights"] = {nid: starting_node_weight() for nid in nn[column_no - 1].keys()}
-            nid += 1
+def mash_numbers(a, b):
+    # dodgy float multiplication
+    return int(math.ceil(((a*b)/1000)))
 
-    print("print nn")
+
+def print_nn(nn: dict):
+
     rotated_screen = []
     c_id = 0
     for column in nn:
@@ -49,11 +42,56 @@ def main():
             # print("rotated_sceen", rotated_screen)
             # print("r_id", r_id)
             # print("c_id", c_id)
-            rotated_screen[r_id][c_id] = f"{node['in_weights']}->[{nid}]->{node['out_weight']}"
+            middle = ("V:" + str(node["value"])) if node["value"] else nid
+            rotated_screen[r_id][c_id] = f"{node['in_weights']}->{node['body_weight']}->[{middle}]"
             r_id += 1
         c_id += 1
     for row in rotated_screen:
         print("\t|\t".join(row))
+
+def main():
+    print("making nn")
+    nid = 0
+    for column_no in range(0, COLUMNS):
+        nn.append({})
+        for row in range(0, HEIGHT):
+            nn[column_no][nid] = {
+                "in_weights": {},
+                "body_weight": starting_node_weight(),
+                "value": None,
+            }
+            if column_no != 0:
+                nn[column_no][nid]["in_weights"] = {nid: starting_node_weight() for nid in nn[column_no - 1].keys()}
+            nid += 1
+
+    print("print nn")
+    print_nn(nn)
+
+    print("run nn")
+    inputs = [starting_node_weight() for _ in range(0, INPUTS)]
+    print("inputs", inputs)
+    input_index = 0  # happens to correlatete with nid
+    for input in inputs:
+        nn[0][input_index]["value"] = mash_numbers(input, nn[0][input_index]["body_weight"])
+        input_index += 1
+
+    last_column = 0
+    last_outputs = []
+    for column in nn[1:]:
+        last_outputs = []
+        for _, node in column.items():
+            node["value"] = node["body_weight"]
+            for back_nid, link_weight in node["in_weights"].items():
+                node["value"] = mash_numbers(node["value"], link_weight)
+                node["value"] = mash_numbers(node["value"], nn[last_column][back_nid]["value"])
+            last_outputs.append(node["value"])
+        last_column += 1
+    print("outputs", last_outputs)
+
+    print("Print nn")
+    print_nn(nn)
+
+    print("end")
 
 
 if __name__ == '__main__':
