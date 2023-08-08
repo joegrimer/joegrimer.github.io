@@ -1,7 +1,12 @@
 /*
 Goal - an old fashioned chatbot, that's manually written, and not too clever
 
+Thoughts:
+One problem with chatbots is that there are two different parts: Understanding, and responding. "Hello" has no obvious response. Perhaps I only care about the imperative
+
 Next:
+I don't understand should be: Please ask me an imperative roodly
+
 */
 
 
@@ -46,6 +51,32 @@ fn main() {
     print!("End");
 }
 
+fn write_story() -> &'static str {
+    return "Once upon a time there was a dog. The dog died at the end";
+}
+
 fn respond_to(input: String) -> &'static str{
+
+    // rudimentary normalising
+    input.to_lowercase();
+    let first_word;
+    let predicate;
+
+    let words: Vec<String> = input.split(" ").collect();
+    for (i, word) in words.iter().enumerate() {
+        println!("{}-", word);
+        if i == 0 {
+            first_word = word;
+        } else {
+            predicate += word;
+        }
+    }
+
+    // imperative_switchboard
+    if first_word == "tell" {
+        if predicate == "story" {
+            return write_story();
+        }
+    }
     return "I don't understand"
 }
