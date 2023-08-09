@@ -5,6 +5,7 @@ Thoughts:
 One problem with chatbots is that there are two different parts: Understanding, and responding. "Hello" has no obvious response. Perhaps I only care about the imperative
 
 Next:
+text print subject and predicate for debug purposes
 I don't understand should be: Please ask me an imperative roodly
 
 */
@@ -47,6 +48,7 @@ fn main() {
         if let Err(e) = writeln!(transcript_file, "{}{}", user_line, manuel_line) {
             eprintln!("Couldn't write to file: {}", e);
         }
+        break;
     }
     print!("End");
 }
@@ -59,24 +61,31 @@ fn respond_to(input: String) -> &'static str{
 
     // rudimentary normalising
     input.to_lowercase();
-    let first_word;
-    let predicate;
 
-    let words: Vec<String> = input.split(" ").collect();
-    for (i, word) in words.iter().enumerate() {
-        println!("{}-", word);
-        if i == 0 {
-            first_word = word;
-        } else {
-            predicate += word;
-        }
-    }
+    
 
-    // imperative_switchboard
-    if first_word == "tell" {
-        if predicate == "story" {
-            return write_story();
-        }
-    }
+    // let words = input.split(' ');
+    // println!("{:?}", words);
+    // let first_word = words.next();
+    // println!("{:?}", first_word);
+    // let mut predicate = String::new();
+
+
+    // for (i, word) in words.iter().enumerate() {
+    //     println!("{}-", word);
+    //     if i == 0 {
+    //         first_word = word;
+    //     } else {
+    //         predicate.push_str(word);
+    //     }
+    // }
+    // println!("fw: {} pr: {}", first_word, predicate);
+
+    // // imperative_switchboard
+    // if first_word == "tell" {
+    //     if predicate == "story" {
+    //         return write_story();
+    //     }
+    // }
     return "I don't understand"
 }
