@@ -66,7 +66,9 @@ fn write_poem() -> String {
 }
 
 fn remember(memory: &HashMap<String, String>, word: &String, definition: &String) {
-    memory[word] = definition.clone();
+    *memory.insert(
+        word.clone(),
+        definition.clone());
 }
 
 fn define(memory: &HashMap<String, String>, word: &String) -> String {
@@ -112,7 +114,7 @@ fn respond_to(memory: HashMap<String, String>, input: &str) -> String{
 
     // imperative_switchboard
     if verb == "is" {
-        remember(memory, subject, predicate);
+        remember(&memory, &subject, &predicate);
     } if verb == "write" {
         if predicate == "story" {
             return write_story();

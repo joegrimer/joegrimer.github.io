@@ -19,13 +19,20 @@ OUTPUTS = INPUTS
 COLUMNS = 3  # layers
 HEIGHT = INPUTS # not neccessarily correct
 nn = []
+NODE_RESOLUTION = 1000
+HALF_RESOLUTION = NODE_RESOLUTION / 2 # n.b. intentionally not flooring
 
 def starting_node_weight():
-    return random.randint(1, 1000)
+    return random.randint(1, NODE_RESOLUTION)
 
 def mash_numbers(a, b):
     # dodgy float multiplication
-    return int(math.ceil(((a*b)/1000)))
+    new_res = math.floor((a/HALF_RESOLUTION)*(b/HALF_RESOLUTION) * NODE_RESOLUTION)
+    if new_res > NODE_RESOLUTION-1:
+        return NODE_RESOLUTION-1
+    elif new_res < 1:
+        return 1
+    return new_res
 
 
 def print_nn(nn: dict):
