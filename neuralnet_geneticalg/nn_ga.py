@@ -16,7 +16,7 @@ import math
 
 INPUTS = 3
 OUTPUTS = INPUTS
-COLUMNS = 3  # layers
+COLUMNS = 4  # layers
 HEIGHT = INPUTS # not neccessarily correct
 nn = []
 NODE_RESOLUTION = 1000
@@ -26,13 +26,7 @@ def starting_node_weight():
     return random.randint(1, NODE_RESOLUTION)
 
 def mash_numbers(a, b):
-    # dodgy float multiplication
-    new_res = math.floor((a/HALF_RESOLUTION)*(b/HALF_RESOLUTION) * NODE_RESOLUTION)
-    if new_res > NODE_RESOLUTION-1:
-        return NODE_RESOLUTION-1
-    elif new_res < 1:
-        return 1
-    return new_res
+    return (a + b) // 2
 
 
 def print_nn(nn: dict):
