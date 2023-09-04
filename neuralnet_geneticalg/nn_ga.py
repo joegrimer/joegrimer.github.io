@@ -14,7 +14,7 @@ import random
 
 INPUTS = 3
 OUTPUTS = 1
-COLUMNS = 4  # layers
+COLUMNS = 2  # layers
 HEIGHT = INPUTS # not neccessarily correct
 nn = []
 NODE_RESOLUTION = 1000
@@ -34,25 +34,29 @@ DATA = [
 
 
 def main():
-    for i in range(0, 1000000):
+    most_hits = 0
+    for i in range(0, 999999):
         make_nn()
-        successes = 0
+        hits = 0
         # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
+        example = ""
         for datum in DATA:
-            # print(f"datum: {datum}")
+            example += f"datum: {datum}\n"
             inputs = [i*999 for i in datum[0]]
             wanted_output = datum[1]
             nn_output = int(run_nn(inputs)[0] >= 500)
-            # print("Print nn")
+            # example += "Print nn\n"
             # print_nn(nn)
-            # print("wanted", wanted_output)
-            # print("outputs", nn_output)
-            if wanted_output != nn_output:
-                break
-            else:
-                successes += 1
-            # print("---")
-        if successes == len(DATA):
+            example += f"wanted {wanted_output} and outputs {nn_output}\n"
+            if wanted_output == nn_output:
+                hits += 1
+        if hits > most_hits:
+            most_hits = hits
+            print("---------")
+            print("Best went up: ", most_hits)
+            print(example)
+            print_nn(nn)
+        if hits == len(DATA):
             print("--------------------------------")
             print("IT WORKED", i, "for len", len(DATA))
             print("print nn")
@@ -61,6 +65,7 @@ def main():
             break
 
     print("end i is", i)
+    print("best was", most_hits)
 
 
 def starting_node_weight():
