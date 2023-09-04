@@ -55,7 +55,8 @@ def main():
     nid = 0
     for column_no in range(0, COLUMNS):
         nn.append({})
-        for row in range(0, HEIGHT):
+        height_of_layer = HEIGHT
+        for _ in range(0, HEIGHT):
             nn[column_no][nid] = {
                 "in_weights": {},
                 "body_weight": starting_node_weight(),
