@@ -43,8 +43,8 @@ def print_nn(nn: dict):
             # print("rotated_sceen", rotated_screen)
             # print("r_id", r_id)
             # print("c_id", c_id)
-            middle = ("V:" + str(node["value"])) if node["value"] else nid
-            rotated_screen[r_id][c_id] = f"{node['in_weights']}->{node['body_weight']}->[{middle}]"
+            middle = f"V:{node['value']:03}" if node["value"] else f"{nid:03}"
+            rotated_screen[r_id][c_id] = f"{node['in_weights']}->{node['body_weight']:03}->[{middle}]"
             r_id += 1
         c_id += 1
     for row in rotated_screen:
@@ -55,8 +55,8 @@ def main():
     nid = 0
     for column_no in range(0, COLUMNS):
         nn.append({})
-        height_of_layer = HEIGHT
-        for _ in range(0, HEIGHT):
+        height_of_layer = HEIGHT if column_no+1 < COLUMNS else OUTPUTS
+        for _ in range(0, height_of_layer):
             nn[column_no][nid] = {
                 "in_weights": {},
                 "body_weight": starting_node_weight(),
