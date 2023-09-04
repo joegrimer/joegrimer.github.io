@@ -66,6 +66,7 @@ def main():
 
     print("end i is", i)
     print("best was", most_hits)
+    print(nn)
 
 
 def starting_node_weight():
