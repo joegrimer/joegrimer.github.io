@@ -61,18 +61,14 @@ def run_manual():
     hits = 0
     print_nn(nn)
     for datum in DATA:
-        hits = 0
-        # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
-        example = ""
-        for datum in DATA:
-            print(f"datum: {datum}")
-            inputs = [i*(NODE_RESOLUTION-1) for i in datum[0]]
-            wanted_output = datum[1]
-            nn_output = int(run_nn(inputs)[0] >= 500)
-            print_nn(nn)
-            print(f"wanted {wanted_output} and outputs {nn_output}")
-            if wanted_output == nn_output:
-                hits += 1
+        print(f"datum: {datum}")
+        inputs = [i*(NODE_RESOLUTION-1) for i in datum[0]]
+        wanted_output = datum[1]
+        nn_output = int(run_nn(inputs)[0] >= HALF_RESOLUTION)
+        print_nn(nn)
+        print(f"wanted {wanted_output} and outputs {nn_output}")
+        if wanted_output == nn_output:
+            hits += 1
 
     print("Hits: {}".format(hits))
 
@@ -117,6 +113,10 @@ def starting_node_weight():
 
 def mash_numbers(a, b):
     return (a + b) // 2  # i.e. average, and throw remainder
+
+
+def funnel(charge, pipe):
+    return int(pipe * (charge/NODE_RESOLUTION))
 
 
 def print_nn(nn: dict):
@@ -169,12 +169,10 @@ def run_nn(inputs):
     for column in nn[1:]:
         last_outputs = []
         for _, node in column.items():
+            new_val = 0
             for back_nid, link_weight in node["in_weights"].items():
-                new_val = mash_numbers(link_weight, nn[last_column][back_nid]["value"])
-                if node["value"]:
-                    node["value"] = mash_numbers(new_val, node["value"])
-                else:
-                    node["value"] = new_val
+                new_val += funnel(nn[last_column][back_nid]["value"], link_weight)
+            node["value"] = new_val
             last_outputs.append(node["value"])
         last_column += 1
     return last_outputs
