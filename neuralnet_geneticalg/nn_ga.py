@@ -28,8 +28,18 @@ DATA_B = [
     ((1, 1, 0), (0,)),
     ((1, 1, 1), (1,)),
 ]
-DATA = DATA_B
-ITERATIONS = 9999999
+DATA_C = [
+    ((0, 0, 0), (0,)),
+    ((0, 0, 1), (0,)),
+    ((0, 1, 0), (0,)),
+    ((0, 1, 1), (0,)),
+    ((1, 0, 0), (0,)),
+    ((1, 0, 1), (0,)),
+    ((1, 1, 0), (1,)),
+    ((1, 1, 1), (1,)),
+]
+DATA = DATA_C
+MAX_ITERATIONS = 9999999
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
@@ -56,7 +66,7 @@ def main():
 def run_iterations():
     global nn
     most_hits = 0
-    for i in range(0, ITERATIONS):
+    for i in range(0, MAX_ITERATIONS):
         generate_nn()
         hits = 0
         # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
