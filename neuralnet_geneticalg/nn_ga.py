@@ -12,33 +12,31 @@ Task:
 """
 import random
 
-INPUTS = 3
-OUTPUTS = 1
-COLUMNS = 3  # layers
+DATA_A = [
+    ((0,0), (0,)),
+    ((0,1), (0,)),
+    ((1,0), (1,)),
+    ((1,1), (1,)),
+]
+DATA = [
+    ((0, 0, 0), (0,)),
+    ((0, 0, 1), (1,)),
+    ((0, 1, 0), (0,)),
+    ((0, 1, 1), (1,)),
+    ((1, 0, 0), (0,)),
+    ((1, 0, 1), (1,)),
+    ((1, 1, 0), (0,)),
+    ((1, 1, 1), (1,)),
+]
+ITERATIONS = 4
+# DATA = DATA_OLD
+INPUTS = len(DATA[0][0])
+OUTPUTS = len(DATA[0][1])
 HEIGHT = INPUTS # not neccessarily correct
+COLUMNS = 3  # layers
 nn = []
 NODE_RESOLUTION = 100
 HALF_RESOLUTION = NODE_RESOLUTION / 2 # n.b. intentionally not flooring
-
-
-DATA_A = [
-    ((0,0), 0),
-    ((0,1), 0),
-    ((1,0), 1),
-    ((1,1), 1),
-]
-DATA = [
-    ((0, 0, 0), 0),
-    ((0, 0, 1), 0),
-    ((0, 1, 0), 0),
-    ((0, 1, 1), 0),
-    ((1, 0, 0), 1),
-    ((1, 0, 1), 1),
-    ((1, 1, 0), 1),
-    ((1, 1, 1), 1),
-]
-ITERATIONS = 1
-# DATA = DATA_OLD
 
 MANUAL_NN = [
     {0: {'in_weights': {}, 'value': None},
@@ -49,28 +47,9 @@ MANUAL_NN = [
 
 def main():
     print("start")
-    run_manual()
+    run_iterations()
+    # run_manual()
     print("end")
-
-
-def run_manual():
-    print("MANUAL")
-
-    global nn
-    nn = MANUAL_NN
-    hits = 0
-    print_nn(nn)
-    for datum in DATA:
-        print(f"datum: {datum}")
-        inputs = [i*(NODE_RESOLUTION-1) for i in datum[0]]
-        wanted_output = datum[1]
-        nn_output = int(run_nn(inputs)[0] >= HALF_RESOLUTION)
-        print_nn(nn)
-        print(f"wanted {wanted_output} and outputs {nn_output}")
-        if wanted_output == nn_output:
-            hits += 1
-
-    print("Hits: {}".format(hits))
 
 
 def run_iterations():
@@ -84,7 +63,7 @@ def run_iterations():
         for datum in DATA:
             example += f"datum: {datum}\n"
             inputs = [i*999 for i in datum[0]]
-            wanted_output = datum[1]
+            wanted_output = datum[1][0]
             nn_output = int(run_nn(inputs)[0] >= 500)
             # example += "Print nn\n"
             # print_nn(nn)
@@ -107,8 +86,33 @@ def run_iterations():
     print("end i is", i)
     print("best was", most_hits)
 
+
+def run_manual():
+    print("MANUAL")
+
+    global nn
+    nn = MANUAL_NN
+    hits = 0
+    print_nn(nn)
+    for datum in DATA:
+        print(f"datum: {datum}")
+        inputs = [i*(NODE_RESOLUTION) for i in datum[0]]
+        wanted_output = datum[1]
+        nn_output = int(run_nn(inputs)[0] >= HALF_RESOLUTION)
+        print_nn(nn)
+        print(f"wanted {wanted_output} and outputs {nn_output}")
+        if wanted_output == nn_output:
+            hits += 1
+
+    print("Hits: {}".format(hits))
+
+
 def starting_node_weight():
     return random.randint(1, NODE_RESOLUTION)
+
+
+def randof(ceiling):
+    return random.randint(0, ceiling)
 
 
 def mash_numbers(a, b):
@@ -154,7 +158,13 @@ def generate_nn():
                 "value": None,
             }
             if column_no != 0:
-                nn[column_no][nid]["in_weights"] = {nid: starting_node_weight() for nid in nn[column_no - 1].keys()}
+                in_weights = {}
+                in_weights_total = 0
+                for mnid in nn[column_no - 1].keys():
+                    new_weight = randof(NODE_RESOLUTION - in_weights_total)
+                    in_weights_total += new_weight
+                    in_weights[mnid] = new_weight
+                nn[column_no][nid]["in_weights"] = in_weights
             nid += 1
 
 
