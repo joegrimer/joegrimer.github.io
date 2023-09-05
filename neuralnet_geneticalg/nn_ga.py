@@ -17,7 +17,7 @@ OUTPUTS = 1
 COLUMNS = 3  # layers
 HEIGHT = INPUTS # not neccessarily correct
 nn = []
-NODE_RESOLUTION = 1000
+NODE_RESOLUTION = 100
 HALF_RESOLUTION = NODE_RESOLUTION / 2 # n.b. intentionally not flooring
 
 
@@ -41,10 +41,10 @@ ITERATIONS = 1
 # DATA = DATA_OLD
 
 MANUAL_NN = [
-    {0: {'in_weights': {}, 'body_weight': 400, 'value': None},
-     1: {'in_weights': {}, 'body_weight': 400, 'value': None},
-     2: {'in_weights': {}, 'body_weight': 999, 'value': None}},
-    {3: {'in_weights': {0: 999, 1: 400, 2: 400}, 'body_weight': 999, 'value': None}}]
+    {0: {'in_weights': {}, 'value': None},
+     1: {'in_weights': {}, 'value': None},
+     2: {'in_weights': {}, 'value': None}},
+    {3: {'in_weights': {0: NODE_RESOLUTION, 1: 0, 2: 0}, 'value': None}}]
 
 
 def main():
@@ -66,7 +66,7 @@ def run_manual():
         example = ""
         for datum in DATA:
             print(f"datum: {datum}")
-            inputs = [i*999 for i in datum[0]]
+            inputs = [i*(NODE_RESOLUTION-1) for i in datum[0]]
             wanted_output = datum[1]
             nn_output = int(run_nn(inputs)[0] >= 500)
             print_nn(nn)
@@ -133,8 +133,8 @@ def print_nn(nn: dict):
             # print("rotated_sceen", rotated_screen)
             # print("r_id", r_id)
             # print("c_id", c_id)
-            middle = f"V:{node['value']:03}" if node["value"] else f"{nid:03}"
-            rotated_screen[r_id][c_id] = f"{node['in_weights']}->{node['body_weight']:03}->[{middle}]"
+            middle = f"V:{node['value']:03}" if node["value"] is not None else f"{nid:03}"
+            rotated_screen[r_id][c_id] = f"{node['in_weights']}->[{middle}]"
             r_id += 1
         c_id += 1
     for row in rotated_screen:
@@ -151,7 +151,6 @@ def generate_nn():
         for _ in range(0, height_of_layer):
             nn[column_no][nid] = {
                 "in_weights": {},
-                "body_weight": starting_node_weight(),
                 "value": None,
             }
             if column_no != 0:
@@ -162,7 +161,7 @@ def generate_nn():
 def run_nn(inputs):
     input_index = 0  # happens to correlatete with nid
     for input in inputs:
-        nn[0][input_index]["value"] = mash_numbers(input, nn[0][input_index]["body_weight"])
+        nn[0][input_index]["value"] = input
         input_index += 1
 
     last_column = 0
@@ -170,10 +169,12 @@ def run_nn(inputs):
     for column in nn[1:]:
         last_outputs = []
         for _, node in column.items():
-            node["value"] = node["body_weight"]
             for back_nid, link_weight in node["in_weights"].items():
-                node["value"] = mash_numbers(node["value"], link_weight)
-                node["value"] = mash_numbers(node["value"], nn[last_column][back_nid]["value"])
+                new_val = mash_numbers(link_weight, nn[last_column][back_nid]["value"])
+                if node["value"]:
+                    node["value"] = mash_numbers(new_val, node["value"])
+                else:
+                    node["value"] = new_val
             last_outputs.append(node["value"])
         last_column += 1
     return last_outputs
