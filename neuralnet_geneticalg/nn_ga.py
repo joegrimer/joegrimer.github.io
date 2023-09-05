@@ -28,7 +28,7 @@ DATA_B = [
     ((1, 1, 0), (0,)),
     ((1, 1, 1), (1,)),
 ]
-DATA = DATA_A
+DATA = DATA_B
 ITERATIONS = 9999999
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
@@ -84,7 +84,7 @@ def run_iterations():
             print_nn(nn)
 
             break
-    print("end i is", i)
+    print(f"solution found in {i} iterations")
     print("best was", most_hits)
 
 
