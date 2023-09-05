@@ -28,12 +28,12 @@ DATA = [
     ((1, 1, 0), (0,)),
     ((1, 1, 1), (1,)),
 ]
-ITERATIONS = 4
+ITERATIONS = 9999999
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
 HEIGHT = INPUTS # not neccessarily correct
-COLUMNS = 3  # layers
+COLUMNS = 2  # layers
 nn = []
 NODE_RESOLUTION = 100
 HALF_RESOLUTION = NODE_RESOLUTION / 2 # n.b. intentionally not flooring
@@ -161,7 +161,10 @@ def generate_nn():
                 in_weights = {}
                 in_weights_total = 0
                 for mnid in nn[column_no - 1].keys():
-                    new_weight = randof(NODE_RESOLUTION - in_weights_total)
+                    if mnid == (HEIGHT -1):
+                        new_weight = NODE_RESOLUTION - in_weights_total
+                    else:
+                        new_weight = randof(NODE_RESOLUTION - in_weights_total)
                     in_weights_total += new_weight
                     in_weights[mnid] = new_weight
                 nn[column_no][nid]["in_weights"] = in_weights
