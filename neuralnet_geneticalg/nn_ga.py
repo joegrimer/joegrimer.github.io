@@ -12,15 +12,21 @@ Task:
 """
 import random
 
-INPUTS = 3
+INPUTS = 2
 OUTPUTS = 1
-COLUMNS = 2  # layers
+COLUMNS = 3  # layers
 HEIGHT = INPUTS # not neccessarily correct
 nn = []
 NODE_RESOLUTION = 1000
 HALF_RESOLUTION = NODE_RESOLUTION / 2 # n.b. intentionally not flooring
 
 
+DATA_OLD = [
+    ((0,0), 0),
+    ((0,1), 0),
+    ((1,0), 1),
+    ((1,1), 1),
+]
 DATA = [
     ((0, 0, 0), 0),
     ((0, 0, 1), 0),
@@ -31,19 +37,20 @@ DATA = [
     ((1, 1, 0), 1),
     ((1, 1, 1), 1),
 ]
+DATA = DATA_OLD
 
-MANUAL_NN = [
-    {0: {'in_weights': {}, 'body_weight': 999, 'value': None},
-     1: {'in_weights': {}, 'body_weight': 400, 'value': None},
-     2: {'in_weights': {}, 'body_weight': 400, 'value': None}},
-     {3: {'in_weights': {0: 999, 1: 400, 2: 400}, 'body_weight': 999, 'value': None}}]
+# MANUAL_NN = [
+#     {0: {'in_weights': {}, 'body_weight': 999, 'value': None},
+#      1: {'in_weights': {}, 'body_weight': 400, 'value': None},
+#      2: {'in_weights': {}, 'body_weight': 400, 'value': None}},
+#     {3: {'in_weights': {0: 999, 1: 400, 2: 400}, 'body_weight': 999, 'value': None}}]
 
 
 def main():
     global nn
     most_hits = 0
-    for i in range(0, 99):
-        make_nn()
+    for i in range(0, 100000):
+        generate_nn()
         hits = 0
         # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
         example = ""
@@ -73,24 +80,24 @@ def main():
     print("end i is", i)
     print("best was", most_hits)
 
-    nn = MANUAL_NN
-    print("MANUAL")
-    hits = 0
-    print_nn(nn)
-    for datum in DATA:
-        hits = 0
-        # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
-        example = ""
-        for datum in DATA:
-            print(f"datum: {datum}")
-            inputs = [i*999 for i in datum[0]]
-            wanted_output = datum[1]
-            nn_output = int(run_nn(inputs)[0] >= 500)
-            print_nn(nn)
-            print(f"wanted {wanted_output} and outputs {nn_output}")
-            if wanted_output == nn_output:
-                hits += 1
-    print("Hits: {}".format(hits))
+    # nn = MANUAL_NN
+    # print("MANUAL")
+    # hits = 0
+    # print_nn(nn)
+    # for datum in DATA:
+    #     hits = 0
+    #     # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
+    #     example = ""
+    #     for datum in DATA:
+    #         print(f"datum: {datum}")
+    #         inputs = [i*999 for i in datum[0]]
+    #         wanted_output = datum[1]
+    #         nn_output = int(run_nn(inputs)[0] >= 500)
+    #         print_nn(nn)
+    #         print(f"wanted {wanted_output} and outputs {nn_output}")
+    #         if wanted_output == nn_output:
+    #             hits += 1
+    # print("Hits: {}".format(hits))
     print("end")
 
 
@@ -124,7 +131,7 @@ def print_nn(nn: dict):
         print("  ".join(row))
 
 
-def make_nn():
+def generate_nn():
     global nn
     nn = []
     nid = 0
