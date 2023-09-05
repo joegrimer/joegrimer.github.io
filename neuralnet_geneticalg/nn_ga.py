@@ -62,7 +62,7 @@ def run_iterations():
         example = ""
         for datum in DATA:
             example += f"datum: {datum}\n"
-            inputs = [i*999 for i in datum[0]]
+            inputs = [i*NODE_RESOLUTION for i in datum[0]]
             wanted_output = datum[1][0]
             nn_output = int(run_nn(inputs)[0] >= 500)
             # example += "Print nn\n"
