@@ -42,7 +42,7 @@ MANUAL_NN = [
     {0: {'in_weights': {}, 'value': None},
      1: {'in_weights': {}, 'value': None},
      2: {'in_weights': {}, 'value': None}},
-    {3: {'in_weights': {0: NODE_RESOLUTION, 1: 0, 2: 0}, 'value': None}}]
+    {3: {'in_weights': {0: 0, 1: 0, 2: NODE_RESOLUTION}, 'value': None}}]
 
 
 def main():
@@ -97,7 +97,7 @@ def run_manual():
     for datum in DATA:
         print(f"datum: {datum}")
         inputs = [i*(NODE_RESOLUTION) for i in datum[0]]
-        wanted_output = datum[1]
+        wanted_output = datum[1][0]
         nn_output = int(run_nn(inputs)[0] >= HALF_RESOLUTION)
         print_nn(nn)
         print(f"wanted {wanted_output} and outputs {nn_output}")
