@@ -18,7 +18,7 @@ DATA_A = [
     ((1,0), (1,)),
     ((1,1), (1,)),
 ]
-DATA = [
+DATA_B = [
     ((0, 0, 0), (0,)),
     ((0, 0, 1), (1,)),
     ((0, 1, 0), (0,)),
@@ -28,6 +28,7 @@ DATA = [
     ((1, 1, 0), (0,)),
     ((1, 1, 1), (1,)),
 ]
+DATA = DATA_A
 ITERATIONS = 9999999
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
@@ -64,7 +65,7 @@ def run_iterations():
             example += f"datum: {datum}\n"
             inputs = [i*NODE_RESOLUTION for i in datum[0]]
             wanted_output = datum[1][0]
-            nn_output = int(run_nn(inputs)[0] >= 500)
+            nn_output = int(run_nn(inputs)[0] >= HALF_RESOLUTION)
             # example += "Print nn\n"
             # print_nn(nn)
             example += f"wanted {wanted_output} and outputs {nn_output}\n"
