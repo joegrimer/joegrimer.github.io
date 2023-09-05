@@ -12,7 +12,7 @@ Task:
 """
 import random
 
-INPUTS = 2
+INPUTS = 3
 OUTPUTS = 1
 COLUMNS = 3  # layers
 HEIGHT = INPUTS # not neccessarily correct
@@ -21,7 +21,7 @@ NODE_RESOLUTION = 1000
 HALF_RESOLUTION = NODE_RESOLUTION / 2 # n.b. intentionally not flooring
 
 
-DATA_OLD = [
+DATA_A = [
     ((0,0), 0),
     ((0,1), 0),
     ((1,0), 1),
@@ -37,19 +37,20 @@ DATA = [
     ((1, 1, 0), 1),
     ((1, 1, 1), 1),
 ]
-DATA = DATA_OLD
+ITERATIONS = 1
+# DATA = DATA_OLD
 
-# MANUAL_NN = [
-#     {0: {'in_weights': {}, 'body_weight': 999, 'value': None},
-#      1: {'in_weights': {}, 'body_weight': 400, 'value': None},
-#      2: {'in_weights': {}, 'body_weight': 400, 'value': None}},
-#     {3: {'in_weights': {0: 999, 1: 400, 2: 400}, 'body_weight': 999, 'value': None}}]
+MANUAL_NN = [
+    {0: {'in_weights': {}, 'body_weight': 999, 'value': None},
+     1: {'in_weights': {}, 'body_weight': 400, 'value': None},
+     2: {'in_weights': {}, 'body_weight': 400, 'value': None}},
+    {3: {'in_weights': {0: 999, 1: 400, 2: 400}, 'body_weight': 999, 'value': None}}]
 
 
 def main():
     global nn
     most_hits = 0
-    for i in range(0, 100000):
+    for i in range(0, ITERATIONS):
         generate_nn()
         hits = 0
         # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
@@ -106,7 +107,7 @@ def starting_node_weight():
 
 
 def mash_numbers(a, b):
-    return (a + b) // 2
+    return (a + b) // 2  # i.e. average, and throw remainder
 
 
 def print_nn(nn: dict):
