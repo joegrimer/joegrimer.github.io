@@ -41,13 +41,43 @@ ITERATIONS = 1
 # DATA = DATA_OLD
 
 MANUAL_NN = [
-    {0: {'in_weights': {}, 'body_weight': 999, 'value': None},
+    {0: {'in_weights': {}, 'body_weight': 400, 'value': None},
      1: {'in_weights': {}, 'body_weight': 400, 'value': None},
-     2: {'in_weights': {}, 'body_weight': 400, 'value': None}},
+     2: {'in_weights': {}, 'body_weight': 999, 'value': None}},
     {3: {'in_weights': {0: 999, 1: 400, 2: 400}, 'body_weight': 999, 'value': None}}]
 
 
 def main():
+    print("start")
+    run_manual()
+    print("end")
+
+
+def run_manual():
+    print("MANUAL")
+
+    global nn
+    nn = MANUAL_NN
+    hits = 0
+    print_nn(nn)
+    for datum in DATA:
+        hits = 0
+        # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
+        example = ""
+        for datum in DATA:
+            print(f"datum: {datum}")
+            inputs = [i*999 for i in datum[0]]
+            wanted_output = datum[1]
+            nn_output = int(run_nn(inputs)[0] >= 500)
+            print_nn(nn)
+            print(f"wanted {wanted_output} and outputs {nn_output}")
+            if wanted_output == nn_output:
+                hits += 1
+
+    print("Hits: {}".format(hits))
+
+
+def run_iterations():
     global nn
     most_hits = 0
     for i in range(0, ITERATIONS):
@@ -80,27 +110,6 @@ def main():
             break
     print("end i is", i)
     print("best was", most_hits)
-
-    # nn = MANUAL_NN
-    # print("MANUAL")
-    # hits = 0
-    # print_nn(nn)
-    # for datum in DATA:
-    #     hits = 0
-    #     # inputs = [starting_node_weight() for _ in range(0, INPUTS)]
-    #     example = ""
-    #     for datum in DATA:
-    #         print(f"datum: {datum}")
-    #         inputs = [i*999 for i in datum[0]]
-    #         wanted_output = datum[1]
-    #         nn_output = int(run_nn(inputs)[0] >= 500)
-    #         print_nn(nn)
-    #         print(f"wanted {wanted_output} and outputs {nn_output}")
-    #         if wanted_output == nn_output:
-    #             hits += 1
-    # print("Hits: {}".format(hits))
-    print("end")
-
 
 def starting_node_weight():
     return random.randint(1, NODE_RESOLUTION)
