@@ -170,14 +170,13 @@ def generate_nn():
             }
             if column_no != 0:
                 in_weights = {}
-                in_weights_total = 0
-                for mnid in nn[column_no - 1].keys():
-                    if mnid == (HEIGHT -1):
-                        new_weight = NODE_RESOLUTION - in_weights_total
-                    else:
-                        new_weight = randof(NODE_RESOLUTION - in_weights_total)
-                    in_weights_total += new_weight
-                    in_weights[mnid] = new_weight
+                in_keys = nn[column_no - 1].keys()
+
+                no_cuts = len(in_keys) - 1
+                # doing it with cuts to equally distribute the weight randomness
+                cuts = [0] + sorted([randof(NODE_RESOLUTION) for _ in range(0, no_cuts)]) + [NODE_RESOLUTION]
+                for mnid in in_keys:
+                    in_weights[mnid] = cuts.pop() - cuts[-1]
                 nn[column_no][nid]["in_weights"] = in_weights
             nid += 1
 
