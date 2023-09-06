@@ -38,8 +38,18 @@ DATA_C = [
     ((1, 1, 0), (1,)),
     ((1, 1, 1), (1,)),
 ]
-DATA = DATA_C
-MAX_ITERATIONS = 9999999
+DATA_D = [
+    ((0, 0, 0), (1,)),
+    ((0, 0, 1), (0,)),
+    ((0, 1, 0), (0,)),
+    ((0, 1, 1), (0,)),
+    ((1, 0, 0), (0,)),
+    ((1, 0, 1), (0,)),
+    ((1, 1, 0), (0,)),
+    ((1, 1, 1), (0,)),
+]
+DATA = DATA_D
+MAX_ITERATIONS = 504
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
@@ -76,8 +86,7 @@ def run_iterations():
             inputs = [i*NODE_RESOLUTION for i in datum[0]]
             wanted_output = datum[1][0]
             nn_output = int(run_nn(inputs)[0] >= TRIGGER_AMOUNT)
-            # example += "Print nn\n"
-            # print_nn(nn)
+            example += render_nn(nn)
             example += f"wanted {wanted_output} and outputs {nn_output}\n"
             if wanted_output == nn_output:
                 hits += 1
@@ -135,7 +144,9 @@ def funnel(charge, pipe):
 
 
 def print_nn(nn: dict):
+    print(render_nn(nn))
 
+def render_nn(nn: dict):
     rotated_screen = []
     c_id = 0
     for column in nn:
@@ -152,8 +163,10 @@ def print_nn(nn: dict):
             rotated_screen[r_id][c_id] = f"{node['in_weights']}->[{middle}]"
             r_id += 1
         c_id += 1
+    res = ''
     for row in rotated_screen:
-        print("  ".join(row))
+        res += "  ".join(row) + "\n"
+    return res
 
 
 def generate_nn():
