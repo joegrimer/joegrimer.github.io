@@ -47,13 +47,13 @@ HEIGHT = INPUTS # not neccessarily correct
 COLUMNS = 2  # layers
 nn = []
 NODE_RESOLUTION = 100
-HALF_RESOLUTION = NODE_RESOLUTION / 2 # n.b. intentionally not flooring
+TRIGGER_AMOUNT = NODE_RESOLUTION*0.6 # n.b. intentionally not flooring
 
 MANUAL_NN = [
     {0: {'in_weights': {}, 'value': None},
      1: {'in_weights': {}, 'value': None},
      2: {'in_weights': {}, 'value': None}},
-    {3: {'in_weights': {0: 0, 1: 0, 2: NODE_RESOLUTION}, 'value': None}}]
+    {3: {'in_weights': {0: NODE_RESOLUTION*0.5, 1: NODE_RESOLUTION*0.5, 2: 0}, 'value': None}}]
 
 
 def main():
@@ -75,7 +75,7 @@ def run_iterations():
             example += f"datum: {datum}\n"
             inputs = [i*NODE_RESOLUTION for i in datum[0]]
             wanted_output = datum[1][0]
-            nn_output = int(run_nn(inputs)[0] >= HALF_RESOLUTION)
+            nn_output = int(run_nn(inputs)[0] >= TRIGGER_AMOUNT)
             # example += "Print nn\n"
             # print_nn(nn)
             example += f"wanted {wanted_output} and outputs {nn_output}\n"
@@ -109,7 +109,7 @@ def run_manual():
         print(f"datum: {datum}")
         inputs = [i*(NODE_RESOLUTION) for i in datum[0]]
         wanted_output = datum[1][0]
-        nn_output = int(run_nn(inputs)[0] >= HALF_RESOLUTION)
+        nn_output = int(run_nn(inputs)[0] >= TRIGGER_AMOUNT)
         print_nn(nn)
         print(f"wanted {wanted_output} and outputs {nn_output}")
         if wanted_output == nn_output:
