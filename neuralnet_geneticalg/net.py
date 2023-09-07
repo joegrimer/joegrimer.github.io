@@ -178,7 +178,7 @@ def net_to_str(net_to_render: dict):
 def generate_net():
     new_net = []
     nid = 0
-    print(f"INPUTS {INPUTS} OUTPUTS {OUTPUTS} HEIGHT {HEIGHT}")
+    # print(f"INPUTS {INPUTS} OUTPUTS {OUTPUTS} HEIGHT {HEIGHT}")
     for column_no in range(0, COLUMNS):
         new_net.append({})
         if column_no == 0:
@@ -187,7 +187,7 @@ def generate_net():
             height_of_layer = OUTPUTS
         else:
             height_of_layer = HEIGHT
-        print(f"column_no is {column_no} and height of layer {height_of_layer}")
+        # print(f"column_no is {column_no} and height of layer {height_of_layer}")
         for _ in range(0, height_of_layer):
             new_net[column_no][nid] = {
                 "in_weights": {},
