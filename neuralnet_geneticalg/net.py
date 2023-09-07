@@ -53,7 +53,7 @@ MAX_ITERATIONS = 504
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
-HEIGHT = INPUTS # not neccessarily correct
+HEIGHT = INPUTS+1 # not neccessarily correct
 COLUMNS = 3  # layers
 NODE_RESOLUTION = 100
 TRIGGER_AMOUNT = NODE_RESOLUTION*0.6 # n.b. intentionally not flooring
@@ -74,9 +74,13 @@ def main():
 
 def run_iterations():
     most_hits = 0
+    print(f"INPUTS {INPUTS}")
+    print(f"HEIGHT {HEIGHT}")
+    print(f"OUTPUTS {OUTPUTS}")
     for i in range(0, MAX_ITERATIONS):
         local_net = generate_net()
         print_nn(local_net)
+        0/0
         hits = 0
         example = ""
         for datum in DATA:
@@ -142,21 +146,27 @@ def print_nn(net_to_print: dict):
 
 def net_to_str(net_to_render: dict):
     rotated_screen = []
-    c_id = 0
+    column_index = 0
     for column in net_to_render:
-        r_id = 0
+        row_index = 0
         for nid, node in column.items():
-            if r_id > len(rotated_screen)-1:
+            if row_index > len(rotated_screen)-1:
                 rotated_screen.append([])
-            if c_id > len(rotated_screen[r_id])-1:
-                rotated_screen[r_id].append("null")
+            if column_index > len(rotated_screen[row_index])-1:
+                rotated_screen[row_index].append("\t ")
             # print("rotated_sceen", rotated_screen)
             # print("r_id", r_id)
             # print("c_id", c_id)
             middle = f"V:{node['value']:03}" if node["value"] is not None else f"{nid:03}"
-            rotated_screen[r_id][c_id] = f"{node['in_weights']}->[{middle}]"
-            r_id += 1
-        c_id += 1
+
+            # print(f"row_index is {row_index} column_index is {column_index}")
+            # print(f"rotated_screen is {rotated_screen}")
+            while len(rotated_screen[row_index]) < column_index+1 :
+                rotated_screen[row_index].append('\t ')
+            rotated_screen[row_index][column_index] = f"{node['in_weights']}->[{middle}]"
+            # print(f"now rotated_screen is {rotated_screen}")
+            row_index += 1
+        column_index += 1
     res = ''
     for row in rotated_screen:
         res += "  ".join(row) + "\n"
@@ -166,14 +176,16 @@ def net_to_str(net_to_render: dict):
 def generate_net():
     new_net = []
     nid = 0
+    print(f"INPUTS {INPUTS} OUTPUTS {OUTPUTS} HEIGHT {HEIGHT}")
     for column_no in range(0, COLUMNS):
         new_net.append({})
         if column_no == 0:
             height_of_layer = INPUTS
-        if column_no + 1 >= COLUMNS:
+        elif column_no + 1 >= COLUMNS:
             height_of_layer = OUTPUTS
         else:
             height_of_layer = HEIGHT
+        print(f"column_no is {column_no} and height of layer {height_of_layer}")
         for _ in range(0, height_of_layer):
             new_net[column_no][nid] = {
                 "in_weights": {},
