@@ -53,9 +53,9 @@ MAX_ITERATIONS = 504
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
-HEIGHT = INPUTS+1 # not neccessarily correct
-COLUMNS = 3  # layers
-NODE_RESOLUTION = 100
+HEIGHT = INPUTS+3 # not neccessarily correct
+COLUMNS = 5  # layers
+NODE_RESOLUTION = 99
 TRIGGER_AMOUNT = NODE_RESOLUTION*0.6 # n.b. intentionally not flooring
 
 MANUAL_NET = [
@@ -79,8 +79,8 @@ def run_iterations():
     print(f"OUTPUTS {OUTPUTS}")
     for i in range(0, MAX_ITERATIONS):
         local_net = generate_net()
-        print_nn(local_net)
-        0/0
+        print_net(local_net)
+
         hits = 0
         example = ""
         for datum in DATA:
@@ -111,13 +111,13 @@ def run_manual():
 
     local_net = MANUAL_NET
     hits = 0
-    print_nn(local_net)
+    print_net(local_net)
     for datum in DATA:
         print(f"datum: {datum}")
         inputs = [i*(NODE_RESOLUTION) for i in datum[0]]
         wanted_output = datum[1][0]
         nn_output = int(run_net(inputs)[0] >= TRIGGER_AMOUNT)
-        print_nn(local_net)
+        print_net(local_net)
         print(f"wanted {wanted_output} and outputs {nn_output}")
         if wanted_output == nn_output:
             hits += 1
@@ -141,29 +141,31 @@ def funnel(charge, pipe):
     return int(pipe * (charge/NODE_RESOLUTION))
 
 
-def print_nn(net_to_print: dict):
+def print_net(net_to_print: dict):
     print(net_to_str(net_to_print))
 
 def net_to_str(net_to_render: dict):
     rotated_screen = []
     column_index = 0
+    print_null_val = '      '
     for column in net_to_render:
         row_index = 0
         for nid, node in column.items():
             if row_index > len(rotated_screen)-1:
                 rotated_screen.append([])
             if column_index > len(rotated_screen[row_index])-1:
-                rotated_screen[row_index].append("\t ")
+                rotated_screen[row_index].append(print_null_val)
             # print("rotated_sceen", rotated_screen)
             # print("r_id", r_id)
             # print("c_id", c_id)
-            middle = f"V:{node['value']:03}" if node["value"] is not None else f"{nid:03}"
+            middle = f"V:{node['value']:02}" if node["value"] is not None else f"{nid:02}"
 
             # print(f"row_index is {row_index} column_index is {column_index}")
             # print(f"rotated_screen is {rotated_screen}")
             while len(rotated_screen[row_index]) < column_index+1 :
-                rotated_screen[row_index].append('\t ')
-            rotated_screen[row_index][column_index] = f"{node['in_weights']}->[{middle}]"
+                rotated_screen[row_index].append(print_null_val)
+            in_weights_conv = ', '.join(f'{key}:{val:02}' for key, val in node['in_weights'].items())
+            rotated_screen[row_index][column_index] = f"{in_weights_conv}->[{middle}]"
             # print(f"now rotated_screen is {rotated_screen}")
             row_index += 1
         column_index += 1
