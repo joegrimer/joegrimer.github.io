@@ -157,7 +157,8 @@ def net_to_str(net_to_render: dict):
             # print("rotated_sceen", rotated_screen)
             # print("r_id", r_id)
             # print("c_id", c_id)
-            middle = f"V:{node['value']:02}" if node["value"] is not None else f"{nid:02}"
+            flipper = "F" if node['flip_val'] else "V"
+            middle = f"{flipper}:{node['value']:02}" if node["value"] is not None else f"{nid:02}"
 
             # print(f"row_index is {row_index} column_index is {column_index}")
             # print(f"rotated_screen is {rotated_screen}")
@@ -191,6 +192,7 @@ def generate_net():
             new_net[column_no][nid] = {
                 "in_weights": {},
                 "value": None,
+                "flip_val": randof(1)
             }
             if column_no != 0:
                 in_weights = {}
@@ -221,6 +223,8 @@ def run_net(net_in_question, inputs):
             new_val = 0
             for back_nid, link_weight in node["in_weights"].items():
                 new_val += funnel(net_in_question[last_column][back_nid]["value"], link_weight)
+            if node["flip_val"]:
+                new_val = NODE_RESOLUTION - new_val
             node["value"] = new_val
             last_outputs.append(node["value"])
         last_column += 1
