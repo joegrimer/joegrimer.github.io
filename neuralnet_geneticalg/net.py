@@ -54,15 +54,19 @@ MAX_ITERATIONS = 504
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
 HEIGHT = INPUTS+1 # not neccessarily correct
-COLUMNS = 3  # layers
+COLUMNS = 2  # layers
 NODE_RESOLUTION = 99
 TRIGGER_AMOUNT = NODE_RESOLUTION*0.6 # n.b. intentionally not flooring
 
 MANUAL_NET = [
-    {0: {'in_weights': {}, 'value': None},
-     1: {'in_weights': {}, 'value': None},
-     2: {'in_weights': {}, 'value': None}},
-    {3: {'in_weights': {0: NODE_RESOLUTION*0.5, 1: NODE_RESOLUTION*0.5, 2: 0}, 'value': None}}]
+    {0: {'in_weights': {}, 'value': None, 'flip_val': True,},
+     1: {'in_weights': {}, 'value': None, 'flip_val': True,},
+     2: {'in_weights': {}, 'value': None, 'flip_val': True,}},
+    {3: {'in_weights': {
+        0: int(NODE_RESOLUTION*0.25),
+        1: int(NODE_RESOLUTION*0.25),
+        2: int(NODE_RESOLUTION*0.25)},
+        'value': None, 'flip_val': False}}]
 
 
 def main():
@@ -115,7 +119,7 @@ def run_manual():
         print(f"datum: {datum}")
         inputs = [i*(NODE_RESOLUTION) for i in datum[0]]
         wanted_output = datum[1][0]
-        nn_output = int(run_net(inputs)[0] >= TRIGGER_AMOUNT)
+        nn_output = int(run_net(local_net, inputs)[0] >= TRIGGER_AMOUNT)
         print_net(local_net)
         print(f"wanted {wanted_output} and outputs {nn_output}")
         if wanted_output == nn_output:
@@ -217,6 +221,12 @@ def run_net(net_in_question, inputs):
 
     last_column = 0
     last_outputs = []
+
+    # check inputs for flipped vals
+    for _, node in net_in_question[0].items():
+        if node["flip_val"]:
+            node["value"] = NODE_RESOLUTION - node["value"]
+
     for column in net_in_question[1:]:
         last_outputs = []
         for _, node in column.items():
