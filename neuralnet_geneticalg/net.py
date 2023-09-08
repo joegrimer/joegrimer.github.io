@@ -199,7 +199,7 @@ def generate_net():
                 no_cuts = len(in_keys) - 1
                 this_node_max = randof(NODE_RESOLUTION)
                 # doing it with cuts to equally distribute the weight randomness
-                cuts = [0] + sorted([this_node_max for _ in range(0, no_cuts)]) + [this_node_max]
+                cuts = [0] + sorted([randof(this_node_max) for _ in range(0, no_cuts)]) + [this_node_max]
                 for mnid in in_keys:
                     in_weights[mnid] = cuts.pop() - cuts[-1]
                 new_net[column_no][nid]["in_weights"] = in_weights
