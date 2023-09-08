@@ -143,13 +143,14 @@ def run_mutater():
     best_so_far = 0
     net_barn = []
     for i in range(0, MAX_ITERATIONS):
-        if net_barn:
+        if net_barn and (i % 2 == 0):
             local_net = mutate_net(net_barn[0])
-            print("original net_barn")
+            print("original net_barn", best_so_far)
             print_net(net_barn[0])
-            print("mutation")
+            print("mutation of", best_so_far)
             print_net(local_net)
         else:
+            print("non mutation")
             local_net = generate_net()
 
         hits = 0
@@ -166,6 +167,7 @@ def run_mutater():
         if hits == best_so_far:
             net_barn.append(local_net)
         if hits > best_so_far:
+            net_barn = [local_net]
             best_so_far = hits
             print("---------")
             print("Best went up: ", best_so_far)
