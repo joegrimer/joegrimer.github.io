@@ -53,8 +53,8 @@ MAX_ITERATIONS = 504
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
-HEIGHT = INPUTS+3 # not neccessarily correct
-COLUMNS = 5  # layers
+HEIGHT = INPUTS+1 # not neccessarily correct
+COLUMNS = 3  # layers
 NODE_RESOLUTION = 99
 TRIGGER_AMOUNT = NODE_RESOLUTION*0.6 # n.b. intentionally not flooring
 
@@ -79,7 +79,6 @@ def run_iterations():
     print(f"OUTPUTS {OUTPUTS}")
     for i in range(0, MAX_ITERATIONS):
         local_net = generate_net()
-        print_net(local_net)
 
         hits = 0
         example = ""
@@ -147,7 +146,7 @@ def print_net(net_to_print: dict):
 def net_to_str(net_to_render: dict):
     rotated_screen = []
     column_index = 0
-    print_null_val = '      '
+    print_null_val = '        '
     for column in net_to_render:
         row_index = 0
         for nid, node in column.items():
@@ -198,8 +197,9 @@ def generate_net():
                 in_keys = new_net[column_no - 1].keys()
 
                 no_cuts = len(in_keys) - 1
+                this_node_max = randof(NODE_RESOLUTION)
                 # doing it with cuts to equally distribute the weight randomness
-                cuts = [0] + sorted([randof(NODE_RESOLUTION) for _ in range(0, no_cuts)]) + [NODE_RESOLUTION]
+                cuts = [0] + sorted([this_node_max for _ in range(0, no_cuts)]) + [this_node_max]
                 for mnid in in_keys:
                     in_weights[mnid] = cuts.pop() - cuts[-1]
                 new_net[column_no][nid]["in_weights"] = in_weights
