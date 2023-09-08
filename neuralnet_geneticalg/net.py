@@ -71,16 +71,14 @@ MANUAL_NET = [
 
 def main():
     print("start")
-    run_iterations()
+    # run_brute_force()
+    run_mutater()
     # run_manual()
     print("end")
 
 
-def run_iterations():
+def run_brute_force():
     most_hits = 0
-    print(f"INPUTS {INPUTS}")
-    print(f"HEIGHT {HEIGHT}")
-    print(f"OUTPUTS {OUTPUTS}")
     for i in range(0, MAX_ITERATIONS):
         local_net = generate_net()
 
@@ -107,6 +105,80 @@ def run_iterations():
             break
     print(f"stopped at {i+1} out of {MAX_ITERATIONS} iterations")
     print("best was", most_hits)
+
+def mutate_once():
+    return randof(MUTATION_RATE) == 0
+
+MUTATION_RATE = 10  # i.e. 1 in 10 per number
+def mutate_net(old_net):
+    new_net = []
+    column_no = 0
+    for column in old_net:
+        new_net.append({})
+        for row_nid, row_val in column.items():
+            new_net[column_no][row_nid] = {
+                "in_weights": {},
+                "value": None,
+                "flip_val": row_val["flip_val"] if mutate_once() else randof(1)
+            }
+            if column_no != 0:
+                in_weights = {}
+                in_keys = row_val['in_weights'].keys()
+
+                for mnid in in_keys:
+                    if mutate_once():
+                        in_weights[mnid] = randof(NODE_RESOLUTION)
+                    else:
+                        in_weights[mnid] = row_val['in_weights'][mnid]
+                while sum(in_weights.values()) > NODE_RESOLUTION:
+                    # in case it's gone over
+                    for weight in in_weights:
+                        in_weights[weight] = in_weights[weight] -1 or 0
+                new_net[column_no][row_nid]["in_weights"] = in_weights
+        column_no += 1
+    return new_net
+
+
+def run_mutater():
+    best_so_far = 0
+    net_barn = []
+    for i in range(0, MAX_ITERATIONS):
+        if net_barn:
+            print("original net_barn")
+            print_net(net_barn[0])
+            local_net = mutate_net(net_barn[0])
+            print("same again")
+            print_net(net_barn[0])
+            print("mutation")
+            print_net(local_net)
+
+            0/0
+        local_net = generate_net()
+
+        hits = 0
+        example = ""
+        for datum in DATA:
+            example += f"datum: {datum}\n"
+            inputs = [i*NODE_RESOLUTION for i in datum[0]]
+            wanted_output = datum[1][0]
+            nn_output = int(run_net(local_net, inputs)[0] >= TRIGGER_AMOUNT)
+            example += net_to_str(local_net)
+            example += f"wanted {wanted_output} and outputs {nn_output}\n"
+            if wanted_output == nn_output:
+                hits += 1
+        if hits == best_so_far:
+            net_barn.append(local_net)
+        if hits > best_so_far:
+            best_so_far = hits
+            print("---------")
+            print("Best went up: ", best_so_far)
+            print(example)
+        if hits == len(DATA):
+            print("IT WORKED", i, "for len", len(DATA))
+            print("--------------------------------")
+            break
+    print(f"stopped at {i+1} out of {MAX_ITERATIONS} iterations")
+    print("best was", best_so_far)
 
 
 def run_manual():
@@ -158,19 +230,16 @@ def net_to_str(net_to_render: dict):
                 rotated_screen.append([])
             if column_index > len(rotated_screen[row_index])-1:
                 rotated_screen[row_index].append(print_null_val)
-            # print("rotated_sceen", rotated_screen)
-            # print("r_id", r_id)
-            # print("c_id", c_id)
-            flipper = "F" if node['flip_val'] else "V"
-            middle = f"{flipper}:{node['value']:02}" if node["value"] is not None else f"{nid:02}"
 
-            # print(f"row_index is {row_index} column_index is {column_index}")
-            # print(f"rotated_screen is {rotated_screen}")
+            flipper = "F" if node['flip_val'] else "V"
+            proto_val = node['value'] or 0
+            middle = f"{flipper}:{proto_val:02}"
+
             while len(rotated_screen[row_index]) < column_index+1 :
                 rotated_screen[row_index].append(print_null_val)
             in_weights_conv = ', '.join(f'{key}:{val:02}' for key, val in node['in_weights'].items())
             rotated_screen[row_index][column_index] = f"{in_weights_conv}->[{middle}]"
-            # print(f"now rotated_screen is {rotated_screen}")
+
             row_index += 1
         column_index += 1
     res = ''
