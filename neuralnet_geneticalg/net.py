@@ -144,16 +144,13 @@ def run_mutater():
     net_barn = []
     for i in range(0, MAX_ITERATIONS):
         if net_barn:
-            print("original net_barn")
-            print_net(net_barn[0])
             local_net = mutate_net(net_barn[0])
-            print("same again")
+            print("original net_barn")
             print_net(net_barn[0])
             print("mutation")
             print_net(local_net)
-
-            0/0
-        local_net = generate_net()
+        else:
+            local_net = generate_net()
 
         hits = 0
         example = ""
