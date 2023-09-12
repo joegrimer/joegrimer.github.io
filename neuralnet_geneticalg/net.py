@@ -49,7 +49,7 @@ DATA_D = [
     ((1, 1, 1), (0,)),
 ]
 DATA = DATA_D
-MAX_ITERATIONS = 99999
+MAX_ITERATIONS = 9999
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
@@ -57,6 +57,7 @@ HEIGHT = INPUTS+4 # not neccessarily correct
 COLUMNS = 5  # layers
 NODE_RESOLUTION = 99
 TRIGGER_AMOUNT = NODE_RESOLUTION*0.6 # n.b. intentionally not flooring
+DEBUG=False
 
 MANUAL_NET = [
     {0: {'in_weights': {}, 'value': None, 'flip_val': True,},
@@ -68,18 +69,16 @@ MANUAL_NET = [
         2: int(NODE_RESOLUTION*0.25)},
         'value': None, 'flip_val': False}}]
 
-
 def main():
     print("start")
-    print("Brute force")
-    run_brute_force()
-    print("mutater")
+    # run_brute_force()
     run_mutater()
     # run_manual()
     print("end")
 
 
 def run_brute_force():
+    print("Brute force")
     most_hits = 0
     successes = 0
     for i in range(0, MAX_ITERATIONS):
@@ -98,21 +97,23 @@ def run_brute_force():
         if hits == len(DATA):
             successes += 1
     print(f"was successfull with {successes} out of {MAX_ITERATIONS} iterations")
-    print("best was", most_hits)
 
 
 def run_mutater():
+    print("mutater")
     best_so_far = 0
-    net_barn = []
-    successes = 0
+    best_net = None
+    mutant_successes = 0
+    normal_successes = 0
     for i in range(0, MAX_ITERATIONS):
-        if net_barn and (i % 2 == 0):
-            local_net = mutate_net(net_barn[0])
+        was_mutant = False
+        if best_net: # and (i % 2 == 0):
+            local_net = mutate_net(best_net)
+            was_mutant = True
         else:
             local_net = generate_net()
 
         hits = 0
-        example = ""
         for datum in DATA:
             inputs = [i*NODE_RESOLUTION for i in datum[0]]
             wanted_output = datum[1][0]
@@ -120,13 +121,18 @@ def run_mutater():
             if wanted_output == nn_output:
                 hits += 1
         if hits == best_so_far:
-            net_barn.append(local_net)
+            best_net = local_net
         if hits > best_so_far:
-            net_barn = [local_net]
+            best_net = local_net
             best_so_far = hits
         if hits == len(DATA):
-            successes += 1
-    print(f"was successfull with {successes} out of {MAX_ITERATIONS} iterations")
+            best_net = None
+            best_so_far = 0
+            if was_mutant:
+                mutant_successes += 1
+            else:
+                normal_successes += 1
+    print(f"mutant_successes {mutant_successes} ; successes: {normal_successes} out of {MAX_ITERATIONS} iterations")
 
 
 def mutate_once():
@@ -198,7 +204,8 @@ def funnel(charge, pipe):
 
 
 def print_net(net_to_print: dict):
-    print(net_to_str(net_to_print))
+    if DEBUG:
+        print(net_to_str(net_to_print))
 
 def net_to_str(net_to_render: dict):
     rotated_screen = []
