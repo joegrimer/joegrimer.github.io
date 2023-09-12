@@ -49,12 +49,12 @@ DATA_D = [
     ((1, 1, 1), (0,)),
 ]
 DATA = DATA_D
-MAX_ITERATIONS = 504
+MAX_ITERATIONS = 99999
 # DATA = DATA_OLD
 INPUTS = len(DATA[0][0])
 OUTPUTS = len(DATA[0][1])
-HEIGHT = INPUTS+1 # not neccessarily correct
-COLUMNS = 2  # layers
+HEIGHT = INPUTS+4 # not neccessarily correct
+COLUMNS = 5  # layers
 NODE_RESOLUTION = 99
 TRIGGER_AMOUNT = NODE_RESOLUTION*0.6 # n.b. intentionally not flooring
 
@@ -71,7 +71,9 @@ MANUAL_NET = [
 
 def main():
     print("start")
-    # run_brute_force()
+    print("Brute force")
+    run_brute_force()
+    print("mutater")
     run_mutater()
     # run_manual()
     print("end")
@@ -79,32 +81,53 @@ def main():
 
 def run_brute_force():
     most_hits = 0
+    successes = 0
     for i in range(0, MAX_ITERATIONS):
         local_net = generate_net()
 
         hits = 0
-        example = ""
         for datum in DATA:
-            example += f"datum: {datum}\n"
             inputs = [i*NODE_RESOLUTION for i in datum[0]]
             wanted_output = datum[1][0]
             nn_output = int(run_net(local_net, inputs)[0] >= TRIGGER_AMOUNT)
-            example += net_to_str(local_net)
-            example += f"wanted {wanted_output} and outputs {nn_output}\n"
+            print_net(local_net)
             if wanted_output == nn_output:
                 hits += 1
         if hits > most_hits:
             most_hits = hits
-            print("---------")
-            print("Best went up: ", most_hits)
-            print(example)
         if hits == len(DATA):
-            print("IT WORKED", i, "for len", len(DATA))
-            print("--------------------------------")
-
-            break
-    print(f"stopped at {i+1} out of {MAX_ITERATIONS} iterations")
+            successes += 1
+    print(f"was successfull with {successes} out of {MAX_ITERATIONS} iterations")
     print("best was", most_hits)
+
+
+def run_mutater():
+    best_so_far = 0
+    net_barn = []
+    successes = 0
+    for i in range(0, MAX_ITERATIONS):
+        if net_barn and (i % 2 == 0):
+            local_net = mutate_net(net_barn[0])
+        else:
+            local_net = generate_net()
+
+        hits = 0
+        example = ""
+        for datum in DATA:
+            inputs = [i*NODE_RESOLUTION for i in datum[0]]
+            wanted_output = datum[1][0]
+            nn_output = int(run_net(local_net, inputs)[0] >= TRIGGER_AMOUNT)
+            if wanted_output == nn_output:
+                hits += 1
+        if hits == best_so_far:
+            net_barn.append(local_net)
+        if hits > best_so_far:
+            net_barn = [local_net]
+            best_so_far = hits
+        if hits == len(DATA):
+            successes += 1
+    print(f"was successfull with {successes} out of {MAX_ITERATIONS} iterations")
+
 
 def mutate_once():
     return randof(MUTATION_RATE) == 0
@@ -137,47 +160,6 @@ def mutate_net(old_net):
                 new_net[column_no][row_nid]["in_weights"] = in_weights
         column_no += 1
     return new_net
-
-
-def run_mutater():
-    best_so_far = 0
-    net_barn = []
-    for i in range(0, MAX_ITERATIONS):
-        if net_barn and (i % 2 == 0):
-            local_net = mutate_net(net_barn[0])
-            print("original net_barn", best_so_far)
-            print_net(net_barn[0])
-            print("mutation of", best_so_far)
-            print_net(local_net)
-        else:
-            print("non mutation")
-            local_net = generate_net()
-
-        hits = 0
-        example = ""
-        for datum in DATA:
-            example += f"datum: {datum}\n"
-            inputs = [i*NODE_RESOLUTION for i in datum[0]]
-            wanted_output = datum[1][0]
-            nn_output = int(run_net(local_net, inputs)[0] >= TRIGGER_AMOUNT)
-            example += net_to_str(local_net)
-            example += f"wanted {wanted_output} and outputs {nn_output}\n"
-            if wanted_output == nn_output:
-                hits += 1
-        if hits == best_so_far:
-            net_barn.append(local_net)
-        if hits > best_so_far:
-            net_barn = [local_net]
-            best_so_far = hits
-            print("---------")
-            print("Best went up: ", best_so_far)
-            print(example)
-        if hits == len(DATA):
-            print("IT WORKED", i, "for len", len(DATA))
-            print("--------------------------------")
-            break
-    print(f"stopped at {i+1} out of {MAX_ITERATIONS} iterations")
-    print("best was", best_so_far)
 
 
 def run_manual():
