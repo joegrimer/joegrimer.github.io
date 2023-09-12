@@ -1,6 +1,4 @@
-// gcc growth.c -lcurses
-// Hello there... this is a small program I wrote using ncurses as a graphics framework
-// Joseph Grimer - Nov 2020
+// remember to compile with -lcurses !
 
 #include <stdio.h>
 #include <ncurses.h>
@@ -34,8 +32,8 @@ int maxy = 10;
    //~ }
 //~ }
 
-void main () {
-   printf("start program.\n");
+int main () {
+   printf("start\n");
 
    int c = 0,
       d = 0;
@@ -68,7 +66,7 @@ void main () {
       }
       //~ printf("\n");
    }
-   
+
    // prepare coords
    int coords[2] = {semi_rand(maxx),semi_rand(maxy)};
    int new_coords[2]; // = {coords[0], coords[1]};
@@ -92,10 +90,10 @@ void main () {
 
    int colour_sequence[] = {7,6,5,1,4,0};
    //~ int firework_pos = 0;
-   
+
    int number_of_chains = 0;
    int firework_chains[MAX_CHAINS][3];
-   while(true) {
+   while(1) {
       if(semi_rand(3)==0 && number_of_chains < MAX_CHAINS) { // create a new chain
          firework_chains[number_of_chains][0] = semi_rand(maxy);
          firework_chains[number_of_chains][1] = semi_rand(maxy);
@@ -130,16 +128,15 @@ void main () {
       refresh();
       usleep(SLEEP_INTERVAL);
    }
-   
+
    attroff(COLOR_PAIR(current_color));
    sleep(10);
    // End ncurses mode
    endwin();
-   return;
 }
 
 short rand_clock = 0;
 int semi_rand(int mod) {
-   unsigned int res = abs(rand()+time(NULL)+(97*rand_clock++))%mod;
+   unsigned int res = rand()+time(NULL)+(97*rand_clock++)%mod;
    return res;
 }
