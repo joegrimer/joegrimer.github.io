@@ -13,7 +13,7 @@ import time # used for Time Delays
 def main():
 
 	print("Hello World!")
-	
+
 #	firstPrime = 1
 	secondPrime = 41
 	for firstPrime in range(0,secondPrime):

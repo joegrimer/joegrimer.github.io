@@ -12,14 +12,14 @@ import time
 def main():
 
 	print("Hello World!")
-	
+
 #	out = []
-	
+
 	out = genSample()
-	
+
 
 	printTest(out)
-	
+
 	out=runTick(out)
 	out=runTick(out)
 	out=runTick(out)
@@ -29,7 +29,7 @@ def main():
 
 	print("2 is a little different though:")
 	printTest(out)
-	
+
 	return 0
 
 def genSample():
@@ -75,7 +75,7 @@ def runTick(inSet):
 			neighbours=inSet[im1][jm1]+inSet[i][jm1]+inSet[ip1][jm1]+inSet[im1][j]
 			+inSet[ip1][j]+inSet[im1][jp1]+inSet[i][jp1]+inSet[ip1][jp1]
 			#print(neighbours)
-			
+
 			# Conway's Four laws
 			if neighbours==3:
 				outSet[-1].append(1)
@@ -83,8 +83,8 @@ def runTick(inSet):
 				outSet[-1].append(1)
 			else: # lower than 2 or higher than 3
 				outSet[-1].append(0)
-	
-	return outSet	
+
+	return outSet
 
 ######################## Active Functions #####################################
 

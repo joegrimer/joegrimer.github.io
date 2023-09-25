@@ -13,7 +13,7 @@ import time # used for Time Delays
 def main():
 
 	print("Hello World!")
-	
+
 	secondPrime = 83
 	theAry = []
 	for h in range(0,secondPrime):
