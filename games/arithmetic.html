@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Math Game</title>
 <meta name="description" content="A pure math game.">
 <!--        <link rel="stylesheet" href="style.css">-->
@@ -12,16 +11,45 @@
 // global handles
 let output;
 let input;
+let question, answer;
+let wrongTimes = 0;
+let level = -1;
 question = [];
-    
-function initiate() {
+
+function init() {
     output = document.getElementById("outputElement");
     input = document.getElementById("inputElement");
-    smoothShow(output,"Arithmetic... please press Enter to start");
+    smoothShow(output,"Press enter");
 }
 
-function nextQuestion() {
-    return rand(4);
+function generateQAPair() {
+
+    if (wrongTimes == 0) level++;
+    else level--;
+    if (level<0) level = 0;
+    wrongTimes = 0;
+
+    const super_level = Math.floor(level / 4);
+    const micro_level = level % 4;
+    if (level > 0) document.title = 'Level ' + level;
+
+    if (micro_level == 0) {
+        const a = rand((level+1)*6)+1;
+        const b = rand((level+1)*6)+1;
+        return [a + " &plus; " + b, (a+b)];
+    } else if (micro_level == 1) {
+        let a = rand((level+1)*6)+1;
+        let b = rand(a)+1;
+        return [a + " &minus; " + b, (a-b)];
+    } else if (micro_level == 2) {
+        const a = rand(12)+1+(super_level*2);
+        const b = rand(12)+1+(super_level*2);
+        return [a + " &times; " + b, (a*b)];
+    } else if (micro_level == 3) {
+        let a = rand(12)+1+(super_level*2);
+        let b = rand(Math.floor(a/2))+2;
+        return [a + " &divide; " + b, Math.floor(a/b)];
+    }
 }
 
 function smoothShow(boxHandle,newText,oldOpacity = 100,velocity = -2) { // -1 is down, 1 is up
@@ -50,6 +78,7 @@ document.addEventListener("keydown", KeyCheck);  //or however you are calling yo
 function KeyCheck(event)
 {
    var KeyID = event.keyCode;
+   console.log("keycode:",KeyID)
    switch(KeyID)
    {
       case 8:
@@ -58,11 +87,13 @@ function KeyCheck(event)
 //      case 46:
 //      alert("delete");
 //      break;
+      case 189:
+      input.innerHTML = '-' + input.innerHTML;
+      break;
       case 13:
       checkAnswer();
       break;
       default:
-      console.log("hi:",KeyID)
 		if((48 <= KeyID) && (KeyID <= 57 ) ) {
 			input.innerHTML += KeyID-48;
 		}// else input.innerHTML = "";
@@ -71,23 +102,21 @@ function KeyCheck(event)
 }
 
 function checkAnswer() {
-    console.log("You hit enter!");
-    
-    var response = parseInt(input.innerHTML)
-    input.innerHTML = '';
-    switch(question[1]) {
-		case '&times;':
-			if(question[0]*question[2]!==response) return;
-		break;
-		default:
-			console.log('TSNH');
-			break;
-	}
-    
-    question = [rand(12)+1,'&times;',rand(12)+1];
 
-    output.innerHTML = question[0]+" "+question[1]+" "+question[2]+" = ?";
-    
+    if (answer !== undefined) {
+        var response = parseInt(input.innerHTML);
+        input.innerHTML = '';
+        if(answer!==response) {
+            if (wrongTimes===undefined) wrongTimes=0;
+            wrongTimes++;
+            return;
+        } // else go down new question
+    }
+
+    [question, answer ] = generateQAPair();
+
+    output.innerHTML = question;
+    weredTime = new Date(); // now
 }
 </script>
 
@@ -110,7 +139,7 @@ div {
 </style>
 
 </head>
-<body onload="initiate()">
+<body onload="init()">
 <div id="outputElement">Preparing...</div>
 <div id="inputElement"></div>
 </body>
