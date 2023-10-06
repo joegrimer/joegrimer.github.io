@@ -29,8 +29,8 @@ function generateQAPair() {
     if (level<0) level = 0;
     wrongTimes = 0;
 
-    const super_level = Math.floor(level / 4);
-    const micro_level = level % 4;
+    const macro_level = Math.floor(level / 4);
+    const micro_level = level % 5;
     if (level > 0) document.title = 'Level ' + level;
 
     if (micro_level == 0) {
@@ -42,13 +42,17 @@ function generateQAPair() {
         let b = rand(a)+1;
         return [a + " &minus; " + b, (a-b)];
     } else if (micro_level == 2) {
-        const a = rand(12)+1+(super_level*2);
-        const b = rand(12)+1+(super_level*2);
+        const a = rand(12)+1+(macro_level*2);
+        const b = rand(12)+1+(macro_level*2);
         return [a + " &times; " + b, (a*b)];
     } else if (micro_level == 3) {
-        let a = rand(12)+1+(super_level*2);
+        let a = rand(12)+1+(macro_level*2);
         let b = rand(Math.floor(a/2))+2;
         return [a + " &divide; " + b, Math.floor(a/b)];
+    } else if (micro_level == 4) {
+        let a = rand(200)+1;
+        let b = rand(macro_level*20)+1;
+        return [a + "&percnt; of " + b, Math.floor(a/100 * b)];
     }
 }
 
