@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <ncurses.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
 
-int coinflip();
-int third();
-int fractional();
-int semi_rand(int mod);
 
 struct sprite {
 	int x;
@@ -15,10 +13,35 @@ struct sprite {
 
 struct sprite droplet;
 
+int coinflip() {
+	return rand() % 2;
+}
+int third() {
+	return rand()%3==1;
+}
+int fifth() {
+	return rand()%5==1;
+}
+int fractional() {
+	return rand()%97==0;
+}
+
+short rand_clock = 0;
+int semi_rand(int mod) {
+//	rand_clock++;
+	unsigned int res = labs(rand()+time(NULL)+(97*rand_clock++))%mod;
+	return res;
+}
+/*
+int clock_rand(int mod) {
+//	rand_clock++;
+	unsigned int res = abs(rand()+time(NULL)+(97*rand_clock++))%mod;
+	return res;
+}*/
+
 int main (void) {
 	/* compile with gcc -lncurses file.c */
-	int c = 0,
-		d = 0;
+	int d = 0;
 	/* Init ncurses mode */
 	initscr ();
 	/* Hide cursor */
@@ -27,7 +50,7 @@ int main (void) {
 	int maxx = 0;
 	int maxy = 0;
 	getmaxyx(stdscr, maxy, maxx);
-	int halfx = maxx/2;
+	// int halfx = maxx/2;
 	int quartx = maxx/4;
 
 	/* prepare bubbles */
@@ -36,10 +59,10 @@ int main (void) {
 						semi_rand(4)*4-10,quartx+(semi_rand(quartx*2))};
 
 	/* prepare cleaners */
-	int cleaner[1][2] = {
-		1, 1,
-		1, 1,
-		1, 1,
+	int cleaner[3][2] = {
+		{1, 1},
+		{1, 1},
+		{1, 1},
 	};
 
 	//printf("%d,%d",maxx,maxy);
@@ -118,28 +141,3 @@ int main (void) {
 	return 0;
 }
 
-int coinflip() {
-	return rand() % 2;
-}
-int third() {
-	return rand()%3==1;
-}
-int fifth() {
-	return rand()%5==1;
-}
-int fractional() {
-	return rand()%97==0;
-}
-
-short rand_clock = 0;
-int semi_rand(int mod) {
-//	rand_clock++;
-	unsigned int res = abs(rand()+time(NULL)+(97*rand_clock++))%mod;
-	return res;
-}
-/*
-int clock_rand(int mod) {
-//	rand_clock++;
-	unsigned int res = abs(rand()+time(NULL)+(97*rand_clock++))%mod;
-	return res;
-}*/

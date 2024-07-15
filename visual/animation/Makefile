@@ -1,2 +1,2 @@
 build:
-	gcc animation.c
+	gcc animation.c -lncurses -Werror
