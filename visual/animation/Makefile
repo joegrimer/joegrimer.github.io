@@ -1,0 +1,2 @@
+build:
+	gcc animation.c
