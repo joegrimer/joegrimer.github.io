@@ -51,33 +51,16 @@ int main (void) {
 	int maxx = 0;
 	int maxy = 0;
 	getmaxyx(stdscr, maxy, maxx);
-	maxy = 30;
+	//maxy = 30;
 	// int halfx = maxx/2;
 	int quartx = maxx/4;
 
-	/* prepare downships */
-	int downship[1][2] = {
-		-3,
-		(quartx+(semi_rand(quartx*2)))
+	/* prepare downship */
+	int downship[] = {
+		-3, // y
+		(quartx+(semi_rand(quartx*2))), // x
+		4, // size
 		};
-	char downship_pic[DOWNSHIP_HEIGHT][DOWNSHIP_WIDTH] = {
-		" /\\",
-		"/  \\",
-		"|  |",
-		"\\__/",
-	};
-	char downship_wipe[DOWNSHIP_HEIGHT][DOWNSHIP_WIDTH];
-	for(int i=0;i<DOWNSHIP_HEIGHT;i++) {
-		for (int j=0;j<DOWNSHIP_WIDTH;j++) downship_wipe[i][j] = ' ';
-		downship_wipe[i][DOWNSHIP_WIDTH-1] = '\0';
-	}
-
-	int snake[2] = {
-		semi_rand(maxy),
-		semi_rand(maxx),
-	};
-
-	//printf("%d,%d",maxx,maxy);
 
 	// prepare the colours
 	start_color();
@@ -85,42 +68,31 @@ int main (void) {
 	init_pair(5,7,0); // purple - white
 
 	// ground
-	for (int k=0;k<maxx;k++) mvprintw (maxy, k,"_");
+	//for (int k=0;k<maxx;k++) mvprintw (maxy, k,"_");
 
 	while (true) {
-		//erase();
+		erase();
 		attron(COLOR_PAIR(5)); // purple
 
-		// downships
-		for(d=0;d<1;d++) {
-			mvprintw (downship[d][0]  ,downship[d][1], downship_wipe[0]);
-			mvprintw (downship[d][0]+1,downship[d][1], downship_wipe[1]);
-			mvprintw (downship[d][0]+2,downship[d][1], downship_wipe[2]);
-			mvprintw (downship[d][0]+3,downship[d][1], downship_wipe[3]);
+		// downship
+		//mvprintw (downship[0]  ,downship[1], downship_wipe[0]);
+		//mvprintw (downship[0]+1,downship[1], downship_wipe[1]);
+		//mvprintw (downship[0]+2,downship[1], downship_wipe[2]);
+		//mvprintw (downship[0]+3,downship[1], downship_wipe[3]);
 
-			// move
-			if((downship[d][0]+3)<maxy) {
-				downship[d][0]+=semi_rand(2)+1;
-				downship[d][1]+=semi_rand(3)-1;
+		// move
+		if((downship[0]+3)<maxy) {
+			downship[0]+=semi_rand(2)+1;
+			downship[1]+=semi_rand(3)-1;
 
-				if(fifth()) mvprintw(downship[d][0]+5,downship[d][1]-1,"o");
-				if(fifth()) mvprintw(downship[d][0]+5,downship[d][1]+5,"o");
-			}
+			if(fifth()) downship[2]+=semi_rand(3)-1;
 
-			mvprintw (downship[d][0]  ,downship[d][1], downship_pic[0]);
-			mvprintw (downship[d][0]+1,downship[d][1], downship_pic[1]);
-			mvprintw (downship[d][0]+2,downship[d][1], downship_pic[2]);
-			mvprintw (downship[d][0]+3,downship[d][1], downship_pic[3]);
-
+			if(fifth()) mvprintw(downship[0]+5,downship[1]-1,"o");
+			if(fifth()) mvprintw(downship[0]+5,downship[1]+5,"o");
 		}
 
-		// snake
-		mvprintw(snake[0], snake[1], ".");
-		// move
-		snake[0]+=semi_rand(3)-1;
-		snake[1]+=semi_rand(3)-1;
-		// draw
-		mvprintw(snake[0], snake[1], "o");
+		mvprintw (downship[0],downship[1], "F");
+		mvprintw (downship[0]+downship[2],downship[1]+downship[2], "J");
 
 		attroff(COLOR_PAIR(5)); // end purple
 		refresh();
