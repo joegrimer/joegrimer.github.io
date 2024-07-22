@@ -4,7 +4,8 @@
 #include <unistd.h>
 #include <time.h>
 
-
+#define DOWNSHIP_HEIGHT 4
+#define DOWNSHIP_WIDTH 5
 struct sprite {
 	int x;
 	int y;
@@ -50,19 +51,30 @@ int main (void) {
 	int maxx = 0;
 	int maxy = 0;
 	getmaxyx(stdscr, maxy, maxx);
+	maxy = 30;
 	// int halfx = maxx/2;
 	int quartx = maxx/4;
 
-	/* prepare bubbles */
-	int bubble[3][2] = {semi_rand(4)*4-10,quartx+(semi_rand(quartx*2)),
-						semi_rand(4)*4-10,quartx+(semi_rand(quartx*2)),
-						semi_rand(4)*4-10,quartx+(semi_rand(quartx*2))};
+	/* prepare downships */
+	int downship[1][2] = {
+		-3,
+		(quartx+(semi_rand(quartx*2)))
+		};
+	char downship_pic[DOWNSHIP_HEIGHT][DOWNSHIP_WIDTH] = {
+		" /\\",
+		"/  \\",
+		"|  |",
+		"\\__/",
+	};
+	char downship_wipe[DOWNSHIP_HEIGHT][DOWNSHIP_WIDTH];
+	for(int i=0;i<DOWNSHIP_HEIGHT;i++) {
+		for (int j=0;j<DOWNSHIP_WIDTH;j++) downship_wipe[i][j] = ' ';
+		downship_wipe[i][DOWNSHIP_WIDTH-1] = '\0';
+	}
 
-	/* prepare cleaners */
-	int cleaner[3][2] = {
-		{1, 1},
-		{1, 1},
-		{1, 1},
+	int snake[2] = {
+		semi_rand(maxy),
+		semi_rand(maxx),
 	};
 
 	//printf("%d,%d",maxx,maxy);
@@ -72,54 +84,50 @@ int main (void) {
 	init_pair(4,4,0); // blue
 	init_pair(5,7,0); // purple - white
 
-	//return true;
+	// ground
+	for (int k=0;k<maxx;k++) mvprintw (maxy, k,"_");
+
 	while (true) {
-		// erase();
-		attron(COLOR_PAIR(4)); // blue
-		// cleaners - these do some of the erasing
-		for(d=0;d<3;d++) {
-			mvprintw(cleaner[d][0]+0,cleaner[d][1],"        ");
-			mvprintw(cleaner[d][0]+1,cleaner[d][1],"        ");
-			mvprintw(cleaner[d][0]+2,cleaner[d][1],"        ");
-			mvprintw(cleaner[d][0]+3,cleaner[d][1],"        ");
-			mvprintw(cleaner[d][0]+4,cleaner[d][1],"        ");
-			mvprintw(cleaner[d][0]+5,cleaner[d][1],"        ");
-
-			cleaner[d][0]+=((bubble[d][0]-cleaner[d][0])/3);
-			cleaner[d][1]+=((bubble[d][1]-cleaner[d][1])/3);
-
-			mvprintw(cleaner[d][0]+0,cleaner[d][1],"        ");
-			mvprintw(cleaner[d][0]+1,cleaner[d][1],"  8888  ");
-			mvprintw(cleaner[d][0]+2,cleaner[d][1]," 8    8 ");
-			mvprintw(cleaner[d][0]+3,cleaner[d][1]," 8    8 ");
-			mvprintw(cleaner[d][0]+4,cleaner[d][1],"  8888  ");
-			mvprintw(cleaner[d][0]+5,cleaner[d][1],"        ");
-		}
-		attroff(COLOR_PAIR(4)); // end blue
+		//erase();
 		attron(COLOR_PAIR(5)); // purple
-		// ships
-		for(d=0;d<3;d++) {
-			/* Print at row 0, col 0 */
-			mvprintw (bubble[d][0]  ,bubble[d][1]+1,"/\\");
-			mvprintw (bubble[d][0]+1,bubble[d][1], "/  \\");
-			mvprintw (bubble[d][0]+2,bubble[d][1], "|[]| ");
-			mvprintw (bubble[d][0]+3,bubble[d][1],"\\__/ ");
 
-			if(fifth()) mvprintw(bubble[d][0]+5,bubble[d][1]-1,"o");
-			if(fifth()) mvprintw(bubble[d][0]+5,bubble[d][1]+5,"o");
+		// downships
+		for(d=0;d<1;d++) {
+			mvprintw (downship[d][0]  ,downship[d][1], downship_wipe[0]);
+			mvprintw (downship[d][0]+1,downship[d][1], downship_wipe[1]);
+			mvprintw (downship[d][0]+2,downship[d][1], downship_wipe[2]);
+			mvprintw (downship[d][0]+3,downship[d][1], downship_wipe[3]);
 
-			bubble[d][0]+=semi_rand(2)+1;
-			bubble[d][1]+=semi_rand(3)-1;
-			if(bubble[d][0]>maxy) {
-				bubble[d][0]=-4;
-				// bubble[d][1]=quartx+(semi_rand(quartx*2));
+			// move
+			if((downship[d][0]+3)<maxy) {
+				downship[d][0]+=semi_rand(2)+1;
+				downship[d][1]+=semi_rand(3)-1;
+
+				if(fifth()) mvprintw(downship[d][0]+5,downship[d][1]-1,"o");
+				if(fifth()) mvprintw(downship[d][0]+5,downship[d][1]+5,"o");
 			}
+
+			mvprintw (downship[d][0]  ,downship[d][1], downship_pic[0]);
+			mvprintw (downship[d][0]+1,downship[d][1], downship_pic[1]);
+			mvprintw (downship[d][0]+2,downship[d][1], downship_pic[2]);
+			mvprintw (downship[d][0]+3,downship[d][1], downship_pic[3]);
+
 		}
+
+		// snake
+		mvprintw(snake[0], snake[1], ".");
+		// move
+		snake[0]+=semi_rand(3)-1;
+		snake[1]+=semi_rand(3)-1;
+		// draw
+		mvprintw(snake[0], snake[1], "o");
+
 		attroff(COLOR_PAIR(5)); // end purple
 		refresh();
-		sleep(1);
-		//usleep(750000); // 0.75 seconds
-	}/* blow up
+		sleep(1); // 1 second
+		//usleep(250000); // 0.25 seconds
+	}
+	/* blow up
 	d=c;
 	while(c<maxy) {
 		mvprintw (c-1, halfx, "      ");
