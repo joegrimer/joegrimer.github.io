@@ -99,22 +99,6 @@ int main (void) {
 		sleep(1); // 1 second
 		//usleep(250000); // 0.25 seconds
 	}
-	/* blow up
-	d=c;
-	while(c<maxy) {
-		mvprintw (c-1, halfx, "      ");
-		mvprintw (c,   halfx, "  /");
-		mvprintw (c+3+(c-d),   halfx, "\\ ");
-		mvprintw (c+1, halfx, " /");
-		mvprintw (c+2+4+(c-d), halfx, "\\");
-		mvprintw (c+2, halfx, " |[");
-		mvprintw (c+2+3+(c-d), halfx, "]| ");
-		mvprintw (c+3, halfx," \\_");
-		mvprintw (c+3+3+(c-d), halfx,"_/ ");
-		refresh();
-		sleep(1);
-		c++;
-	}*/
 	sleep(10);
 	/* End ncurses mode */
 	endwin();

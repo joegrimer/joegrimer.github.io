@@ -32,8 +32,8 @@ def main():
 				wordConnections[last] = [word]
 			last = word
 
-	print wordConnections
-	print ("\n--------------------------------------\n")
+	print(wordConnections)
+	print("\n--------------------------------------\n")
 	output = ["John"] # eventually random caps word from dict
 	nextSearch = wordConnections["John"][-1]
 	for i in range(0,98):
