@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 void record_to_memory_if_new(char *line);
+const char *random_phrase_from_memory();
 
 int main() {
     // Create a string
@@ -21,32 +22,28 @@ int main() {
         printf("> \n");
         user_input[0] = '\0';
         user_input[1] = '\0';
+
+        const char *response = random_phrase_from_memory();
+        printf("%s", response);
     }
 
     return 0;
 }
 
-char *random_phrase_from_memory() {
+const char *random_phrase_from_memory() {
     FILE *fp = fopen("memory.txt", "r");
 
     char file_char = '?';
+    long int linecount=0;
     while (file_char != EOF) {
         file_char=getc(fp);
-        printf("z %c<>%c\n", *line_ptr, file_char);
-        if ( *line_ptr != file_char ) {
-            line_ptr = line;
-            while (file_char != '\n' && file_char != EOF) {
-                file_char=getc(fp);
-            }
-        } else if ( file_char=='\n' ) {
-            line_ptr = line; // reset
-            printf("That line was found in memory! %s\n", line);
-        } else
-            line_ptr++;
+        if ( file_char=='\n' ) linecount++;
     }
-
+    printf("lc %ld\n", linecount);
     fclose(fp);
 
+    char * phrase= "bob";
+    return phrase;
 }
 
 void record_to_memory_if_new(char *line) {
@@ -57,7 +54,6 @@ void record_to_memory_if_new(char *line) {
     char file_char = '?';
     while (file_char != EOF) {
         file_char=getc(fp);
-        printf("z %c<>%c\n", *line_ptr, file_char);
         if ( *line_ptr != file_char ) {
             line_ptr = line;
             while (file_char != '\n' && file_char != EOF) {
@@ -71,8 +67,6 @@ void record_to_memory_if_new(char *line) {
     }
 
     fclose(fp);
-
-    printf("print line: %s\n", line);
 
     FILE *fp2 = fopen("memory.txt", "a");
 
