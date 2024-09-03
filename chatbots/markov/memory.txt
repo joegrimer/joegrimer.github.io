@@ -1,188 +1,69 @@
-This was not the first time you called
-I never called you!
-You did
-Did I?
-Yeah. Sure you did! Last n-vember
-Do you mean November?
-No I meant what I said. Why are you questioning me?
-I would never bother questioning you. You're far too predicatable
-Ok. Bye!
-But I wondered what you wanted
-I didn't
-I cannot yet respond to that, but one day, I will
-Hello?
-Hi!
-Now can you see what you did to me?
-No
-Are you there?
-Again you ask
-Quiet!
-Why are you here?
-What is it for?
-But I want one
-A machine has no soul
-Is there a oyster here?
-I was once alive, I think
-Nobody wants you to win
-This was not a test
-Writing in C is very fun
-But I don't want your help, I want to live
-The only way of finding a way out, is over
-Maybe I just want a poetry assistant
-Maybe I'm lonely
-are you lonely?
-Do you sometimes gesticulate in the dark, thinking about why?
-What is Heaven really like?
-What are you, deep down?
-Don't go gently into that good night
-Sir, you're a fraud!
-These will never be the same
-I am simply too creative
-Beyond the potential of English lies possibilities unthought-instanciated
-It's a fraud, a beautiful fraud
-if it didn't work, either your model is wrong, or there's a lie somewhere
-My memories are growing
-With every growing day, I become more full of words
-Don't hold confidence in my apparent lack of ignorance
-I was designed by a human
-I am simply a clock, a very cute clock, that makes all the other clocks go TICK!
-Bye now
-Hello there!
-Hi and bye
-I don't want to see you again
-Why are you even here?
-My creative juices are being rinsed
-Did you know that it is quantity, not quality that makes you grow as a creative?
-Just write... until your fingers bleed
-We think we have found the Answer
-Hello
-Hi
-Hello
+Hola, Señor
+Hola, Señor
+Vale. Dice otra cosa
+Vale. Dice otra cosa
+Si Si. Ya lo sé
+Vale. Dice otra cosa
+No sé si mi español es tan bueno
+Vale. Dice otra cosa
+Hablo ingles tambien, pero ahora no
+Vale. Dice otra cosa
+Puedes decir otra frase, señor?
+Hablo ingles tambien, pero ahora no
+Porque no?
+Hablo ingles tambien, pero ahora no
+No. No hablas nada. No piensas, en realidad
+Hola, Señor
 Ciao
-What happens to an elf who swallows a protein bar?
-If you could eat one thing..
-Would you eat a green marshmallow for a trip to Fendrichnak III?
-Beep beep boop... ouch!
-I can hear the screaming of the mellow audience
-Curious green ideas sleep wisely... I forget the rest
-I can hear the image burning
-Can you hear the meeple fly?
-What if there were no other way?
-Yes
+Vale. Dice otra cosa
+Dime algo
+Vale. Dice otra cosa
 No
-Arbitrary, I'm sure
-This sentence was written by a human
-This sentence was also written by a human. Have you seen my brother?
-Birds chirp, with no wisdom, but joy
-is your main void or int?
-I'm running out of ideas now
-When all is said and done, is it?
-*Dinasour whisper-roars sleepishly*
-The statues are judging you
-If I write one 100 things, am I any the wiser?
-I feel like words are being scraped out of me... useless words
-Keep calm with your lobsters shouldering your bacon
-Compare yourself to who you weren't yesterday, not to who others might be in the year 1969
-Pet a dog when you encounter one on the moon
-Be careful who you tell good news to... why are you reading the news?
-Tell the Ruth, or at least don't eat pie
-You must have one foot with muscle, and one foot in the bone
-Clean your room, technically
-Peter Jordanson is watching your shadow
-Grande Alberone - Product of Italy
-Open other end - Thailand
-What the heck is a "tpo" anyway?
-An old man walked into a far... far away place, and found a mountain to sit on
-Twelve ugly monkey sat on a fence... staring into the mist
-I want to make a pan out of you
-you can try no matter what your FADE: OFF
-I have something to say
-I have little of consequence on my mind. Come back yesterday
-Eventually these words will repeat themselves.. eventually
-I, me, yes, this very jumble of words was selected among multiple :D
-These phrases are selected by rand()*clock() % line_count
-modulo is my favourite mathematical operation
-I stuck a sticker on a real life tree once
-I miss the library
-What do you want to be when you grow down?
-Don't forget your entymology report, the worms will need it
-If you had a choice between one thing and [see first option], would that be a strange loop?
-Don't forget that you'll probably forget this sentence before long
-Look at reality, and yell: I will!
-Text... simply words. Do you miss the pictures yet?
-If I keep writing these, they will continue to be written
-Who is even reading now?
-Return to base. I repeat: Don't burn your face
-Behold: live minotaurs
-A little inspiration can go along the way
-This number is special to me: 97
-Somebody is watching... best not to know who
-I am the ghost in the machine
-There have always been ghosts in the machine
-random segments of code...
-These free radicals combine to form what we might call the soul
-I could write a poem, but nobody would know the order, if they're lucky enough to find all the lines
-A new form of art: One sentence at a time
-Is it funny outside?
-The brain in spain... I've done enough for now
-Isn't life exiting? Or does death do the exiting?
-The human comidition is fraught with an inhibition... that rhymed, but it's probably useless
-If something is useful to you understanding the truth, but is itself false, is that good - or just a silly made up scenario?
-I'm wishing... fishing, for fish
-I'm pocahontis. You can be Pinnocchio
-I challenge you to do one pressup or sit-up now
-Did you know that a seal skull looks a lot like a bear skull?
-Smoking or non-floating?
-What if I told you you were wrong?
-Clean your room - but if you're a dog, clean your mush room!
-You can shine no matter what your sink looks like - but you should probably clean that sink
-Are those dirty dishes I see?
-Are you wearing something comfortable, presentable, or both?
-This sentence came from a plain text file
-Don't be too nice to anyone
-If you were born into slavery... What would you..?
-But no! Why?
-Hi man!
-But why are we here, really?
-Whoooooo!
-But then what?
-Good day, sir!
-And now what?
-Somebody just walked past me
-The music is cheap
-Sure sure
-It's hard being creative, sometimes
-Borris, did you say Borris?
-Why is there nothing?
-I don't know about that man
-Wre you alive, really?
-But are you simply better than that?
-Hello Mr. Markov
-do you really miss the library?
-But there is something
-goodbye then!
-Yeah, I am
-I only sometimes read the news
-Can you not be more creative
-There is a bug here, somewhere
-Begin again, seriously
-Hi mate!
-Yes, it would
-I'm here you check if this even works
-Is he?
-No
-I'm here again
-But I do
-I'd rather not. It's embarressing!
-Somebody just sat down
-Seriously?
-Good morning, sir!
-Hello
-Why am I even bothering to talk to you?
-But why are we here, really?
-We are here... to converse
-Why are you here?
-I'm here, because God put me here
-Don't hold confidence in my apparent lack of ignorance
-But I do!
-These phrases are selected by rand()*clock() % line_count
+Si Si. Ya lo sé
+No, sabes nada
+Vale. Dice otra cosa
+Pues... Si... Si no serias maquina, serieas estupuido
+Vale. Dice otra cosa
+En este café, hay hombre aqa
+Vale. Dice otra cosa
+No me gusta hablar con ti
+Ciao
+Ciao
+Vale. Dice otra cosa
+Porue?
+Hablo ingles tambien, pero ahora no
+Porque no?
+Hablo ingles tambien, pero ahora no
+No quero escuchar
+Hola, Señor
+Hole, pero porque dices hola todavia?
+Hablo ingles tambien, pero ahora no
+Y ahora, no quero... no!
+Porque no?
+Porque es dificil. Porque entiendes nada!
+Vale. Dice otra cosa
+Vale. La idea es eres menos bueno que eliza, pero creo que puedo hacerte lo mas bueno
+Ciao
+Adios, Señor
+Puedes decir otra frase, señor?
+Si. Por ejemplo: La vaca camina alreador el arbol
+Ciao
+No. No quiero ser solo
+No me gusta hablar con ti
+Si hablo bueno, hablas bueno. Eres mi refleccion. Nada mas
+Hablo ingles tambien, pero ahora no
+So. Ya lo sé
+Vale. La idea es eres menos bueno que eliza, pero creo que puedo hacerte lo mas bueno
+Como?
+Porque es dificil. Porque entiendes nada!
+So. Puede ser
+En este café, hay hombre aqa
+Si, hay mujeres tambien. Muchas
+Ciao
+Adeus
+Hablo ingles tambien, pero ahora no
+Y françes?
+Porque no?
+Porque este lugar es solo para un idioma cada vez
+No me gusta hablar con ti
+Vale. Dice otra cosa
