@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 void record_to_memory_if_new(char *line);
 const char *random_phrase_from_memory();
@@ -9,7 +11,7 @@ int main() {
 
     while (1) {
         // Ask the user to input some text
-        printf(": ");
+        printf("$ ");
 
         // Get and save the text
         fgets(user_input, 100, stdin);
@@ -19,15 +21,24 @@ int main() {
         record_to_memory_if_new(user_input);
 
         // Output the text
-        printf("> \n");
+        // printf("> \n");
         user_input[0] = '\0';
         user_input[1] = '\0';
 
         const char *response = random_phrase_from_memory();
-        printf("%s", response);
+        printf("> %s", response);
     }
 
     return 0;
+}
+
+short rand_clock = 0;
+long semi_rand(long mod) {
+    rand_clock+=97;
+    //~ printf("t:%d\nr:%d\nc:%d\n",time(NULL),rand(),rand_clock);
+    // labs is like abs but for longs
+    unsigned int res = labs(rand()+time(NULL)+(673*rand_clock++))%mod;
+    return res;
 }
 
 const char *random_phrase_from_memory() {
@@ -39,11 +50,30 @@ const char *random_phrase_from_memory() {
         file_char=getc(fp);
         if ( file_char=='\n' ) linecount++;
     }
-    printf("lc %ld\n", linecount);
+    fclose(fp);
+    fp = fopen("memory.txt", "r");
+    long choice = semi_rand(linecount);
+    //printf("max %ld and choice %ld\n", linecount, choice);
+    static char retort[100];
+    char * _retort = retort;
+    do {
+        //printf("w");
+        file_char=getc(fp);
+        if (choice == 0) {
+            *_retort = file_char;
+            _retort++;
+            //printf("a.[%c]", file_char);
+        }
+        if ( file_char=='\n' ) {
+            if (choice <=0) break;
+            linecount++;
+            choice--;
+            //printf("dc");
+        }
+    } while (file_char != EOF);
     fclose(fp);
 
-    char * phrase= "bob";
-    return phrase;
+    return retort;
 }
 
 void record_to_memory_if_new(char *line) {
