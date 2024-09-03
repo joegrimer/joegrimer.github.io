@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-void record_to_memory_if_new(char *line);
-const char *random_phrase_from_memory();
+void record_to_memory(char *line);
+void random_phrase_from_memory(char *_retort);
 
 int main() {
     // Create a string
@@ -18,15 +18,17 @@ int main() {
 
         if (*(user_input+1) == '\0') break;
 
-        record_to_memory_if_new(user_input);
+        record_to_memory(user_input);
 
         // Output the text
         // printf("> \n");
         user_input[0] = '\0';
         user_input[1] = '\0';
 
-        const char *response = random_phrase_from_memory();
-        printf("> %s", response);
+        char retort[100];
+        random_phrase_from_memory(retort);
+        record_to_memory(retort);
+        printf("> %s", retort);
     }
 
     return 0;
@@ -41,7 +43,7 @@ long semi_rand(long mod) {
     return res;
 }
 
-const char *random_phrase_from_memory() {
+void random_phrase_from_memory(char *_retort) {
     FILE *fp = fopen("memory.txt", "r");
 
     char file_char = '?';
@@ -54,8 +56,6 @@ const char *random_phrase_from_memory() {
     fp = fopen("memory.txt", "r");
     long choice = semi_rand(linecount);
     //printf("max %ld and choice %ld\n", linecount, choice);
-    static char retort[100];
-    char * _retort = retort;
     do {
         //printf("w");
         file_char=getc(fp);
@@ -65,19 +65,21 @@ const char *random_phrase_from_memory() {
             //printf("a.[%c]", file_char);
         }
         if ( file_char=='\n' ) {
-            if (choice <=0) break;
+            if (choice <=0) {
+                *_retort = '\0';
+                break;
+            }
             linecount++;
             choice--;
             //printf("dc");
         }
     } while (file_char != EOF);
     fclose(fp);
-
-    return retort;
 }
 
-void record_to_memory_if_new(char *line) {
+void record_to_memory(char *line) {
 
+    /*
     FILE *fp = fopen("memory.txt", "r");
 
     char *line_ptr = line;
@@ -96,7 +98,7 @@ void record_to_memory_if_new(char *line) {
             line_ptr++;
     }
 
-    fclose(fp);
+    fclose(fp);*/
 
     FILE *fp2 = fopen("memory.txt", "a");
 

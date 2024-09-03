@@ -1,9 +1,19 @@
 This was not the first time you called
+I never called you!
+You did
+Did I?
+Yeah. Sure you did! Last n-vember
+Do you mean November?
+No I meant what I said. Why are you questioning me?
+I would never bother questioning you. You're far too predicatable
+Ok. Bye!
 But I wondered what you wanted
-I cannot yet respond, but one day, I will
-Hello
-Hi
+I didn't
+I cannot yet respond to that, but one day, I will
+Hello?
+Hi!
 Now can you see what you did to me?
+No
 Are you there?
 Again you ask
 Quiet!
@@ -156,3 +166,23 @@ I only sometimes read the news
 Can you not be more creative
 There is a bug here, somewhere
 Begin again, seriously
+Hi mate!
+Yes, it would
+I'm here you check if this even works
+Is he?
+No
+I'm here again
+But I do
+I'd rather not. It's embarressing!
+Somebody just sat down
+Seriously?
+Good morning, sir!
+Hello
+Why am I even bothering to talk to you?
+But why are we here, really?
+We are here... to converse
+Why are you here?
+I'm here, because God put me here
+Don't hold confidence in my apparent lack of ignorance
+But I do!
+These phrases are selected by rand()*clock() % line_count
