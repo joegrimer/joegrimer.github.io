@@ -4,8 +4,13 @@
 
 void record_to_memory(char *line);
 void random_phrase_from_memory(char *_retort);
+void generate_markov_word_phrase(char *_retort);
 
 int main() {
+
+    char retort[100];
+    //generate_markov_word_phrase(retort);
+    //exit(0);
     // Create a string
     char user_input[300];
 
@@ -25,10 +30,9 @@ int main() {
         user_input[0] = '\0';
         user_input[1] = '\0';
 
-        char retort[100];
         random_phrase_from_memory(retort);
         record_to_memory(retort);
-        printf("> %s", retort);
+        printf("£ %s", retort);
     }
 
     return 0;
@@ -41,6 +45,23 @@ long semi_rand(long mod) {
     // labs is like abs but for longs
     unsigned int res = labs(rand()+time(NULL)+(673*rand_clock++))%mod;
     return res;
+}
+
+void generate_markov_word_phrase(char *_retort) {
+    FILE *fp = fopen("memory.txt", "r");
+
+    char file_char = '?';
+    while (file_char != EOF) {
+        file_char = getc(fp);
+        printf("%c", file_char);
+        if ( file_char == ' ' ) {
+            break;
+        } else if ( file_char=='\n' ) {
+            break;
+        }
+    }
+
+    fclose(fp);
 }
 
 void random_phrase_from_memory(char *_retort) {
