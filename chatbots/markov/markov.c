@@ -11,7 +11,7 @@ int main() {
 
 	char retort[100];
 	generate_markov_word_phrase(retort);
-	printf("£ %s\n", retort);
+	printf("retort £ %s\n", retort);
 	exit(0);
 	// Create a string
 	char user_input[300];
@@ -74,11 +74,10 @@ void generate_markov_word_phrase(char *_retort) {
 	char file_char = '?';
 	char file_buffer[99999];
 	char *_file_buffer = file_buffer;
-	char last_word[50];
-	char next_word[50];
+	/*char last_word[50];
+	char this_word[50];
 	char *_last_word = last_word;
-	char *_next_word = next_word;
-	FILE *fp;
+	char *_this_word = this_word;*/
 
 	/* process:
 	- get random line first word
@@ -87,10 +86,9 @@ void generate_markov_word_phrase(char *_retort) {
 	- follow
 	- finish eventually
 	*/
-	long line_count = get_line_count();
-	long choice = semi_rand(line_count);
+	long line_count = get_line_count(); // could make this use buffer and be faster
 
-	fp = fopen("memory.txt", "r");
+	FILE *fp = fopen("memory.txt", "r");
 	while (1) {
 		*_file_buffer = getc(fp);
 		if (*_file_buffer == EOF) break;
@@ -102,31 +100,19 @@ void generate_markov_word_phrase(char *_retort) {
 	_file_buffer = file_buffer;
 
 	//printf("read buffer>%s<<<<", _file_buffer);
-	read_word(next_word, file_buffer);
-	printf("read word>%s<<<<", next_word);
+	//read_word(this_word, file_buffer);
+	//printf("read word>%s<<<<", this_word);
 
-	return;
+	long choice = semi_rand(line_count);
 	do {
 		if (choice == 0) {
-			if (file_char == ' ') {
-				*_retort = '\0';
-				*_last_word = '\0';
-				break;
-			}
-			*_retort = file_char;
-			_retort++;
-			*_last_word = file_char;
-			_last_word++;
-		}
-		if ( file_char=='\n' ) {
-			if (choice <=0) {
-				*_last_word = '\0';
-				break;
-			}
-			line_count++;
+			read_word(_retort, _file_buffer);
+			break;
+		} else if ( file_char=='\n' ) {
 			choice--;
 		}
-	} while (file_char != EOF);
+		_file_buffer++;
+	} while (*_file_buffer != EOF);
 	*_retort = '\0';
 	return;
 
