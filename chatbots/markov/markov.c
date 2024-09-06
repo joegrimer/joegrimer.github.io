@@ -74,10 +74,10 @@ void generate_markov_word_phrase(char *_retort) {
 	char file_char = '?';
 	char file_buffer[99999];
 	char *_file_buffer = file_buffer;
-	/*char last_word[50];
+	char last_word[50];
 	char this_word[50];
 	char *_last_word = last_word;
-	char *_this_word = this_word;*/
+	char *_this_word = this_word;
 
 	/* process:
 	- get random line first word
