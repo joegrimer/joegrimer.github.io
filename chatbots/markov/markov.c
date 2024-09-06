@@ -99,10 +99,6 @@ void generate_markov_word_phrase(char *_retort) {
 	// reset ptr
 	_file_buffer = file_buffer;
 
-	//printf("read buffer>%s<<<<", _file_buffer);
-	//read_word(this_word, file_buffer);
-	//printf("read word>%s<<<<", this_word);
-
 	long choice = semi_rand(line_count);
 	do {
 		if (choice == 0) {
