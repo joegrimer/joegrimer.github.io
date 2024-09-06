@@ -7,6 +7,7 @@ void record_to_memory(char *line);
 void random_phrase_from_memory(char *_retort);
 void generate_markov_word_phrase(char *_retort);
 
+void pf(char *_s) {printf("%s\n",_s); }
 int main() {
 
 	char retort[100];
@@ -62,22 +63,26 @@ long get_line_count() {
 }
 
 void read_word(char *word_buf, char *text_ptr) {
-	while(*text_ptr!=' ' && *text_ptr!='\0') {
-		*word_buf = *text_ptr;
+	char *_word_buf = word_buf;
+	while( *text_ptr != ' ' && *text_ptr!='\0') {
+		*_word_buf = *text_ptr;
 		text_ptr++;
-		word_buf++;
+		_word_buf++;
 	}
-	*word_buf = '\0';
+	*_word_buf = '\0';
 }
 
-void generate_markov_word_phrase(char *_retort) {
+void generate_markov_word_phrase(char *retort) {
 	char file_char = '?';
 	char file_buffer[99999];
 	char *_file_buffer = file_buffer;
 	char last_word[50];
 	char this_word[50];
+	char new_word[50];
 	char *_last_word = last_word;
 	char *_this_word = this_word;
+	char *_new_word;
+	char *_retort = retort;
 
 	/* process:
 	- get random line first word
@@ -96,7 +101,7 @@ void generate_markov_word_phrase(char *_retort) {
 	}
 	fclose(fp);
 
-	// reset ptr
+	// reset pointer
 	_file_buffer = file_buffer;
 
 	long choice = semi_rand(line_count);
@@ -104,39 +109,32 @@ void generate_markov_word_phrase(char *_retort) {
 		if (choice == 0) {
 			read_word(_retort, _file_buffer);
 			break;
-		} else if ( file_char=='\n' ) {
+		} else if ( *_file_buffer=='\n' ) {
 			choice--;
 		}
 		_file_buffer++;
 	} while (*_file_buffer != EOF);
-	*_retort = '\0';
-	return;
+	printf("First word: %s\n", retort);
 
+	// reset pointer
+	_file_buffer = file_buffer;
+
+	printf("Up to here\n");
 	do {
-		do {
-			if (choice == 0) {
-				if (file_char == ' ') {
-					*_retort = '\0';
-					*_last_word = '\0';
-					break;
-				}
-				*_retort = file_char;
-				_retort++;
-				*_last_word = file_char;
-				_last_word++;
+		_new_word = new_word;
+	    if (*_file_buffer != ' ' && *_file_buffer != '\n') {
+			pf("About to read word");
+			read_word(_new_word, _file_buffer);
+			_file_buffer += strlen(_new_word);
+			printf("words: %s %s", new_word, retort);
+			if(strcmp(new_word, retort) == 0) {
+				pf("The same, they are");
+				break;
 			}
-			if ( file_char=='\n' ) {
-				if (choice <=0) {
-					*_last_word = '\0';
-					break;
-				}
-				line_count++;
-			}
-		} while (file_char != EOF);
-		*_retort = '\0';
-	} while (*_retort != '\0');
-
-	*_retort = '\0';
+		}
+		_file_buffer++;
+	} while (*_file_buffer != EOF);
+	printf("Next word: %s\n", retort);
 }
 
 void random_phrase_from_memory(char *_retort) {
