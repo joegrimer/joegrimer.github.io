@@ -7,9 +7,10 @@ void record_to_memory(char *line);
 void random_phrase_from_memory(char *_retort);
 void generate_markov_word_phrase(char *_retort);
 
-void pf(char *_s) {printf("%s\n",_s); }
+void pf(char *_s) {printf("%s\n",_s); 	fflush(stdout);}
 int main() {
 
+	pf("Start");
 	char retort[100];
 	generate_markov_word_phrase(retort);
 	printf("retort £ %s\n", retort);
@@ -24,20 +25,21 @@ int main() {
 		// Get and save the text
 		fgets(user_input, 100, stdin);
 
-		if (*(user_input+1) == '\0') break;
+		if (*(user_input+1) == EOF) break;
 
 		record_to_memory(user_input);
 
 		// Output the text
 		// printf("> \n");
-		user_input[0] = '\0';
-		user_input[1] = '\0';
+		user_input[0] = EOF;
+		user_input[1] = EOF;
 
 		random_phrase_from_memory(retort);
 		record_to_memory(retort);
 		printf("£ %s\n", retort);
 	}
 
+	pf("end");
 	return 0;
 }
 
@@ -63,13 +65,36 @@ long get_line_count() {
 }
 
 void read_word(char *word_buf, char *text_ptr) {
-	char *_word_buf = word_buf;
-	while( *text_ptr != ' ' && *text_ptr!='\0') {
-		*_word_buf = *text_ptr;
+    short int max_out=50;
+    pf("read word start");
+	while( *text_ptr != ' ' && *text_ptr != EOF && *text_ptr != '\n') {
+		printf("read word char >%c< \n", *text_ptr);
+		*word_buf = *text_ptr;
 		text_ptr++;
-		_word_buf++;
+		word_buf++;
+		max_out--;
+		if (max_out==0) {
+			printf("This should not happen. Maxed out reading new word!");
+			exit(1);
+		}
 	}
-	*_word_buf = '\0';
+	*word_buf = EOF;
+    pf("read word end");
+}
+
+unsigned long strlenj(char *word) {
+    short int max_out=50;
+    unsigned int w_len=0;
+    while (*word != EOF) {
+    	w_len++;
+		max_out--;
+		if (max_out==0) {
+			printf("This should not happen. Maxed out jstrlen word!");
+			exit(1);
+		}
+		word++;
+}
+  return w_len;
 }
 
 void generate_markov_word_phrase(char *retort) {
@@ -81,8 +106,8 @@ void generate_markov_word_phrase(char *retort) {
 	char new_word[50];
 	char *_last_word = last_word;
 	char *_this_word = this_word;
-	char *_new_word;
 	char *_retort = retort;
+	//unsigned short looped_count = 0;
 
 	/* process:
 	- get random line first word
@@ -101,40 +126,48 @@ void generate_markov_word_phrase(char *retort) {
 	}
 	fclose(fp);
 
+	pf("memory loaded");
 	// reset pointer
 	_file_buffer = file_buffer;
 
 	long choice = semi_rand(line_count);
 	do {
 		if (choice == 0) {
-			read_word(_retort, _file_buffer);
+			read_word(_last_word, _file_buffer);
 			break;
 		} else if ( *_file_buffer=='\n' ) {
 			choice--;
 		}
 		_file_buffer++;
 	} while (*_file_buffer != EOF);
-	printf("First word: %s\n", retort);
+	printf("a >%s<", last_word);
 
-	// reset pointer
+	pf("first word got");
+	// n.b. Resetting file_buffer. Not necessary?
 	_file_buffer = file_buffer;
 
-	printf("Up to here\n");
 	do {
-		_new_word = new_word;
-	    if (*_file_buffer != ' ' && *_file_buffer != '\n') {
-			pf("About to read word");
-			read_word(_new_word, _file_buffer);
-			_file_buffer += strlen(_new_word);
-			printf("words: %s %s", new_word, retort);
-			if(strcmp(new_word, retort) == 0) {
-				pf("The same, they are");
-				break;
+		_this_word = this_word;
+		if (*_file_buffer != ' ' && *_file_buffer != '\n' && *_file_buffer != EOF) {
+			read_word(_this_word, _file_buffer);
+			printf("before + strlenj >%c< %ld\n", *_file_buffer, strlenj(_this_word));
+			_file_buffer += strlenj(_this_word); // either way
+			printf("after + strlenj >%c<\n", *_file_buffer);
+			// printf("new word and word I'm looking for: >%s< >%s<\n", this_word, retort);
+			if(strcmp(this_word, last_word) == 0) {
+				printf("this word like last word >%s< >%s<", this_word, last_word);
+				read_word(new_word, _file_buffer);
+				if (*_file_buffer == '\n' || *_file_buffer == EOF) {
+					pf("end of line or file. break");
+					break;
+				}
+				printf("b: >%s< is new word", new_word);
+				read_word(last_word, new_word);
+				printf("b: >%s< ", last_word);
 			}
 		}
 		_file_buffer++;
 	} while (*_file_buffer != EOF);
-	printf("Next word: %s\n", retort);
 }
 
 void random_phrase_from_memory(char *_retort) {
@@ -160,7 +193,7 @@ void random_phrase_from_memory(char *_retort) {
 		}
 		if ( file_char=='\n' ) {
 			if (choice <=0) {
-				*_retort = '\0';
+				*_retort = EOF;
 				break;
 			}
 			line_count++;
@@ -200,3 +233,4 @@ void record_to_memory(char *line) {
 
 	fclose(fp2);
 }
+
