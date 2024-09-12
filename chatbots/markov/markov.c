@@ -56,6 +56,7 @@ int main() {
 
 short rand_clock = 0;
 long semi_rand(long mod) {
+	if (mod<2) return 0;
 	rand_clock+=97;
 	//~ printf("t:%d\nr:%d\nc:%d\n",time(NULL),rand(),rand_clock);
 	// labs is like abs but for longs
@@ -134,7 +135,9 @@ void generate_markov_word_phrase(char *retort) {
 	// reset pointer
 	_file_buffer = file_buffer;
 
-	long choice = semi_rand(line_count);
+	// Will only pick first word from even lines
+	// To prevent bot learning from it's own mistakes
+	long choice = semi_rand(line_count/2)*2;
 	do {
 		if (choice == 0) {
 			read_word(_last_word, _file_buffer);
