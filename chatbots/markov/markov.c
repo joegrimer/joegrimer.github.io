@@ -76,7 +76,6 @@ long get_line_count() {
 void read_word(char *word_buf, char *text_ptr) {
 	short int max_out=50;
 	while( *text_ptr != ' ' && *text_ptr != '\0' && *text_ptr != '\n') {
-		printf("read word char to >%c<\n", *text_ptr);
 		*word_buf = *text_ptr;
 		text_ptr++;
 		word_buf++;
@@ -86,7 +85,6 @@ void read_word(char *word_buf, char *text_ptr) {
 			exit(1);
 		}
 	}
-	pf("read word adding end");
 	*word_buf = '\0';
 }
 
@@ -159,15 +157,9 @@ void generate_markov_word_phrase(char *retort) {
 
 	do {
 		if (*_file_buffer != ' ' && *_file_buffer != '\n' && *_file_buffer != EOF) {
-			pf("file buffer before read word");
-			scan_dozen(_file_buffer);
 			read_word(this_word, _file_buffer);
 			_file_buffer += strlenj(this_word); // either way
-			printf("after %ld lenj", strlenj(this_word));
-			scan_dozen(_file_buffer);
-			printf("checkthis word like last word >%s< >%s<\n", this_word, last_word);
 			if(strcmp(this_word, last_word) == 0) {
-				printf("this word IS like last word >%s< >%s<\n", this_word, last_word);
 				// skip a space if there is one
 				if (*_file_buffer == ' ') _file_buffer++;
 				if (*_file_buffer == '\n' || *_file_buffer == EOF) {
@@ -175,9 +167,10 @@ void generate_markov_word_phrase(char *retort) {
 					break;
 				}
 				read_word(new_word, _file_buffer);
-				printf("new word is: >%s<\n", new_word);
 				read_word(last_word, new_word);
-				printf("last word is: >%s< \n", last_word);
+				printf("next word is: >%s< \n", last_word);
+				//_file_buffer += strlenj(last_word); // including space, brings to beginning of next word
+				_file_buffer = file_buffer;
 			}
 		}
 		_file_buffer++;
