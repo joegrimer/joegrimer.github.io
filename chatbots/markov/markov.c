@@ -147,10 +147,10 @@ void generate_markov_word_phrase(char *retort) {
 	//printf("first word >%s<\n", last_word);
 	//printf("%s ", last_word);
 	sprintf(retort, "%s", last_word);
-	retort += (strlenj(last_word)+1);
+	retort += (strlenj(last_word));
 
 	// n.b. Resetting file_buffer. Not necessary?
-	_file_buffer = file_buffer;
+	// _file_buffer = file_buffer;
 
 	int loop_max=19;
 	while (loop_max > 0) {
