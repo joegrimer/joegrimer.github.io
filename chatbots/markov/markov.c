@@ -8,10 +8,18 @@ void random_phrase_from_memory(char *_retort);
 void generate_markov_word_phrase(char *_retort);
 
 void pf(char *_s) {printf("%s\n",_s); 	fflush(stdout);}
+void scan_dozen(char *_s) {
+	printf("dozen: ");
+	for (int i=0;i<12;i++)
+		printf("%c",_s[i]);
+	printf("\n");
+}
+
 int main() {
 
 	pf("Start");
 	char retort[100];
+	pf("about to generate");
 	generate_markov_word_phrase(retort);
 	printf("retort £ %s\n", retort);
 	exit(0);
@@ -66,9 +74,7 @@ long get_line_count() {
 
 void read_word(char *word_buf, char *text_ptr) {
     short int max_out=50;
-    pf("read word start");
 	while( *text_ptr != ' ' && *text_ptr != EOF && *text_ptr != '\n') {
-		printf("read word char >%c< \n", *text_ptr);
 		*word_buf = *text_ptr;
 		text_ptr++;
 		word_buf++;
@@ -79,7 +85,6 @@ void read_word(char *word_buf, char *text_ptr) {
 		}
 	}
 	*word_buf = EOF;
-    pf("read word end");
 }
 
 unsigned long strlenj(char *word) {
@@ -87,17 +92,18 @@ unsigned long strlenj(char *word) {
     unsigned int w_len=0;
     while (*word != EOF) {
     	w_len++;
-		max_out--;
-		if (max_out==0) {
-			printf("This should not happen. Maxed out jstrlen word!");
-			exit(1);
-		}
-		word++;
-}
+	max_out--;
+	if (max_out==0) {
+	 printf("This should not happen. Maxed out jstrlen word!");
+	 exit(1);
+	}
+	word++;
+    }
   return w_len;
 }
 
 void generate_markov_word_phrase(char *retort) {
+	pf("about to init");
 	char file_char = '?';
 	char file_buffer[99999];
 	char *_file_buffer = file_buffer;
@@ -105,7 +111,6 @@ void generate_markov_word_phrase(char *retort) {
 	char this_word[50];
 	char new_word[50];
 	char *_last_word = last_word;
-	char *_this_word = this_word;
 	char *_retort = retort;
 	//unsigned short looped_count = 0;
 
@@ -116,11 +121,13 @@ void generate_markov_word_phrase(char *retort) {
 	- follow
 	- finish eventually
 	*/
-	long line_count = get_line_count(); // could make this use buffer and be faster
+	long line_count = 0;
 
+	pf("about to read memory");
 	FILE *fp = fopen("memory.txt", "r");
 	while (1) {
 		*_file_buffer = getc(fp);
+		if ( file_char=='\n' ) line_count++;
 		if (*_file_buffer == EOF) break;
 		_file_buffer++;
 	}
@@ -147,15 +154,16 @@ void generate_markov_word_phrase(char *retort) {
 	_file_buffer = file_buffer;
 
 	do {
-		_this_word = this_word;
 		if (*_file_buffer != ' ' && *_file_buffer != '\n' && *_file_buffer != EOF) {
-			read_word(_this_word, _file_buffer);
-			printf("before + strlenj >%c< %ld\n", *_file_buffer, strlenj(_this_word));
-			_file_buffer += strlenj(_this_word); // either way
-			printf("after + strlenj >%c<\n", *_file_buffer);
-			// printf("new word and word I'm looking for: >%s< >%s<\n", this_word, retort);
+			pf("file buffer before read word");
+			scan_dozen(_file_buffer);
+			read_word(this_word, _file_buffer);
+			_file_buffer += strlenj(this_word); // either way
+			printf("after %ld lenj", strlenj(this_word));
+			scan_dozen(_file_buffer);
+			printf("checkthis word like last word >%s< >%s<\n", this_word, last_word);
 			if(strcmp(this_word, last_word) == 0) {
-				printf("this word like last word >%s< >%s<", this_word, last_word);
+				printf("this word IS like last word >%s< >%s<\n", this_word, last_word);
 				read_word(new_word, _file_buffer);
 				if (*_file_buffer == '\n' || *_file_buffer == EOF) {
 					pf("end of line or file. break");
