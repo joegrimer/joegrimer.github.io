@@ -113,6 +113,7 @@ void generate_markov_word_phrase(char *retort) {
 	char new_word[50];
 	char *_last_word = last_word;
 	char *_retort = retort;
+	int entropy = 5;
 	//unsigned short looped_count = 0;
 
 	/* process:
@@ -138,7 +139,6 @@ void generate_markov_word_phrase(char *retort) {
 	// reset pointer
 	_file_buffer = file_buffer;
 
-	printf("no of lines %ld", line_count);
 	long choice = semi_rand(line_count);
 	printf("no of lines %ld and I want %ld\n", line_count, choice);
 	do {
@@ -150,31 +150,40 @@ void generate_markov_word_phrase(char *retort) {
 		}
 		_file_buffer++;
 	} while (*_file_buffer != EOF);
-	printf("first word >%s<\n", last_word);
+	//printf("first word >%s<\n", last_word);
+	printf("%s ", last_word);
 
 	// n.b. Resetting file_buffer. Not necessary?
 	_file_buffer = file_buffer;
 
-	do {
+	int loop_max=19;
+	while (loop_max > 0) {
 		if (*_file_buffer != ' ' && *_file_buffer != '\n' && *_file_buffer != EOF) {
 			read_word(this_word, _file_buffer);
 			_file_buffer += strlenj(this_word); // either way
 			if(strcmp(this_word, last_word) == 0) {
+				if (entropy && semi_rand(2)==0) {
+					entropy--;
+					continue;
+				}
 				// skip a space if there is one
 				if (*_file_buffer == ' ') _file_buffer++;
 				if (*_file_buffer == '\n' || *_file_buffer == EOF) {
 					pf("end of line or file. break");
 					break;
 				}
-				read_word(new_word, _file_buffer);
-				read_word(last_word, new_word);
-				printf("next word is: >%s< \n", last_word);
-				//_file_buffer += strlenj(last_word); // including space, brings to beginning of next word
-				_file_buffer = file_buffer;
+				read_word(last_word, _file_buffer);
+				printf("%s ", last_word);
+				_file_buffer += strlenj(last_word); // including space, brings to beginning of next word
 			}
 		}
 		_file_buffer++;
-	} while (*_file_buffer != EOF);
+		if (*_file_buffer == EOF) {
+			loop_max--;
+			_file_buffer = file_buffer;
+		}
+	}
+	if (loop_max <= 0) pf("loop maxed out");
 }
 
 void random_phrase_from_memory(char *_retort) {
