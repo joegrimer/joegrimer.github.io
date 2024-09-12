@@ -175,7 +175,7 @@ void generate_markov_word_phrase(char *retort) {
 				//printf("%s ", last_word);
 				sprintf(retort, " %s", last_word);
 				retort += (strlenj(last_word)+1);
-				_file_buffer += strlenj(last_word); // including space, brings to beginning of next word
+				_file_buffer += strlenj(last_word); // brings just after end of word
 			}
 		}
 		_file_buffer++;
