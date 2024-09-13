@@ -22,12 +22,11 @@ int main() {
 
 	pf("Start");
 	char retort[300];
-	/*
 	pf("about to generate");
 	generate_markov_word_phrase(retort);
 	printf("retort £ %s\n", retort);
 	exit(0);
-	*/
+	// */
 	// Create a string
 	char user_input[300];
 	*user_input = '\0';
@@ -134,6 +133,7 @@ void generate_markov_word_phrase(char *retort) {
 
 	// reset pointer
 	_file_buffer = file_buffer;
+	int line_number = 1;
 
 	// Will only pick first word from even lines
 	// To prevent bot learning from it's own mistakes
@@ -141,8 +141,10 @@ void generate_markov_word_phrase(char *retort) {
 	do {
 		if (choice == 0) {
 			read_word(_last_word, _file_buffer);
+			_file_buffer += strlenj(last_word);
 			break;
 		} else if ( *_file_buffer=='\n' ) {
+			line_number++;
 			choice--;
 		}
 		_file_buffer++;
@@ -152,11 +154,33 @@ void generate_markov_word_phrase(char *retort) {
 	sprintf(retort, "%s", last_word);
 	retort += (strlenj(last_word));
 
+	/*
+	for(;*_file_buffer!=EOF;_file_buffer++) {
+		printf("%c", *_file_buffer);
+		if (*_file_buffer=='\n') {
+			line_number++;
+			printf("%d. ", line_number);
+		}
+	}
+	return;*/
+
 	// n.b. Resetting file_buffer. Not necessary?
 	// _file_buffer = file_buffer;
 
+	printf("before main loop ln is %d, but choice was %ld\n", line_number, choice);
 	int loop_max=19;
 	while (loop_max > 0) {
+		if (*_file_buffer == EOF) {
+			loop_max--;
+			_file_buffer = file_buffer;
+			pf("Resetting line number");
+			line_number = 1;
+		}
+		printf(".");
+		if (*_file_buffer == '\n') {
+			line_number++;
+			printf("%d-", line_number);
+		}
 		if (*_file_buffer != ' ' && *_file_buffer != '\n' && *_file_buffer != EOF) {
 			read_word(this_word, _file_buffer);
 			_file_buffer += strlenj(this_word); // either way
@@ -174,15 +198,16 @@ void generate_markov_word_phrase(char *retort) {
 				read_word(last_word, _file_buffer);
 				//printf("%s ", last_word);
 				sprintf(retort, " %s", last_word);
-				retort += (strlenj(last_word)+1);
+				retort += (strlenj(last_word)+1); // to include space
+				//pf("file buffer before increment");
+				//scan_dozen(_file_buffer);
 				_file_buffer += strlenj(last_word); // brings just after end of word
+				//pf("file buffer after increment");
+				//scan_dozen(_file_buffer);
 			}
+			continue; // if we got here, we already incrememted
 		}
 		_file_buffer++;
-		if (*_file_buffer == EOF) {
-			loop_max--;
-			_file_buffer = file_buffer;
-		}
 	}
 	sprintf(retort, "\n");
 	if (loop_max <= 0) pf("ERROR: loop maxed out");
