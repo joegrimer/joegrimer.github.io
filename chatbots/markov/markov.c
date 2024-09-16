@@ -22,6 +22,7 @@ int main() {
 
 	pf("Start");
 	char retort[300];
+	/*
 	pf("about to generate");
 	generate_markov_word_phrase(retort);
 	printf("retort £ %s\n", retort);
@@ -167,19 +168,24 @@ void generate_markov_word_phrase(char *retort) {
 	// n.b. Resetting file_buffer. Not necessary?
 	// _file_buffer = file_buffer;
 
-	printf("before main loop ln is %d, but choice was %ld\n", line_number, choice);
+	//printf("before main loop ln is %d, but choice was %ld\n", line_number, choice);
 	int loop_max=19;
 	while (loop_max > 0) {
 		if (*_file_buffer == EOF) {
 			loop_max--;
 			_file_buffer = file_buffer;
-			pf("Resetting line number");
+			//pf("Resetting line number");
 			line_number = 1;
 		}
-		printf(".");
+		//printf(".");
 		if (*_file_buffer == '\n') {
 			line_number++;
-			printf("%d-", line_number);
+			if (line_number %2 == 0) {
+				// skip line
+				while(*_file_buffer != '\n' && *_file_buffer != EOF) _file_buffer++;
+				continue;
+			}
+			//printf("%d-", line_number);
 		}
 		if (*_file_buffer != ' ' && *_file_buffer != '\n' && *_file_buffer != EOF) {
 			read_word(this_word, _file_buffer);
