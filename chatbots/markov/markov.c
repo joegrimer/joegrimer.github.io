@@ -6,6 +6,7 @@
 void record_to_memory(char *line);
 void random_phrase_from_memory(char *_retort);
 void generate_markov_word_phrase(char *_retort);
+long semi_rand(long mod);
 
 void pf(char *_s) {printf("%s\n",_s); 	fflush(stdout);}
 void scan_dozen(char *_s) {
@@ -20,14 +21,8 @@ void scan_dozen(char *_s) {
 
 int main() {
 
-	pf("Start");
+	//pf("Start");
 	char retort[300];
-	/*
-	pf("about to generate");
-	generate_markov_word_phrase(retort);
-	printf("retort £ %s\n", retort);
-	exit(0);
-	// */
 	// Create a string
 	char user_input[300];
 	*user_input = '\0';
@@ -54,13 +49,11 @@ int main() {
 	return 0;
 }
 
-short rand_clock = 0;
 long semi_rand(long mod) {
 	if (mod<2) return 0;
-	rand_clock+=97;
 	//~ printf("t:%d\nr:%d\nc:%d\n",time(NULL),rand(),rand_clock);
 	// labs is like abs but for longs
-	unsigned long res = labs(rand()+time(NULL)+(673*rand_clock++))%mod;
+	unsigned long res = labs(rand()+time(NULL))%mod;
 	return res;
 }
 
