@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+<head>
+<title>Square Adventure</title>
+    
+<style>
+
+    body {
+        background-color:#000;
+    }
+    section#gameContainer {
+        width:800px;
+        height:500px;
+        background-color:#fff;
+        margin:0px auto;
+        border: 2px solid grey;
+        border-radius:5px;
+        margin-top:20px;
+    }
+    
+    body canvas {
+/*        background:linear-gradient(red, yellow);*/
+        background-color:#eee;
+        border:1px solid #222;
+
+    }
+
+</style>
+    
+<script>
+
+// globals:
+var canvas;
+var ctx; // context
+// robot Globals
+var hero;
+var walls = [];
+var objects = [];
+var npcs = [];
+// the ultimate global
+endGame = false;
+
+// todo: calculate walls based on exits
+var rooms = [{}, // the quantum 0 room!! To be a grand finalé
+{exits:[,2,5,],wallColour:"green",objects:[new potion(400,300)],npcs:[new antagonist()]}, //room 0
+{exits:[,,3,1],wallColour:"#040",objects:[],npcs:[]}, // room 1
+{exits:[2,,4,],wallColour:"#041",objects:[],npcs:[]}, // room 1
+{exits:[3,0,0,0],wallColour:"#140",objects:[],npcs:[new antagonist()]}, // room 1
+{exits:[1,,,],wallColour:"yellow",objects:[new potion(400,300)],npcs:[]}, // room 1
+
+]
+var currentRoom; // will store one of the objects from rooms
+
+// initator - called at onload event in <body> tag
+function resetGame() {
+
+    canvas = document.getElementById('myCanvas');
+    ctx = canvas.getContext('2d');
+    
+    hero = new protagonist(); //width, height,x, y, colour
+
+    prepareRoom(1);
+    
+    // the forever loop
+    setInterval(function() {
+        if(!endGame) {
+            actualiseEnvironment();
+            drawAll();
+        }
+    },30);
+}
+
+function actualiseEnvironment() {
+    console.log(hero.x + "<>" + hero.y);
+    
+    for(badGuy of npcs) {
+        if(hero.colour!=badGuy.colour) badGuy.moveTowards(hero);
+        if(touches(hero,badGuy)) endGame=true;
+    }
+}   
+
+function prepareRoom(roomNo) {
+    
+    ctx.clearRect(0,0,canvas.width,canvas.height); //clear screen before re-render
+
+    currentRoom=rooms[roomNo];
+    console.log("preparing room " + roomNo);
+    
+    // prepare walls
+    walls = []; // setting or resetting walls
+    waysOut = currentRoom.exits;
+    wallColour = currentRoom.wallColour;
+    if(waysOut[0]) {
+        walls.push(new immovable(0,0,350,20,wallColour)); //north wall
+        walls.push(new immovable(450,0,350,20,wallColour)); //north wall
+    } else {
+        walls.push(new immovable(0,0,800,20,wallColour)); //north wall
+    }
+    if(waysOut[1]) {
+        walls.push(new immovable(780,0,20,200,wallColour)); //east wall
+        walls.push(new immovable(780,300,20,200,wallColour)); //east wall
+    } else {
+        walls.push(new immovable(780,0,20,500,wallColour)); //east wall
+    }
+    if(waysOut[2]) {
+        walls.push(new immovable(0,480,350,20,wallColour)); //south wall
+        walls.push(new immovable(450,480,350,20,wallColour)); //south wall
+    } else {
+        walls.push(new immovable(0,480,800,20,wallColour)); //south wall
+    }
+    if(waysOut[3]) {
+        walls.push(new immovable(0,0,20,200,wallColour)); //west wall
+        walls.push(new immovable(0,300,20,300,wallColour)); //west wall
+    } else {
+        walls.push(new immovable(0,0,20,500,wallColour)); //west wall
+    }
+
+    // global = roombased
+    objects = []; // resetting array
+    objects = currentRoom.objects;
+    npcs = []; // resetting array
+    npcs = currentRoom.npcs;
+}
+
+function drawAll() {
+    
+//    console.log("drawing all")
+    ctx.clearRect(0,0,canvas.width,canvas.height); //clear screen before re-render
+
+    for(wall of walls) wall.draw();
+    hero.draw();
+    for(potion of objects) potion.draw();
+    for(badGuy of npcs) badGuy.draw();
+}
+
+// the antagonist class
+// bad guy types: 0? 1: fat red dude - spee
+function antagonist(type = 1) { //300,350,23,23,"#f00"
+    if(type = 1) {
+        this.width = 40;
+        this.height = 40;
+        this.colour = "#af6"
+        this.speed = 2;
+    } else console.error("What just happened?");
+    
+    this.x = 300;
+    this.y = 350;
+    this.holds = 0; //objects
+    this.move = function(xAug, yAug) {
+        this.x+=this.speed*xAug;
+        this.y+=this.speed*yAug;
+    };
+    this.moveTowards = function (what) {
+        if(what.x<this.x) this.move(-1,0);
+        else this.move(1,0);
+        if(what.y<this.y) this.move(0,-1);
+        else this.move(0,1);
+    };
+    this.draw = function(){
+        ctx.fillStyle = this.colour;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+
+// potion types:
+// 0 = reset
+// 1 = red (killing rage when SPACE bar pressed)
+// 2 = blue
+// 3 = green
+// 4 = yellow (invisibility)
+// 5 = purple (expand when SPACE bar pressed)
+function potion(x,y,type = 1) {
+    this.x = x;
+    this.y = y;
+    this.width = 10;
+    this.height = 10;
+    this.draw = function(){
+        ctx.fillStyle = "#f00";
+        ctx.fillRect(this.x,this.y,this.width,this.height);
+    }
+}
+
+// the following is the JavaScript version of a class
+function protagonist(width=20, height=20, colour="#abf", x=700, y=200) { //20,20,"#abf",700,200
+    this.width = width;
+    this.height = height;
+    this.speed = 10;
+    this.x = x;
+    this.y = y;
+    this.colour = colour;
+    this.holds = 0; //objects
+    this.mirror = function() { // bug: there is a special way to get stuck in the wall! I can fix it here by limiting the mirror
+        if(this.x < 0 || this.x > canvas.width) {
+            this.x = ((this.x-400)*-1)+400; // maths :)
+        } else this.y= ((this.y-250)*-1)+250;; //bodge
+    }
+    this.move = function(xAug, yAug) {
+        this.x+=this.speed*xAug;
+        this.y+=this.speed*yAug;
+        
+        // this line is technically depricated... but it's fun to keep :)
+        if(this.colour!="#f00") for(badGuy of npcs) badGuy.moveTowards(this);
+        
+        this.collide();
+
+        // refactor this one day
+        // check if room change
+        if (this.x<0) {
+            hero.mirror();
+            prepareRoom(currentRoom.exits[3]);// console.log("going west");
+        } else if (this.x>canvas.width) {
+            hero.mirror();
+            prepareRoom(currentRoom.exits[1]); // going east
+        } else if (this.y<0) {
+//            hero.x=400;
+            hero.mirror();
+            prepareRoom(currentRoom.exits[0]);// console.log("going north");
+        } else if (this.y>canvas.height) {
+            hero.mirror();
+            prepareRoom(currentRoom.exits[2]);// going south");
+        }
+    };
+    this.collide = function() { // reset? ;)
+        for(wall of walls) {
+            if (touches(this,wall)){
+                this.reset();
+            }
+        }
+        for (object of objects) {
+            if(touches(this,objects[0])) {
+    //            console.log("touching");
+                this.colour="#f00";
+                this.holds = 1;
+            }
+        }
+    };
+    this.act = function() {
+        console.log("Action key pressed");
+        if(this.holds == 1) console.log("kill");
+        this.holds = 0;
+        this.colour = "abf";
+    };
+    this.reset = function() {
+        console.log("resetting hero");
+        this.x = 33;
+        this.y = 33;
+    };
+    this.draw = function(){
+        ctx.fillStyle = this.colour;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+
+// refactor - add some vars for clarity! Done
+function touches(a,b) { // change to subject, object?
+//    console.log("checking for contact")
+    const aLeftSide = a.x;
+    const aRightSide = a.x+a.width;
+    const aTopSide = a.y;
+    const aBottomSide = a.y+a.height; 
+    const bLeftSide = b.x;
+    const bRightSide = b.x+b.width;
+    const bTopSide = b.y;
+    const bBottomSide = b.y+b.height;
+    // dodo: consider cutting down the below if to just the central hero point!
+//    console.log("stuff="+aLeftSide+","+bLeftSide+",")
+    if ( ((aLeftSide < bRightSide && aLeftSide > bLeftSide) && (aTopSide>bTopSide && aTopSide < bBottomSide))
+                || ((aRightSide > bLeftSide && aRightSide < bRightSide) && 
+                   (aBottomSide > bTopSide && aBottomSide< bBottomSide)) )
+        return true;
+    else return false;
+}
+
+// this will make walls
+function immovable(x, y,width, height, color) {
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y; 
+    this.draw = function(){
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+
+// this function will capture keystrokes
+document.addEventListener("keydown", KeyCheck);  //or however you are calling your method
+function KeyCheck(event)
+{
+   var KeyID = event.keyCode;
+   switch(KeyID)
+   {
+ /*       case 87: // W
+        hero.y-=10;
+        break;
+        case 65: // A
+        hero.x-=10;
+        break;
+        case 83: // S
+        hero.y+=10;
+        break;
+        case 68: // D
+        hero.x+=10;
+        break;*/
+        case 38: // Up
+        hero.move(0,-1);
+        break;
+        case 37: // Left
+        hero.move(-1,0);
+        break;
+        case 40: // Down
+        hero.move(0,1);
+        break;
+        case 39: // Right
+        hero.move(1,0);
+        break;
+        case 32: // space
+        hero.act();
+        break;
+        default:
+        break;
+   }
+}
+    
+</script>
+</head>
+<body onload="resetGame()">
+
+<section id="gameContainer">
+
+<canvas id="myCanvas" width="800" height="500"
+style="border-radius:5px;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+</section>
+
+</body>
+</html>
